@@ -7,13 +7,13 @@ public class Calculadora {
 		return a + b;
 	}
 
-	//division de dos numeros reales ( a / b)
+	//division de dos numeros reales (a / b)
 	public double divide(double a, double b) {
-		return a/b;
+		return a / b;
 	}
 	
-	//division de dos enteros
+	//division de dos enteros (a / b) --> si el resultado da decimal causará un error
 	public double divide(int a, int b) {
-		return a/b;
+		return a / b;
 	}
 }

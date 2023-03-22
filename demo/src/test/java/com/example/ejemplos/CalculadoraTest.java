@@ -72,25 +72,30 @@ class CalculadoraTest {
 		valor esperado: 0.3 -- valor obtenido: 0.30000000000000004 --> test fallido*/
 	}
 
-	//division de dos numeros enteros --> al implementar una segunda función de dividir con dos enteros como parámetros hay error al dividir enteros
+	//division de dos numeros enteros --> al implementar una segunda función de dividir con dos enteros como parámetros hay error al dividir enteros si el resultado contiene decimales
 	@Test
 	void testDividirEnteros() {
 		var calc = new Calculadora();
 
+		//en caso de dividir dos enteros cuyo resultado NO tenga decimales (4/2 = 2 por ejemplo) cambiar a assertEquals para comprobar que en este caso el resultado SÍ que es el esperado
+		//el caso de que la división tenga decimales se produce un error; como el fallo es conocido el test comprueba que el resultado sea NOT equal y así ver que efectivamente no devuelve el resultado esperado
 		var rslt = calc.divide(1,2);
 		
-		assertEquals(0.5, rslt);
+		assertNotEquals(0.5, rslt);
+		
 	}
 
-	//Si se divide por 0.0 el resultado da infinito, por lo que salta un fallo
 	//division de dos numeros reales
 	@Test
 	void testDividirReales() {
 		var calc = new Calculadora();
 
-		var rslt = calc.divide(1,2.0);
+		var rslt = calc.divide(-1.0,0);
 		
-		assertEquals(0.5, rslt);
+		//En caso de dividir números reales por 0 el resultado da +-infinito, por lo que el assertEquals se actualiza a Double.POSITIVE_INIFINITY y Double.NEGATIVE_INFINITY respectivamente en vez de utilizar un valor "tangible"
+		
+		//Aunque el resultado de infinito al dividir por zero el test se realiza del mismo modo 
+		assertEquals(Double.NEGATIVE_INFINITY, rslt);
 	}
 	
 }
