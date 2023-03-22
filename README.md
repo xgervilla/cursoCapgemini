@@ -1,4 +1,4 @@
-# Curso de Java -- Rama hotfix
+# Curso de Java
 ## Spring, Maven, JavaScript, NodeJS, ReactJS
 
 ---
