@@ -25,7 +25,7 @@ class CalculadoraTest {
 		//valor que espero -- valor obtenido
 		assertEquals(1.7, rslt);
 		
-		//si no el valor esperado es diferente al obtenido el test falla
+		//si el valor esperado es diferente al obtenido el test falla
 		//assertEquals(5, rslt);
 	}
 	
@@ -62,15 +62,14 @@ class CalculadoraTest {
 		var calc = new Calculadora();
 		
 		//ejecución de la función/método a testear
-		//0.2 y 0.1 (por ejemplo) falla por la precisión de los valores
 		var rslt = calc.suma(0.3,1.4);
 		
 		//valor que espero -- valor obtenido
 		assertEquals(1.7, rslt);
 		
-		//var rslt = calc.suma(0.2,0.1);
-		//assertEquals(0.3, rslt);
-		//valor esperado: 0.3 -- valor obtenido: 0.30000000000000004 --> test fallido
+		/*var rslt = calc.suma(0.2,0.1);
+		assertEquals(0.3, rslt);
+		valor esperado: 0.3 -- valor obtenido: 0.30000000000000004 --> test fallido*/
 	}
 
 }
