@@ -13,16 +13,46 @@ class CalculadoraTest {
 	void setUp() throws Exception {
 	}
 
+	//suma de dos numeros positivos
 	@Test
-	void testSuma() {
+	void testSumaPositivo() {
 		//instanciación del objeto a testear
 		var calc = new Calculadora();
 		
 		//ejecución de la función/método a testear
-		var rslt = calc.suma(2,2);
+		var rslt = calc.suma(0.3,1.4);
+		
+		//valor que espero -- valor obtenido
+		assertEquals(1.7, rslt);
+		
+		//si no el valor esperado es diferente al obtenido el test falla
+		//assertEquals(5, rslt);
+	}
+	
+	//suma de un numero positivo y otro negativo
+	@Test
+	void testSumaPositivoNegativo() {
+		//instanciación del objeto a testear
+		var calc = new Calculadora();
+		
+		//ejecución de la función/método a testear
+		var rslt = calc.suma(9,-5);
 		
 		//valor que espero -- valor obtenido
 		assertEquals(4, rslt);
+	}
+	
+	//suma de dos numeros negativos
+	@Test
+	void testSumaNegativo() {
+		//instanciación del objeto a testear
+		var calc = new Calculadora();
+		
+		//ejecución de la función/método a testear
+		var rslt = calc.suma(-1,-7);
+		
+		//valor que espero -- valor obtenido
+		assertEquals(-8, rslt);
 		
 		//si no el valor esperado es diferente al obtenido el test falla
 		//assertEquals(5, rslt);
