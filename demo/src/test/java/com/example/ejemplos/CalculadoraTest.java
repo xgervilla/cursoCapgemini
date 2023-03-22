@@ -72,11 +72,11 @@ class CalculadoraTest {
 		valor esperado: 0.3 -- valor obtenido: 0.30000000000000004 --> test fallido*/
 	}
 
-	//division de dos numeros enteros
+	//division de dos numeros enteros --> al implementar una segunda función de dividir con dos enteros como parámetros hay error al dividir enteros
 	@Test
 	void testDividirEnteros() {
 		var calc = new Calculadora();
-		//al implementar una segunda función de dividir con dos enteros como parámetros hay error al dividir enteros
+
 		var rslt = calc.divide(1,2);
 		
 		assertEquals(0.5, rslt);
