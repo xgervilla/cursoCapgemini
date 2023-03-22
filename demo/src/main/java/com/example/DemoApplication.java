@@ -56,27 +56,6 @@ public class DemoApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
-		
-		//inferencia de datos manera directa
-		/*var dao = new StringRepositoryImpl();
-		var srv = new StringServiceImpl(dao);
-		System.out.println(srv.get(1));
-		
-		//inyección manual
-		StringRepository dao2 = new StringRepositoryImpl();
-		dao2 = new StringRepositoryMockImpl();
-		var srv2 = new StringServiceImpl(dao2);
-		System.out.println(srv2.get(1));*/
-//		System.out.println(srvRem.get(1));
-//		srvRem.add("Este es el remoto");
-//		System.out.println("");
-//		System.out.println(srvLoc.get(1));
-//		srvLoc.add("Este es el local");
-//		System.out.println("");
-//		srvLoc.add("Este es el local de nuevo");
-//		
-//		System.out.println("\n");
-//		System.out.println(rango.getMin() + " -- " + rango.getMax());
 		System.out.println(unaTonteria.dimeAlgo());
 		
 		System.out.println(config);
