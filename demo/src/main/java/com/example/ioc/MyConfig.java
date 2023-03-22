@@ -44,7 +44,8 @@ public class MyConfig {
 		};
 	}
 	
-	/* //Genera error porque la clase Rango está inicializada mediante application.properties y tiene prioridad sobre esta inicialización
+	/*
+	//Genera error porque la clase Rango está inicializada mediante application.properties y tiene prioridad sobre esta inicialización
 	@Bean
 	@Primary
 	Rango unRango() {

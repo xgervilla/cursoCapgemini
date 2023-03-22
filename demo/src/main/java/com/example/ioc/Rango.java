@@ -13,7 +13,7 @@ import lombok.Data;
 public class Rango {
 	/*
 	 * Al asignar los valores mediante application.properties los nombres deben coincidir (el orden no importa)
-	 * Si los nombres no coinciden (no se encuentran en application.properties) se asigna 0/null
+	 * Si los nombres no coinciden (no se encuentran en application.properties) se asigna null (0 en caso de números)
 	*/
 	private int min;
 	private int max;
