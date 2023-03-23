@@ -11,10 +11,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.commons.annotation.Testable;
+
+import com.example.core.test.Smoke;
 
 import lombok.experimental.var;
 
@@ -52,6 +55,7 @@ class CalculadoraTest {
 			
 			//suma de un numero positivo y otro negativo
 			@Test
+			@Smoke
 			void testSumaPositivoNegativo() {
 				
 				//ejecución de la función/método a testear
