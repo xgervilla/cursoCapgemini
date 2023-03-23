@@ -7,6 +7,18 @@ import com.example.exceptions.InvalidArgumentException;
 import lombok.Builder;
 import lombok.Data;
 
+/*
+ * Casos especiales de los atributos:
+ *  - Valores nulos en el apellido (permitido)
+ *  - Palabras con acentos (permitido)
+ *  - Palabras con símbolos (no permitido? es posible al codificarlo como string, se debería hacer limpieza a caracteres del alfabeto?)
+ *  - Números negativos en el ID (NO permitido)
+ *  - Valores nulos en el nombre (NO permitido)
+ *  - Nombres y apellidos con dos carácteres o menos (NO permitido)
+ *  - Nombres y apellidos con string vacía (NO permitido)
+ *  - IDs con más números de los que soporta el tipo int (permitido aunque no esperado?)
+ *  - IDs empezando en 0 (permitido aunque no esperado?)
+ */
 
 @Builder
 public class Persona {
