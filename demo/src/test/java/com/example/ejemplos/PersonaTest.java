@@ -15,6 +15,7 @@ import lombok.experimental.var;
  * 		1.2- El obejto creado es del tipo que nos interesa (instance of)
  * 2- comprobar que la inicialización es correcta
  *  * Se pueden agrupar bajo un assertAll ya que si una comprobación falla el resto se pueden realizar, además de permitir identificar los errores de manera más rápida sin tener que repetir caso por caso
+ *  * Se pueden combinar con un DoesNotThrow para comprobar además que no saltan excepciones inesperadas
 */
 
 class PersonaTest {
