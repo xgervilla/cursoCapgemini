@@ -4,9 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import com.example.core.test.Smoke;
 
 import lombok.experimental.var;
 
@@ -25,25 +31,97 @@ class PersonaTest {
 	@BeforeEach
 	void setUp() throws Exception {
 	}
+	
+	//Tests básicos (versión inicial de Persona sin control de valores)
+	@Nested
+	@DisplayName("Inicialización básica")
+	class Basic {
+		
+		@RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalRepetitions}")
+		void testCreate(RepetitionInfo repetitionInfo) {
+			var p = Persona.builder()
+					.id(repetitionInfo.getCurrentRepetition())
+					.nombre("Pepito" + repetitionInfo.getCurrentRepetition())
+					.apellidos("Grillo" + repetitionInfo.getCurrentRepetition()).build();
+			
+			assertNotNull(p);
+			
+			assertTrue(p instanceof Persona, "No es instancia de persona");
+			
+			assertAll("Inicialización de la persona", 
+					()-> assertEquals(repetitionInfo.getCurrentRepetition(), p.getId(), "Fallo en el ID"),
+					()-> assertEquals("Pepito" + repetitionInfo.getCurrentRepetition(), p.getNombre(), "Fallo en el nombre"),
+					()-> assertEquals("Grillo" + repetitionInfo.getCurrentRepetition(), p.getApellidos().get(), "Fallo en el apellido"));
+					//en la version inicial de Persona para obtener el apellido se utiliza p.getApellidos() ya que el return es de tipo String, no Optional<String>
+		}
+	}
 
-	@RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalRepetitions}")
-	void testCreate(RepetitionInfo repetitionInfo) {
-		var p = Persona.builder()
-				.id(repetitionInfo.getCurrentRepetition())
-				.nombre("Pepito" + repetitionInfo.getCurrentRepetition())
-				.apellidos("Grillo" + repetitionInfo.getCurrentRepetition()).build();
+	//Tests complejos (segunda versión de Persona con control de valores no nulos y con longitud mínima)
+	@Nested
+	@DisplayName("Incialización compleja")
+	class Controlled {
 		
-		assertNotNull(p);
+		//Tests con valores "correctos" (válidos y esperables en condiciones normales)
+		@Nested
+		class OK {
+			@ParameterizedTest(name = "Id: {0}, {1} {2}")
+			@Smoke
+			@CsvSource(value = {"13,Juan,Sanchez", "9,Marcos,Lopez", "19999994,Lionel,Messi", "10,Ansu,Fati","999999999,Bad,Bunny"})
+			void testPersonaCompleta(int id, String nombre, String apellidos) {
+				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
+				
+				assertNotNull(p);
+				
+				assertTrue(p instanceof Persona, "No es instancia de persona");
+				
+				assertAll("Inicialización de la persona", 
+						()-> assertEquals(id, p.getId(), "Fallo en el ID"),
+						()-> assertEquals(nombre, p.getNombre(), "Fallo en el nombre"),
+						()-> assertEquals(apellidos, p.getApellidos().get(), "Fallo en el apellido"));
+			}
+
+			
+			@ParameterizedTest(name = "Id: {0}, {1} {2}")
+			@Smoke
+			@CsvSource(value = {"3765,Juan Carlos", "1234,Penelope", "9876,Scarlet", "2012,IronMan"})
+			void testPersonaSinApellido(int id, String nombre) {
+				var p = new Persona(id, nombre);
+				
+				assertNotNull(p);
+				
+				assertTrue(p instanceof Persona, "No es instancia de persona");
+				
+				assertAll("Inicialización de la persona", 
+						()-> assertEquals(id, p.getId(), "Fallo en el ID"),
+						()-> assertEquals(nombre, p.getNombre(), "Fallo en el nombre"));
+			}
+		}
 		
-		assertTrue(p instanceof Persona, "No es instancia de persona");
-		
-		//ejemplo para "forzar" el fallo
-		//p.setNombre("Juan");
-		
-		assertAll("Inicialización de la persona", 
-				()-> assertEquals(repetitionInfo.getCurrentRepetition(), p.getId(), "Fallo en el ID"),
-				()-> assertEquals("Pepito" + repetitionInfo.getCurrentRepetition(), p.getNombre(), "Fallo en el nombre"),
-				()-> assertEquals("Grillo" + repetitionInfo.getCurrentRepetition(), p.getApellidos(), "Fallo en el apellido"));
+		//Tests con valores no válidos (si por cualquier motivo se llegasen a utilizar se produce un fallo)
+		@Nested
+		class KO {
+			@ParameterizedTest(name = "Id: {0}, {1} {2}")
+			@CsvSource(value = {",,", ",,", ",,", ",,"})
+			void testPersonaNombreNulo(int id, String nombre, String apellidos) {
+				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
+				
+			}
+			
+			@ParameterizedTest(name = "Id: {0}, {1} {2}")
+			@CsvSource(value = {",,", ",,", ",,", ",,"})
+			void testPersonaLongitud(int id, String nombre, String apellidos) {
+				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
+				
+			}
+			
+			@ParameterizedTest(name = "Id: {0}, {1} {2}")
+			@CsvSource(value = {"999999999,Kun,Aguero", "-188889,Vinicius,JR", "0556,Carolina,Marin"})
+			void testPersonaIdInvalido(int id, String nombre, String apellidos) {
+				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
+				
+			}
+		}
+			
 	}
 
 }

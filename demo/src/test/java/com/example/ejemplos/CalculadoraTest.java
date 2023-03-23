@@ -45,7 +45,7 @@ class CalculadoraTest {
 		class OK {
 			
 			@Test
-			@Smoke
+			//@Smoke
 			@DisplayName("Cotilla")
 			void cotilla(TestInfo testInfo, TestReporter testReporter) {
 				assertEquals("Cotilla", testInfo.getDisplayName());
@@ -68,7 +68,7 @@ class CalculadoraTest {
 			
 			//suma de un numero positivo y otro negativo
 			@Test
-			@Smoke
+			//@Smoke
 			void testSumaPositivoNegativo() {
 				
 				//ejecución de la función/método a testear

@@ -24,7 +24,8 @@ public class Persona {
 	public Persona(int id, String nombre) {
 		super();
 		this.id = id;
-		this.nombre = nombre;
+		setNombre(nombre);
+		removeApellidos();
 	}
 
 	public int getId() {
@@ -53,7 +54,7 @@ public class Persona {
 		this.apellidos = apellidos;
 	}
 	
-	public void removeApellidos(String apellidos) {
+	public void removeApellidos() {
 		this.apellidos = null;
 	}
 	
