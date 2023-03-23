@@ -120,17 +120,8 @@ class CalculadoraTest {
 			void testDividirReales() {
 				double dividendo = -1.0;
 				double divisor = 4.0;
-				
-				/*En caso de dividir números reales por 0 el resultado da +-infinito. Hay varias alternativas para "tratar" el resultado:
-				 * assertEquals con los valores Double.POSITIVE_INIFINITY y Double.NEGATIVE_INFINITY
-				 * assumeTrue para comprobar que el valor divisor es diferente de 0 --equivalente a-- assumeFalse para comprobar que el valor divisor es igual a 0*/
-				//si el divisor es 0 el test no está en condiciones "idóneas" para ejecutar por lo que el test se saltará (NO ES FALLO NI SUCCESS SINO SKIP)
-				assumeTrue(divisor != 0.0, "Tried to divide by Zero");
-
-				var rslt = calc.divide(dividendo,divisor);
-				
-				//Aunque el resultado de infinito al dividir por zero el test se realiza del mismo modo 
-				assertEquals(-0.25, rslt);
+			
+				assertEquals(-0.25, calc.divide(dividendo, divisor));
 			}
 			
 		}
@@ -144,20 +135,27 @@ class CalculadoraTest {
 				double dividendo = -1.0;
 				double divisor = 0.0;
 				
+				
 				/*En caso de dividir números reales por 0 el resultado da +-infinito. Hay varias alternativas para "tratar" el resultado:
+				 * modificar la clase para que lance una excepción al intentar dividir por cero
 				 * assumeTrue para comprobar que el valor divisor es diferente de 0 --equivalente a-- assumeFalse para comprobar que el valor divisor es igual a 0
 				 * assertEquals con los valores Double.POSITIVE_INIFINITY y Double.NEGATIVE_INFINITY
 				 * assertTrue comprobando que el resultado es infinito
 				 */
 				
-				//Opción 1: Asume que el divisor es diferente de cero
+				//Opción 1: modificar la clase
+				assertThrows(ArithmeticException.class, () -> calc.divide(dividendo,divisor));
+				
+				/* Sólo habilitar si no se envía excepción desde la clase Calculadora
+				//Opción 2: Asume que el divisor es diferente de cero
 				assumeTrue(divisor != 0.0, "Tried to divide by Zero");
 
 				var rslt = calc.divide(dividendo,divisor);
-				//Opción 2: Equals con infinity
+				//Opción 3: Equals con infinity
 				assertEquals(Double.NEGATIVE_INFINITY, rslt);
-				//Opción 3: el resultado es infinito
+				//Opción 4: el resultado es infinito
 				assertTrue(Double.isInfinite(rslt));
+				*/
 			}
 		}
 	}

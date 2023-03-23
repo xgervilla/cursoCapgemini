@@ -9,6 +9,9 @@ public class Calculadora {
 
 	//division de dos numeros reales (a / b)
 	public double divide(double a, double b) {
+		if (b== 0){
+			throw new ArithmeticException("Tried to divide by Zero");
+		}
 		return a / b;
 	}
 	
