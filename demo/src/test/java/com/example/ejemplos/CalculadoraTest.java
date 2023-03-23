@@ -20,6 +20,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.commons.annotation.Testable;
 
 import com.example.core.test.Smoke;
+import com.example.core.test.SpaceCamelCase;
 
 import lombok.experimental.var;
 
@@ -36,7 +37,7 @@ class CalculadoraTest {
 
 	@Nested
 	@DisplayName("Pruebas del método suma")
-	//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+	@DisplayNameGeneration(SpaceCamelCase.class)
 	class Suma {
 		
 		//Tests válidos
