@@ -26,7 +26,7 @@ class PersonaTest {
 	void setUp() throws Exception {
 	}
 
-	@RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalReptitions}")
+	@RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalRepetitions}")
 	void testCreate(RepetitionInfo repetitionInfo) {
 		var p = Persona.builder()
 				.id(repetitionInfo.getCurrentRepetition())
@@ -42,7 +42,8 @@ class PersonaTest {
 		
 		assertAll("Inicialización de la persona", 
 				()-> assertEquals(repetitionInfo.getCurrentRepetition(), p.getId(), "Fallo en el ID"),
-				()-> assertEquals("Pepito" + repetitionInfo.getCurrentRepetition(), p.getNombre(), "Fallo en el nombre"),
+				//si añadimos un condicional para que la iteración 4 compruebe algo diferente podemos ver que sólo falla esta iteración, el resto no dan fallos
+				()-> assertEquals("Pepito" + (repetitionInfo.getCurrentRepetition() % 4 == 0 ? "__4" : repetitionInfo.getCurrentRepetition()), p.getNombre(), "Fallo en el nombre"),
 				()-> assertEquals("Grillo" + repetitionInfo.getCurrentRepetition(), p.getApellidos(), "Fallo en el apellido"));
 	}
 
