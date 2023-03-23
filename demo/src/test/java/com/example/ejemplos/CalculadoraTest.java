@@ -13,6 +13,8 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.commons.annotation.Testable;
@@ -40,6 +42,16 @@ class CalculadoraTest {
 		//Tests válidos
 		@Nested
 		class OK {
+			
+			@Test
+			@Smoke
+			@DisplayName("Cotilla")
+			void cotilla(TestInfo testInfo, TestReporter testReporter) {
+				assertEquals("Cotilla", testInfo.getDisplayName());
+				assertTrue(testInfo.getTags().contains("Smoke"));
+				for(String tag: testInfo.getTags()) testReporter.publishEntry(tag);
+			}
+			
 			//Disabled para no realizarlo, ya se considera de manera similar en el caso de decimales (evitamos repetir la prueba cada vez que ejecutamos pero se puede reactivar en cualquier momento.
 			//suma de dos numeros positivos
 			@Test
