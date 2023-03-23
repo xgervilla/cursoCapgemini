@@ -1,6 +1,9 @@
 package com.example.ejemplos;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.ArgumentMatchers.doubleThat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,14 +91,21 @@ class CalculadoraTest {
 	//division de dos numeros reales
 	@Test
 	void testDividirReales() {
+		double dividendo = -1.0;
+		double divisor = 4.0;
+		
+		/*En caso de dividir números reales por 0 el resultado da +-infinito. Hay varias alternativas para "tratar" el resultado:
+		 * assertEquals con los valores Double.POSITIVE_INIFINITY y Double.NEGATIVE_INFINITY
+		 * assumeTrue para comprobar que el valor divisor es diferente de 0 --equivalente a-- assumeFalse para comprobar que el valor divisor es igual a 0*/
+		//si el divisor es 0 el test no está en condiciones "idóneas" para ejecutar por lo que el test se saltará (NO ES FALLO NI SUCCESS SINO SKIP)
+		assumeTrue(divisor != 0.0, "Tried to divide by Zero");
+		
 		var calc = new Calculadora();
 
-		var rslt = calc.divide(-1.0,0);
-		
-		//En caso de dividir números reales por 0 el resultado da +-infinito, por lo que el assertEquals se actualiza a Double.POSITIVE_INIFINITY y Double.NEGATIVE_INFINITY respectivamente en vez de utilizar un valor "tangible"
+		var rslt = calc.divide(dividendo,divisor);
 		
 		//Aunque el resultado de infinito al dividir por zero el test se realiza del mismo modo 
-		assertEquals(Double.NEGATIVE_INFINITY, rslt);
+		assertEquals(-0.25, rslt);
 	}
 	
 }
