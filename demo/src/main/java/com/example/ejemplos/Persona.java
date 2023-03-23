@@ -16,14 +16,14 @@ public class Persona {
 	
 	public Persona(int id, String nombre, String apellidos) {
 		super();
-		this.id = id;
+		setId(id);
 		setNombre(nombre);
 		setApellidos(apellidos);
 	}
 	
 	public Persona(int id, String nombre) {
 		super();
-		this.id = id;
+		setId(id);
 		setNombre(nombre);
 		removeApellidos();
 	}
@@ -33,6 +33,7 @@ public class Persona {
 	}
 
 	public void setId(int id) {
+		if(id < 0) throw new IllegalArgumentException();
 		this.id = id;
 	}
 
@@ -41,7 +42,7 @@ public class Persona {
 	}
 
 	public void setNombre(String nombre) {
-		if (nombre == null || nombre == "" || nombre.length() < 2) throw new IllegalArgumentException();
+		if (nombre == null || nombre == "" || nombre.length() <= 2) throw new IllegalArgumentException();
 		this.nombre = nombre;
 	}
 
@@ -50,7 +51,7 @@ public class Persona {
 	}
 
 	public void setApellidos(String apellidos) {
-		if (apellidos == null || "".equals(apellidos) || apellidos.length() < 2) throw new IllegalArgumentException();
+		if (apellidos == null || "".equals(apellidos) || apellidos.length() <= 2) throw new IllegalArgumentException();
 		this.apellidos = apellidos;
 	}
 	

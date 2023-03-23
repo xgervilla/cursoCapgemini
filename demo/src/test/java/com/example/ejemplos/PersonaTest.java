@@ -66,7 +66,7 @@ class PersonaTest {
 		class OK {
 			@ParameterizedTest(name = "Id: {0}, {1} {2}")
 			@Smoke
-			@CsvSource(value = {"13,Juan,Sanchez", "9,Marcos,Lopez", "19999994,Lionel,Messi", "10,Ansu,Fati","999999999,Bad,Bunny"})
+			@CsvSource(value = {"13,Juan,Sanchez", "9,Marcos,Lopez", "19999994,Lionel,Messi", "010,Ansu,Fati","999999999,Carolina,Marin"})
 			void testPersonaCompleta(int id, String nombre, String apellidos) {
 				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
 				
@@ -100,25 +100,25 @@ class PersonaTest {
 		//Tests con valores no válidos (si por cualquier motivo se llegasen a utilizar se produce un fallo)
 		@Nested
 		class KO {
-			@ParameterizedTest(name = "Id: {0}, {1} {2}")
-			@CsvSource(value = {",,", ",,", ",,", ",,"})
-			void testPersonaNombreNulo(int id, String nombre, String apellidos) {
-				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
-				
-			}
 			
 			@ParameterizedTest(name = "Id: {0}, {1} {2}")
-			@CsvSource(value = {",,", ",,", ",,", ",,"})
-			void testPersonaLongitud(int id, String nombre, String apellidos) {
-				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
-				
+			@Smoke
+			@CsvSource(value = {"9001,Po,Llofrito", "3333,MC,Donalds","1234,Evaris,To", "9876,Pimpine,La", "122,null,pop"})
+			void testPersonaLongitudNombreApellido(int id, String nombre, String apellidos) {
+				if("null".equals(nombre)) {
+					assertThrows(IllegalArgumentException.class, ()-> new Persona(id, null, apellidos));
+				}
+				else {
+					assertThrows(IllegalArgumentException.class, ()-> new Persona(id, nombre, apellidos));
+				}
 			}
 			
+			//Test de Persona con ID invalido -> Illegal Argument Exception si es < 0
 			@ParameterizedTest(name = "Id: {0}, {1} {2}")
-			@CsvSource(value = {"999999999,Kun,Aguero", "-188889,Vinicius,JR", "0556,Carolina,Marin"})
-			void testPersonaIdInvalido(int id, String nombre, String apellidos) {
-				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
-				
+			@Smoke
+			@CsvSource(value = {"-8891,Vinicius,JR"}) //, "999999999,Kun,Aguero"
+			void testPersonaIdInvalido(int id, String nombre, String apellidos) {	
+				assertThrows(IllegalArgumentException.class, ()-> new Persona(id, nombre, apellidos));
 			}
 		}
 			
