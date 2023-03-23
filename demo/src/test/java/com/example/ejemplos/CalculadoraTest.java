@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.doubleThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
@@ -27,6 +28,7 @@ class CalculadoraTest {
 
 	@Nested
 	@DisplayName("Pruebas del método suma")
+	//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 	class Suma {
 		
 		//Tests válidos
@@ -88,6 +90,7 @@ class CalculadoraTest {
 	}
 	
 	@Nested
+	@DisplayName("Pruebas del método divide")
 	class Divide {
 		
 		//Tests válidos
