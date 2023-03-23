@@ -103,13 +103,16 @@ class PersonaTest {
 			
 			@ParameterizedTest(name = "Id: {0}, {1} {2}")
 			@Smoke
-			@CsvSource(value = {"9001,Po,Llofrito", "3333,MC,Donalds","1234,Evaris,To", "9876,Pimpine,La", "122,null,pop", })
+			@CsvSource(value = {"9001,Po,Llofrito", "3333,MC,Donalds","1234,Evaris,To", "9876,Pimpine,La", "122,null,pop", "12,Pop,apellido_vacio", "13,Pulpo,nombre_vacio"})
 			void testPersonaLongitudNombreApellido(int id, String nombre, String apellidos) {
 				if("null".equals(nombre)) {
 					assertThrows(IllegalArgumentException.class, ()-> new Persona(id, null, apellidos));
 				}
 				else if ("apellido_vacio".equals(apellidos)){
 					assertThrows(IllegalArgumentException.class, ()-> new Persona(id, nombre, ""));
+				}
+				else if ("nombre_vacio".equals(apellidos)){
+					assertThrows(IllegalArgumentException.class, ()-> new Persona(id, "", apellidos));
 				}
 				else {
 					assertThrows(IllegalArgumentException.class, ()-> new Persona(id, nombre, apellidos));
