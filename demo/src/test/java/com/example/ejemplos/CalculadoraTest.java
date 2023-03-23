@@ -11,16 +11,17 @@ import org.junit.jupiter.api.Test;
 import lombok.experimental.var;
 
 class CalculadoraTest {
+	Calculadora calc;
 
+	//Instanciación del objeto antes de cada prueba. En caso de querer usar la misma instancia en todas se puede cambiar por @BeforeAll
 	@BeforeEach
 	void setUp() throws Exception {
+		calc = new Calculadora();
 	}
 
 	//suma de dos numeros positivos
 	@Test
 	void testSumaPositivo() {
-		//instanciación del objeto a testear
-		var calc = new Calculadora();
 		
 		//ejecución de la función/método a testear
 		var rslt = calc.suma(0.3,1.4);
@@ -35,8 +36,6 @@ class CalculadoraTest {
 	//suma de un numero positivo y otro negativo
 	@Test
 	void testSumaPositivoNegativo() {
-		//instanciación del objeto a testear
-		var calc = new Calculadora();
 		
 		//ejecución de la función/método a testear
 		var rslt = calc.suma(9,-5);
@@ -48,8 +47,6 @@ class CalculadoraTest {
 	//suma de dos numeros negativos
 	@Test
 	void testSumaNegativo() {
-		//instanciación del objeto a testear
-		var calc = new Calculadora();
 		
 		//ejecución de la función/método a testear
 		var rslt = calc.suma(-1,-7);
@@ -61,8 +58,6 @@ class CalculadoraTest {
 	//suma de dos numeros positivos
 	@Test
 	void testSumaDecimales() {
-		//instanciación del objeto a testear
-		var calc = new Calculadora();
 		
 		//ejecución de la función/método a testear
 		var rslt = calc.suma(0.3,1.4);
@@ -78,8 +73,6 @@ class CalculadoraTest {
 	//division de dos numeros enteros --> al implementar una segunda función de dividir con dos enteros como parámetros hay error al dividir enteros si el resultado contiene decimales
 	@Test
 	void testDividirEnteros() {
-		var calc = new Calculadora();
-
 		//en caso de dividir dos enteros cuyo resultado NO tenga decimales (4/2 = 2 por ejemplo) cambiar a assertEquals para comprobar que en este caso el resultado SÍ que es el esperado
 		//el caso de que la división tenga decimales se produce un error; como el fallo es conocido el test comprueba que el resultado sea NOT equal y así ver que efectivamente no devuelve el resultado esperado
 		var rslt = calc.divide(1,2);
@@ -99,8 +92,6 @@ class CalculadoraTest {
 		 * assumeTrue para comprobar que el valor divisor es diferente de 0 --equivalente a-- assumeFalse para comprobar que el valor divisor es igual a 0*/
 		//si el divisor es 0 el test no está en condiciones "idóneas" para ejecutar por lo que el test se saltará (NO ES FALLO NI SUCCESS SINO SKIP)
 		assumeTrue(divisor != 0.0, "Tried to divide by Zero");
-		
-		var calc = new Calculadora();
 
 		var rslt = calc.divide(dividendo,divisor);
 		
