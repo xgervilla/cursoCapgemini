@@ -11,6 +11,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.commons.annotation.Testable;
 
 import lombok.experimental.var;
@@ -78,7 +80,12 @@ class CalculadoraTest {
 				assertEquals(0.3, rslt);
 			}
 			
-			
+			@ParameterizedTest(name = "{0} + {1} = {2}")
+			@DisplayName("Test de suma parametrizado")
+			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3"})
+			void testSumaParametrizado(double operand1, double operand2, double result) {
+				assertEquals(result, calc.suma(operand1, operand2));
+			}
 			
 		}
 

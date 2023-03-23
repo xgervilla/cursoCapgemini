@@ -42,8 +42,7 @@ class PersonaTest {
 		
 		assertAll("Inicialización de la persona", 
 				()-> assertEquals(repetitionInfo.getCurrentRepetition(), p.getId(), "Fallo en el ID"),
-				//si añadimos un condicional para que la iteración 4 compruebe algo diferente podemos ver que sólo falla esta iteración, el resto no dan fallos
-				()-> assertEquals("Pepito" + (repetitionInfo.getCurrentRepetition() % 4 == 0 ? "__4" : repetitionInfo.getCurrentRepetition()), p.getNombre(), "Fallo en el nombre"),
+				()-> assertEquals("Pepito" + repetitionInfo.getCurrentRepetition(), p.getNombre(), "Fallo en el nombre"),
 				()-> assertEquals("Grillo" + repetitionInfo.getCurrentRepetition(), p.getApellidos(), "Fallo en el apellido"));
 	}
 
