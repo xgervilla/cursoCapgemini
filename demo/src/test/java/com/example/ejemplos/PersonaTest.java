@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import lombok.experimental.var;
@@ -24,9 +26,12 @@ class PersonaTest {
 	void setUp() throws Exception {
 	}
 
-	@Test
-	void testCreate() {
-		var p = Persona.builder().id(1).nombre("Pepito").apellidos("Grillo").build();
+	@RepeatedTest(value = 5, name = "{displayName} {currentRepetition}/{totalReptitions}")
+	void testCreate(RepetitionInfo repetitionInfo) {
+		var p = Persona.builder()
+				.id(repetitionInfo.getCurrentRepetition())
+				.nombre("Pepito" + repetitionInfo.getCurrentRepetition())
+				.apellidos("Grillo" + repetitionInfo.getCurrentRepetition()).build();
 		
 		assertNotNull(p);
 		
@@ -36,9 +41,9 @@ class PersonaTest {
 		//p.setNombre("Juan");
 		
 		assertAll("Inicialización de la persona", 
-				()-> assertEquals(1, p.getId(), "Fallo en el ID"),
-				()-> assertEquals("Pepito", p.getNombre(), "Fallo en el nombre"),
-				()-> assertEquals("Grillo", p.getApellidos(), "Fallo en el apellido"));
+				()-> assertEquals(repetitionInfo.getCurrentRepetition(), p.getId(), "Fallo en el ID"),
+				()-> assertEquals("Pepito" + repetitionInfo.getCurrentRepetition(), p.getNombre(), "Fallo en el nombre"),
+				()-> assertEquals("Grillo" + repetitionInfo.getCurrentRepetition(), p.getApellidos(), "Fallo en el apellido"));
 	}
 
 }
