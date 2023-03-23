@@ -24,6 +24,7 @@ import com.example.core.test.SpaceCamelCase;
 
 import lombok.experimental.var;
 
+@DisplayNameGeneration(SpaceCamelCase.class)
 class CalculadoraTest {
 	Calculadora calc;
 
@@ -37,7 +38,6 @@ class CalculadoraTest {
 
 	@Nested
 	@DisplayName("Pruebas del método suma")
-	@DisplayNameGeneration(SpaceCamelCase.class)
 	class Suma {
 		
 		//Tests válidos
