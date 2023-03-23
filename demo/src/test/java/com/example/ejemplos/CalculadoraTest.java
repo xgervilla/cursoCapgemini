@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.doubleThat;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -36,8 +37,10 @@ class CalculadoraTest {
 		//Tests válidos
 		@Nested
 		class OK {
+			//Disabled para no realizarlo, ya se considera de manera similar en el caso de decimales (evitamos repetir la prueba cada vez que ejecutamos pero se puede reactivar en cualquier momento.
 			//suma de dos numeros positivos
 			@Test
+			@Disabled
 			void testSumaPositivo() {
 				
 				//ejecución de la función/método a testear
@@ -82,8 +85,7 @@ class CalculadoraTest {
 			
 			@ParameterizedTest(name = "{0} + {1} = {2}")
 			@DisplayName("Test de suma parametrizado")
-			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3", "-1,-1,2", "-1.9,0.7,-1.2"})
-			//-1 + -1 = -2 ->  aunque el test de fallo el resto de tests si que se ejecutan
+			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3", "-1,-1,-2", "-1.9,0.7,-1.2"})
 			void testSumaParametrizado(double operand1, double operand2, double result) {
 				assertEquals(result, calc.suma(operand1, operand2));
 			}
