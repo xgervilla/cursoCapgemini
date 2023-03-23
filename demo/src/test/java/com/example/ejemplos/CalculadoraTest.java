@@ -95,6 +95,9 @@ class CalculadoraTest {
 		//Tests inválidos
 		@Nested
 		class KO {
+			/* Dividir dos enteros no se considera test inválido ya que es un escenario plausible, el problema se encuentra en la ambigüedad de las funciones de la clase Calculadora
+			 * Se debería controlar desde la clase lanzando una excepción cuando el módulo es diferente de cero o eliminando directamente la función ambigua para hacer que se consideren en la función con doubles como parámetros
+			 */
 		}
 		
 	}
@@ -138,7 +141,6 @@ class CalculadoraTest {
 				
 				/*En caso de dividir números reales por 0 el resultado da +-infinito. Hay varias alternativas para "tratar" el resultado:
 				 * modificar la clase para que lance una excepción al intentar dividir por cero
-				 * assumeTrue para comprobar que el valor divisor es diferente de 0 --equivalente a-- assumeFalse para comprobar que el valor divisor es igual a 0
 				 * assertEquals con los valores Double.POSITIVE_INIFINITY y Double.NEGATIVE_INFINITY
 				 * assertTrue comprobando que el resultado es infinito
 				 */
@@ -146,9 +148,14 @@ class CalculadoraTest {
 				//Opción 1: modificar la clase
 				assertThrows(ArithmeticException.class, () -> calc.divide(dividendo,divisor));
 				
-				/* Sólo habilitar si no se envía excepción desde la clase Calculadora
+				/* LA SEGUNDA OPCIÓN NO ES VÁLIDA
+				 * Sí que "previene" dividir por cero pero no es un buen uso de assumeTrue, que se debe utilizar para asegurar que el test se realiza en las condiciones correctas.
+				 * En este caso el test está en condiciones correctas pero con valores que requieren una gestión especial, por lo que sí que se deería ejecutar y detectar fallo o success y no hacer skip
 				//Opción 2: Asume que el divisor es diferente de cero
 				assumeTrue(divisor != 0.0, "Tried to divide by Zero");
+				 */
+				
+				/* Sólo habilitar si no se envía excepción desde la clase Calculadora
 
 				var rslt = calc.divide(dividendo,divisor);
 				//Opción 3: Equals con infinity
