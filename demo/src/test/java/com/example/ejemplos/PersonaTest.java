@@ -66,7 +66,7 @@ class PersonaTest {
 		class OK {
 			@ParameterizedTest(name = "Id: {0}, {1} {2}")
 			@Smoke
-			@CsvSource(value = {"13,Juan,Sanchez", "9,Marcos,Lopez", "19999994,Lionel,Messi", "010,Ansu,Fati","999999999,Carolina,Marin"})
+			@CsvSource(value = {"13,Juan,Sanchez", "9,Marcos,López", "19999994,Lionel,Messi", "010,Ansu,Fati","999999999,Carolina,Muñoz"})
 			void testPersonaCompleta(int id, String nombre, String apellidos) {
 				var p = Persona.builder().id(id).nombre(nombre).apellidos(apellidos).build();
 				
