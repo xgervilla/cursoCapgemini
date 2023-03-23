@@ -82,7 +82,8 @@ class CalculadoraTest {
 			
 			@ParameterizedTest(name = "{0} + {1} = {2}")
 			@DisplayName("Test de suma parametrizado")
-			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3"})
+			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3", "-1,-1,2", "-1.9,0.7,-1.2"})
+			//-1 + -1 = -2 ->  aunque el test de fallo el resto de tests si que se ejecutan
 			void testSumaParametrizado(double operand1, double operand2, double result) {
 				assertEquals(result, calc.suma(operand1, operand2));
 			}
