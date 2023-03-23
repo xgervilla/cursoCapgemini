@@ -70,13 +70,10 @@ class CalculadoraTest {
 			void testSumaDecimales() {
 				
 				//ejecución de la función/método a testear
-				var rslt = calc.suma(0.3,1.4);
+				var rslt = calc.suma(0.2,0.1);
 				
 				//valor que espero -- valor obtenido
-				assertEquals(1.7, rslt);
-				/*var rslt = calc.suma(0.2,0.1);
 				assertEquals(0.3, rslt);
-				valor esperado: 0.3 -- valor obtenido: 0.30000000000000004 --> test fallido*/
 			}
 			
 			
@@ -86,16 +83,6 @@ class CalculadoraTest {
 		//Tests inválidos
 		@Nested
 		class KO {
-			//suma de dos enteros con decimales
-			@Test
-			void testSumaDecimales() {
-				
-				//ejecución de la función/método a testear
-				var rslt = calc.suma(0.2,0.1);
-				
-				//valor esperado: 0.3 -- valor obtenido: 0.30000000000000004 --> test fallido
-				assertNotEquals(0.3, rslt);
-			}
 		}
 		
 	}
