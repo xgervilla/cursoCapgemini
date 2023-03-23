@@ -150,7 +150,6 @@ class CalculadoraTest {
 				 * assertTrue comprobando que el resultado es infinito
 				 */
 				
-				
 				//Opción 1: Asume que el divisor es diferente de cero
 				assumeTrue(divisor != 0.0, "Tried to divide by Zero");
 
