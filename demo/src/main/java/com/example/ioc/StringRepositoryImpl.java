@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
+import com.example.exceptions.InvalidDataException;
 
 @Primary
 @Repository
@@ -17,7 +18,10 @@ public class StringRepositoryImpl implements StringRepository {
 	}
 	
 	@Override
-	public void save(String item) {
+	public void save(String item) throws InvalidDataException {
+		if (item == "") {
+			throw new InvalidDataException("Data can't be empty");
+		}
 		System.out.println("Anterior: " + ultimo);
 		System.out.println("Guardo el item " + item);
 		this.ultimo = item;
