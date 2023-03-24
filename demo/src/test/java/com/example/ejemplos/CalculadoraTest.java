@@ -117,9 +117,9 @@ class CalculadoraTest {
 			@Smoke
 			void testSumaMock() {
 				Calculadora calc = mock(Calculadora.class);
-				//declaramos que cuando se ejecute la suma con los parámetros 2,2 devuelva siempre el valor 3.0
+				//declaramos que cuando se ejecute la suma con cualquier parámetro devuelva siempre el valor 3.0
 				when(calc.suma(anyDouble(),anyDouble())).thenReturn(3.0);
-				//al realizar la operación vemos que el resultado devuelto es igual a 3 (el valor que le hemos dicho que devuelva siempre) -> en condiciones "funcionales" devolvería 4 pero mockeamos la clase para poder simular su comportamiento
+				//al realizar la operación vemos que el resultado devuelto es igual a 3 (el valor que le hemos dicho que devuelva siempre) -> en condiciones "funcionales" devolvería 17 pero mockeamos la clase para poder simular y predecir su comportamiento
 				assertEquals(3, calc.suma(8, 9));
 			}
 			
