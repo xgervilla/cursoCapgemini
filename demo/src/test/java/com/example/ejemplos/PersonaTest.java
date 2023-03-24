@@ -1,6 +1,7 @@
 package com.example.ejemplos;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 
 import com.example.core.test.Smoke;
+import com.example.exceptions.InvalidDataException;
 import com.example.ioc.PersonaRepository;
 
 import lombok.experimental.var;
@@ -138,9 +140,15 @@ class PersonaTest {
 		@Nested
 		@Smoke
 		class PersonaRepositoryTest {
-			@Mock
+			
 			PersonaRepository dao;
 			
+			@BeforeEach
+			void setUp() throws Exception {
+				dao = mock(PersonaRepository.class);
+			}
+			
+			//test de carga de una persona
 			@Test
 			void testLoad() {
 				PersonaRepository dao = mock(PersonaRepository.class);
@@ -155,6 +163,13 @@ class PersonaTest {
 						()-> assertEquals(1, p.getId(), "Fallo en el ID"),
 						()-> assertEquals("Pepito", p.getNombre(), "Fallo en el nombre"),
 						()-> assertEquals("Grillo", p.getApellidos().get(), "Fallo en el apellido"));
+			}
+			
+			//test de guardado de una persona --> si se guarda null debe saltar error
+			@Test
+			void testSave() throws InvalidDataException{
+				doThrow(new IllegalArgumentException()).when(dao).save(null);
+				assertThrows(IllegalArgumentException.class, () -> dao.save(null));
 			}
 		}
 	}
