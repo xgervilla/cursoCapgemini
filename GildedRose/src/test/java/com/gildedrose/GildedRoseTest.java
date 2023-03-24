@@ -20,6 +20,8 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Sulfuras, Hand of Ragnaros", app.items[0].name);
+        assertEquals(0, app.items[0].sellIn);
+        assertEquals(80, app.items[0].quality);
     }
     
     @Test
@@ -28,6 +30,8 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Aged Brie", app.items[0].name);
+        assertEquals(0, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
     }
     
     @Test
@@ -36,6 +40,8 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Backstage passes to a TAFKAL80ETC concert", app.items[0].name);
+        assertEquals(0, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
     }
 
 }
