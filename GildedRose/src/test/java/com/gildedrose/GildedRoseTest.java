@@ -46,7 +46,7 @@ class GildedRoseTest {
             assertEquals(quality, app.items[0].quality);
         }
         
-    	//Test con el Item Aged Brie --> 
+    	//Test con el Item Aged Brie --> sellIn decrementa en 1 y la calidad aumenta según las especificaciones
     	@ParameterizedTest(name = "SellIn: {0}, Quality: {1}, SellInFinal: {2}, QualityFinal: {3}")
         @CsvSource(value = {"0,5,7", "6,50,50", "-1,49,50"})
         void BrieTest(int sellIn, int qualityInitial, int qualityFinal) {
@@ -61,13 +61,13 @@ class GildedRoseTest {
         //Test con el Item Backstage passes
     	@ParameterizedTest(name = "SellIn: {0}, Quality: {1}, SellInFinal: {2}, QualityFinal: {3}")
         @Disabled
-        @CsvSource(value = {"0,0,0,0"})
-        void BackstageTest(int sellInInitial, int qualityInitial, int sellInFinal, int qualityFinal) {
-            Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", sellInInitial, qualityInitial) };
+        @CsvSource(value = {"0,14,0", "20,15,16", "7,0,2","2,46,49","1,49,50"})
+        void BackstageTest(int sellIn, int qualityInitial, int qualityFinal) {
+            Item[] items = new Item[] { new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, qualityInitial) };
             GildedRose app = new GildedRose(items);
             app.updateQuality();
             assertEquals("Backstage passes to a TAFKAL80ETC concert", app.items[0].name);
-            assertEquals(sellInFinal, app.items[0].sellIn);
+            assertEquals(sellIn-1, app.items[0].sellIn);
             assertEquals(qualityFinal, app.items[0].quality);
         }
     }
