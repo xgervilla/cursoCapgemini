@@ -16,7 +16,7 @@ import lombok.Data;
  *  - Valores nulos en el nombre (NO permitido)
  *  - Nombres y apellidos con dos carácteres o menos (NO permitido)
  *  - Nombres y apellidos con string vacía (NO permitido)
- *  - IDs con más números de los que soporta el tipo int (permitido aunque no esperado?)
+ *  - IDs con más números de los que soporta el tipo int (NO permitido ni esperado, en la definición de los datos debe nespecificarse los rangos de valores y adaptar el tipo según sea necesario)
  *  - IDs empezando en 0 (permitido aunque no esperado?)
  */
 

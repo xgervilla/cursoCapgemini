@@ -122,7 +122,8 @@ class PersonaTest {
 			//Test de Persona con ID invalido -> Illegal Argument Exception si es < 0
 			@ParameterizedTest(name = "Id: {0}, {1} {2}")
 			@Smoke
-			@CsvSource(value = {"-8891,Vinicius,JR"}) //, "999999999,Kun,Aguero"
+			@CsvSource(value = {"-8891,Vinicius,JR"})
+			//"9999999999999,Kun,Aguero" 	--> 	es ID no válido porque supera el valor soportado por el tipo int pero es un fallo de nivel "superior" (especificación de los datos, si el rango de valores está dentro de lo que permite int entonces utilizar un valor superior no será válido ni esperado)
 			void testPersonaIdInvalido(int id, String nombre, String apellidos) {	
 				assertThrows(IllegalArgumentException.class, ()-> new Persona(id, nombre, apellidos));
 			}
