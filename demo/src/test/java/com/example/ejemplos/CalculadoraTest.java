@@ -3,6 +3,7 @@ package com.example.ejemplos;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.doubleThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,8 +47,10 @@ class CalculadoraTest {
 		@Nested
 		class OK {
 			
+			//muestra por consola la información del test
 			@Test
-			//@Smoke
+			@Disabled
+			@Smoke
 			@DisplayName("Cotilla")
 			void cotilla(TestInfo testInfo, TestReporter testReporter) {
 				assertEquals("Cotilla", testInfo.getDisplayName());
@@ -115,9 +118,9 @@ class CalculadoraTest {
 			void testSumaMock() {
 				Calculadora calc = mock(Calculadora.class);
 				//declaramos que cuando se ejecute la suma con los parámetros 2,2 devuelva siempre el valor 3.0
-				when(calc.suma(2,2)).thenReturn(3.0);
+				when(calc.suma(anyDouble(),anyDouble())).thenReturn(3.0);
 				//al realizar la operación vemos que el resultado devuelto es igual a 3 (el valor que le hemos dicho que devuelva siempre) -> en condiciones "funcionales" devolvería 4 pero mockeamos la clase para poder simular su comportamiento
-				assertEquals(3, calc.suma(2, 2));
+				assertEquals(3, calc.suma(8, 9));
 			}
 			
 		}
