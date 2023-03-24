@@ -1,6 +1,8 @@
 package com.example.ejemplos;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +14,10 @@ import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
+
 import com.example.core.test.Smoke;
+import com.example.ioc.PersonaRepository;
 
 import lombok.experimental.var;
 
@@ -129,6 +134,29 @@ class PersonaTest {
 			}
 		}
 			
+		//Tests ocn un mock de persona
+		@Nested
+		@Smoke
+		class PersonaRepositoryTest {
+			@Mock
+			PersonaRepository dao;
+			
+			@Test
+			void testLoad() {
+				PersonaRepository dao = mock(PersonaRepository.class);
+				when(dao.load()).thenReturn(Persona.builder().id(1).nombre("Pepito").apellidos("Grillo").build());
+				var p = dao.load();
+				
+				assertNotNull(p);
+				
+				assertTrue(p instanceof Persona, "No es instancia de persona");
+				
+				assertAll("Inicialización de la persona", 
+						()-> assertEquals(1, p.getId(), "Fallo en el ID"),
+						()-> assertEquals("Pepito", p.getNombre(), "Fallo en el nombre"),
+						()-> assertEquals("Grillo", p.getApellidos().get(), "Fallo en el apellido"));
+			}
+		}
 	}
 
 }
