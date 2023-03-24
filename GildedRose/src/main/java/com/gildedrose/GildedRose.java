@@ -18,6 +18,16 @@ package com.gildedrose;
  * 			 -> 5<SellIn<=10 aumenta en 2 unidades a cada día que pasa
 */
 
+/*
+ ***INPUT SPECIAL CASES***
+ * Negative quality as object creation -> NO PERMITIDO (throw exception en la instanciación)
+ * Negative SellIn -> Permitido? Implica que la fecha de venta ya ha pasado
+ * Quality > 50 --CUANDO NO ES SULFURAS-- -> NO PERMITIDO
+ * Quality < 0 -> NO PERMITIDO
+ * Quality != 80 --CUANDO ES SULFURAS-- -> NO PERMITIDO
+ * Nombre nulo/longitud menor de x carácteres -> NO PERMITIDO (throw exception en la instanciación)
+ * */
+
 class GildedRose {
     Item[] items;
 
