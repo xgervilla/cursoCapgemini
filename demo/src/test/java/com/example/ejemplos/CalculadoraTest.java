@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.doubleThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -105,6 +107,17 @@ class CalculadoraTest {
 			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3", "-1,-1,-2", "-1.9,0.7,-1.2"})
 			void testSumaParametrizado(double operand1, double operand2, double result) {
 				assertEquals(result, calc.suma(operand1, operand2));
+			}
+			
+			//Test con un mock para ver el comportamiento del mock
+			@Test
+			@Smoke
+			void testSumaMock() {
+				Calculadora calc = mock(Calculadora.class);
+				//declaramos que cuando se ejecute la suma con los parámetros 2,2 devuelva siempre el valor 3.0
+				when(calc.suma(2,2)).thenReturn(3.0);
+				//al realizar la operación vemos que el resultado devuelto es igual a 3 (el valor que le hemos dicho que devuelva siempre) -> en condiciones "funcionales" devolvería 4 pero mockeamos la clase para poder simular su comportamiento
+				assertEquals(3, calc.suma(2, 2));
 			}
 			
 		}
