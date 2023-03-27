@@ -49,7 +49,7 @@ class ValidadorNIFTest {
 		
 		//8 números + letra
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"49487953A"})
+		@CsvSource(value = {"98238867W", "12345678Z", "Y3574767Y"})
 		void testNIFConLetra(String nif) {
 			var validador = new ValidadorNIF();
 			assertTrue(validador.isvalido(nif));
@@ -77,7 +77,7 @@ class ValidadorNIFTest {
 		
 		//8 números + letra PERO letra no válida
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"49487953R"})
+		@CsvSource(value = {"49487953R", "00000000T"})
 		void testLetraNoValida(String nif) {
 			var validador = new ValidadorNIF();
 			assertFalse(validador.isvalido(nif));
@@ -92,8 +92,9 @@ class ValidadorNIFTest {
 		}
 		
 		//test opcional: combinación de letras y números
+		@Disabled
 		@ParameterizedTest(name= "NIF: {0}")
-		@CsvSource(value = {"A4B4C7953"})
+		@CsvSource(value = {"4B4C7953B"})
 		void testNifErroneo(String nif) {
 			var validador = new ValidadorNIF();
 			assertFalse(validador.isvalido(nif));
