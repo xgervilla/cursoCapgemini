@@ -1,4 +1,4 @@
-# Curso de Java
+# Curso de formación
 ## Spring, Maven, JavaScript, NodeJS, ReactJS
 
 ---
