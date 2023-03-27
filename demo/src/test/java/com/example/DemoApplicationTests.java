@@ -17,7 +17,7 @@ import com.example.ioc.StringRepositoryMockImpl;
 
 import lombok.experimental.var;
 
-@SpringBootTest
+@SpringBootTest(properties= {"mi.valor=Falso"})
 class DemoApplicationTests {
 
 	@Autowired
