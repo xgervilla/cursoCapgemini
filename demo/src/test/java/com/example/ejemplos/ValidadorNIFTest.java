@@ -10,8 +10,12 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 
 import com.example.core.test.SpaceCamelCase;
+
+import lombok.experimental.PackagePrivate;
 
 /* NIF Válido:
 	* Personas físicas:
@@ -39,20 +43,21 @@ class ValidadorNIFTest {
 	@DisplayName("NIF válidos")
 	class OK {
 		
-		//8 números (sin letra)
+		//8 números (sin letra), 8 números + letra y caso nif = null (mediante NullSource
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"49487953", "01234567"})
+		@CsvSource(value = {"40556524", "01234567", "98238867W", "12345678Z", "Y3578217Y"})
+		@NullSource
 		void testNIFSinLetra(String nif) {
 			var validador = new ValidadorNIF();
-			assertTrue(validador.isvalido(nif));
+			assertTrue(validador.isValido(nif));
 		}
 		
-		//8 números + letra
-		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"98238867W", "12345678Z", "Y3574767Y"})
-		void testNIFConLetra(String nif) {
+		//prueba de la función isNotValido con el NIF vacío
+		@ParameterizedTest(name="NIF: {0}")
+		@EmptySource
+		void testNIFNotValid(String nif) {
 			var validador = new ValidadorNIF();
-			assertTrue(validador.isvalido(nif));
+			assertTrue(validador.isNotValido(nif));
 		}
 		
 	}
@@ -61,43 +66,34 @@ class ValidadorNIFTest {
 	@DisplayName("NIF inválidos")
 	class KO{
 		
-		//7 números (con o sin letra)
+		//<8 números (con o sin letra) -> incluye el caso de nif vacío ""
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"0","11111","1"})
+		@CsvSource(value = {"0","11111","4g"})
 		void testLongitudInferior(String nif) {
 			var validador = new ValidadorNIF();
-			assertFalse(validador.isvalido(nif));
+			assertFalse(validador.isValido(nif));
 		}
 		
 		//>8 números (con o sin letra)
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"123456789"})
+		@CsvSource(value = {"123456789", "12345678A10"})
 		void testLetraLongitudSuperior(String nif) {
 		}
 		
-		//8 números + letra PERO letra no válida
+		//8 números + letra PERO letra no correcta
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"49487953R", "00000000T"})
+		@CsvSource(value = {"17137272K", "98795469L"})
 		void testLetraNoValida(String nif) {
 			var validador = new ValidadorNIF();
-			assertFalse(validador.isvalido(nif));
+			assertFalse(validador.isValido(nif));
 		}
 		
 		//letra + 8 números ("orden erróneo")
 		@ParameterizedTest(name= "NIF: {0}")
-		@CsvSource(value = {"A49487953"})
+		@CsvSource(value = {"Z78664821"})
 		void testOrdenInverso(String nif) {
 			var validador = new ValidadorNIF();
-			assertFalse(validador.isvalido(nif));
-		}
-		
-		//test opcional: combinación de letras y números
-		@Disabled
-		@ParameterizedTest(name= "NIF: {0}")
-		@CsvSource(value = {"4B4C7953B"})
-		void testNifErroneo(String nif) {
-			var validador = new ValidadorNIF();
-			assertFalse(validador.isvalido(nif));
+			assertFalse(validador.isValido(nif));
 		}
 	}
 
