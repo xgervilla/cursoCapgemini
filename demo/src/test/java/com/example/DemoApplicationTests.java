@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.example.ioc.StringRepository;
 import com.example.ioc.StringRepositoryMockImpl;
+
+import lombok.experimental.var;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -23,6 +26,13 @@ class DemoApplicationTests {
 	@Test
 	void contextLoads() {
 		assertEquals("Soy el StringRepositoryImpl", dao.load());
+	}
+	
+	@Value("${mi.valor:(Sin valor)}")
+	private String config;
+	@Test
+	void valueLoads() {
+		assertEquals("Valor por defecto",config);
 	}
 	
 	//Creamos una clase de configuración (mock o clase especial para modificar el comportamiento normal --> cambios entre test e integración por ejemplo)
@@ -44,7 +54,7 @@ class DemoApplicationTests {
 		
 		@Test
 		void contextLoads(){
-			assertEquals("Soy el doble de pruebas de StringRepository", dao.load());
+			assertEquals("Soy el doble de prueba de StringRepositoryImpl", dao.load());
 		}
 	}
 	
@@ -65,7 +75,7 @@ class DemoApplicationTests {
 		
 		@Test
 		void contextLoads() {
-			assertEquals("Soy el doble de pruebas de StringRepository", dao.load());
+			assertEquals("Soy el doble de prueba de StringRepositoryImpl", dao.load());
 		}
 	}
 }
