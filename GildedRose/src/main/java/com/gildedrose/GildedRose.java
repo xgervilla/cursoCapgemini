@@ -21,7 +21,7 @@ package com.gildedrose;
 /*
  ***INPUT SPECIAL CASES***
  * Negative quality as object creation -> NO PERMITIDO (throw exception en la instanciación)
- * Negative SellIn -> Permitido? Implica que la fecha de venta ya ha pasado
+ * Negative SellIn -> Permitido, indica que la fecha de venta ya ha pasado
  * Quality > 50 --CUANDO NO ES SULFURAS-- -> NO PERMITIDO
  * Quality < 0 -> NO PERMITIDO
  * Quality != 80 --CUANDO ES SULFURAS-- -> NO PERMITIDO
