@@ -8,3 +8,4 @@
 * *demo-maven*: Creación de un proyecto mediante un arquetipo.
 * *demo*: Proyecto con el desarrollo principal y la realización de las pruebas.
 * *GildedRose*: Código del Gilded Rose
+* *rama.txt*: File to test merge of branches
