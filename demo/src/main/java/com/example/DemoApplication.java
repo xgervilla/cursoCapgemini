@@ -28,7 +28,24 @@ public class DemoApplication implements CommandLineRunner{
 		//dao.save(actor);
 		
 		//ejemplo de consulta a la base de datos para obtener todos los actores mediante ActorRepository
-		dao.findAll().forEach(System.out::println);
+		//dao.findAll().forEach(System.out::println);
+		
+		//obtenemos el actor con id 201 -> devuelve un objeto Optional para comprobar si es nulo o no
+		var item = dao.findById(201);
+		//si el actor se ha encontrado, lo modificamos y volvemos a guardar
+		if (item.isPresent()) {
+			//obtenemos el actor
+			var actor = item.get();
+			//le modificamos el apellido
+			actor.setLastName(actor.getLastName().toUpperCase());
+			//lo guardamos de nuevo en la base de datos (update)
+			dao.save(actor);
+			//imprimimos los actores de nuevo para ver los cambios
+			dao.findAll().forEach(System.out::println);
+		}
+		else {
+			System.out.println("Actor no encontrado");
+		}
 	}
 
 }
