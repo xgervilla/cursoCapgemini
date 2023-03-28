@@ -5,6 +5,7 @@ target/**
 *.ear
 *.class
 kk/**
+sparring_jpa/**
 
 # eclipse specific
 *.pydevproject
