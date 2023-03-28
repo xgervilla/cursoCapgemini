@@ -1,5 +1,8 @@
 package com.example;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +10,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.example.ioc.Rango;
 import com.example.ioc.StringRepository;
@@ -16,6 +21,8 @@ import com.example.ioc.StringService;
 import com.example.ioc.StringServiceImpl;
 import com.example.ioc.UnaTonteria;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.experimental.var;
 
 
@@ -53,12 +60,38 @@ public class DemoApplication implements CommandLineRunner{
 	UnaTonteria unaTonteria;
 	
 	
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+
+	@Data
+	@AllArgsConstructor
+	class Actor {
+		private int id;
+		private String first_name, last_name;
+	}
+	class ActorRowMapper implements RowMapper<Actor> {
+	      @Override
+	      public Actor mapRow(ResultSet rs, int rowNum) throws SQLException {
+	            return new Actor(rs.getInt("actor_id"), rs.getString("last_name"), rs.getString("first_name"));
+	      }
+	}
+	
+	
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
-		System.out.println(unaTonteria.dimeAlgo());
+		//var lst = jdbcTemplate.query("""
+		//		SELECT actor_id, first_name, last_name from actor
+		//		""", new ActorRowMapper());
+		//lst.forEach(System.out::println);
 		
-		System.out.println(config);
+		//example of 'complex' query to find all movie titles from actresses named Penelope
+		jdbcTemplate.queryForList("""
+				SELECT title FROM film f
+				WHERE f.film_id IN
+				(SELECT film_id FROM actor a INNER JOIN film_actor fa WHERE a.first_name='PENELOPE' AND a.actor_id=fa.actor_id)
+				""", String.class).forEach(System.out::println);
+		
 	}
 
 }
