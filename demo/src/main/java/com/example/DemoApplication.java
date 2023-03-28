@@ -80,10 +80,6 @@ public class DemoApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
-		//var lst = jdbcTemplate.query("""
-		//		SELECT actor_id, first_name, last_name from actor
-		//		""", new ActorRowMapper());
-		//lst.forEach(System.out::println);
 		
 		//example of 'complex' query to find all movie titles from actresses named Penelope
 		jdbcTemplate.queryForList("""
