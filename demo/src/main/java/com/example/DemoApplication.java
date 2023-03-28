@@ -23,19 +23,7 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		dao.deleteById(201);
-		
-		var item = dao.findById(201);
-		if (item.isPresent()) {
-			var actor = item.get();
-			actor.setLastName(actor.getLastName().toUpperCase());
-			dao.save(actor);
-			dao.findAll().forEach(System.out::println);
-		}
-		
-		else {
-			System.out.println("Actor no encontrado");
-		}
+		dao.findTop5ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.out::println);
 	}
 
 }
