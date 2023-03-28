@@ -24,14 +24,9 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		//dao.findTop5ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.out::println);
-		//dao.findTop5ByFirstNameStartingWith("P", Sort.by("firstName")).forEach(System.out::println);
+		dao.findAll((root, query, builder) -> builder.lessThan(root.get("actorId"), 5)).forEach(System.out::println);
 		
-		System.out.println("");
-		dao.findConNativeSQL(3).forEach(System.out::println);
-		
-		System.out.println("");
-		dao.findConJPQL(3).forEach(System.out::println);
+		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 200)).forEach(System.out::println);
 	}
 
 }
