@@ -24,9 +24,14 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		dao.findAll((root, query, builder) -> builder.lessThan(root.get("actorId"), 5)).forEach(System.out::println);
-		
-		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 200)).forEach(System.out::println);
+		var item = dao.findById(1);
+		if (item.isPresent()) {
+			var actor = item.get();
+			actor.getFilmActors().forEach(o -> System.out.println(o.getFilm().getTitle()));
+		}
+		else {
+			System.out.println("Actor not found");
+		}
 	}
 
 }
