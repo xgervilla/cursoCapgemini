@@ -32,17 +32,14 @@ public class DemoApplication implements CommandLineRunner{
 		//creación de un nuevo actor
 		var actor = new Actor(0, "Peter","Pan");
 		
-		//antes de almacenarlo se debe validar
-		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-		var err = validator.validate(actor);
-		//si hay errores en la validación se muestran por consola
-		if (err.size()>0) {
-			err.forEach(e -> System.out.println(e.getPropertyPath() + ": " + e.getMessage()));
-		}
-		//si no hay errores se guarda
-		else {
+		//validación de manera automática por la extensión de EntityBase en la clase Actor
+		
+		//si el actor no es válido, mostramos los errores
+		if (actor.isInvalid())
+			System.out.println(actor.getErrorsMessage());
+		//si es valido lo almacenamos
+		else
 			dao.save(actor);
-		}
 	}
 
 }
