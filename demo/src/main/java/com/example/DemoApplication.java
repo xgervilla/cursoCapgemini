@@ -29,9 +29,14 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		var actor = new Actor(0, "p","pollo");
-		//validación automática dentro del save
-		dao.save(actor);
+		var actor = new Actor(0, "4G","");
+		
+		if (actor.isInvalid())
+			System.out.println(actor.getErrorsMessage());
+		else {
+			dao.save(actor);
+		}
+		//dao.findAll().forEach(System.out::println);
 	}
 
 }
