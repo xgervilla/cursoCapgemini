@@ -30,7 +30,7 @@ public class DemoApplication implements CommandLineRunner{
 		System.out.println("Aplicación arrancada");
 		
 		//creación de un nuevo actor
-		var actor = new Actor(0, "Peter","Pan");
+		var actor = new Actor(0, "Peter","PAN");
 		
 		//validación de manera automática por la extensión de EntityBase en la clase Actor
 		
