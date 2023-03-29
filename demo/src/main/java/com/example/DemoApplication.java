@@ -1,4 +1,6 @@
 package com.example;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Sort;
 
 import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
+import com.example.domains.entities.dtos.ActorDTO;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validation;
@@ -40,7 +43,7 @@ public class DemoApplication implements CommandLineRunner{
 //		dao.findAll().forEach(System.out::println);
 		
 		var rslt = dao.findAll(PageRequest.of(1,20, Sort.by("actorId")));
-		rslt.getContent().forEach(System.out::println);
+		rslt.getContent().stream().map(item -> ActorDTO.from(item)).forEach(System.out::println);
 		
 	}
 
