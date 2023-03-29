@@ -2,6 +2,11 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +28,21 @@ public class Actor implements Serializable {
 	@Column(name="actor_id", unique=true, nullable=false)
 	private int actorId;
 
+	//Column(length) y Size(max) representan lo mismo pero se utilizan en contextos distintos por lo que se debe especificar "por duplicado"
 	@Column(name="first_name", nullable=false, length=45)
+	@NotBlank	//no puede ser una String llena de espacios vacíos "     "
+	@Size(max=45, min=2)	//no puede tener más de 45 carácteres y añadimos una regla "de cliente" para forzar un mínimo de 2 carácteres
+	@Pattern(regexp = "[A-Z]+", message="Tiene que estar en mayusculas.")
 	private String firstName;
 
 	@Column(name="last_name", nullable=false, length=45)
+	@Size(max=45, min=2)
+	@NotBlank
+	@Pattern(regexp = "[A-Z]+", message="Tiene que estar en mayusculas.")
 	private String lastName;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@PastOrPresent	//no puede actualizarse en el futuro 
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor
