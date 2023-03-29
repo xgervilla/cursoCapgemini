@@ -12,6 +12,8 @@ import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validation;
@@ -34,20 +36,16 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-//		var actor = new Actor(0, "4G","");
-//		
-//		if (actor.isInvalid())
-//			System.out.println(actor.getErrorsMessage());
-//		else {
-//			dao.save(actor);
-//		}
-		
-		dao.findAllBy(ActorDTO.class).forEach(System.out::println);
-		
-		System.out.println("");
-		
-		dao.findAllBy(ActorShort.class).forEach(System.out::println);
-		
+		ObjectMapper objectMapper = new ObjectMapper();
+		dao.findAllBy(ActorDTO.class).stream().map(item -> {
+			try {
+				return objectMapper.writeValueAsString(item);
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				return "";
+			}
+		}).forEach(System.out::println);
 	}
 
 }
