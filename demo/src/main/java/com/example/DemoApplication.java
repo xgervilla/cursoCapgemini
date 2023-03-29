@@ -29,17 +29,9 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		//creación de un nuevo actor
-		var actor = new Actor(0, "Peter","PAN");
-		
-		//validación de manera automática por la extensión de EntityBase en la clase Actor
-		
-		//si el actor no es válido, mostramos los errores
-		if (actor.isInvalid())
-			System.out.println(actor.getErrorsMessage());
-		//si es valido lo almacenamos
-		else
-			dao.save(actor);
+		var actor = new Actor(0, "p","pollo");
+		//validación automática dentro del save
+		dao.save(actor);
 	}
 
 }
