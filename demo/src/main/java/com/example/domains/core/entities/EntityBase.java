@@ -9,6 +9,8 @@ import jakarta.validation.Validator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+//En vez de validar cada nuevo objeto uno por uno se utiliza la entidad base para reutilizar código ya que la estructura de validación es siempre la misma
 public abstract class EntityBase<E> {
 	
 	@Transient
@@ -24,7 +26,7 @@ public abstract class EntityBase<E> {
 	public String getErrorsMessage() {
 		if(isValid()) return "";
 		StringBuilder sb = new StringBuilder("ERRORES: ");
-		getErrors().forEach(item -> sb.append(item.getPropertyPath() + ": " + item.getMessage() + ". "));
+		getErrors().stream().forEachOrdered(item -> sb.append(item.getPropertyPath() + ": " + item.getMessage() + ". "));
 		return sb.toString().trim();
 	}
 	
