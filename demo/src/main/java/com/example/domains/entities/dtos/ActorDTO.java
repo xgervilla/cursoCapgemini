@@ -5,10 +5,9 @@ import com.example.domains.entities.Actor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 public class ActorDTO {
 	private int actorId;
 	private String firstName;
