@@ -9,12 +9,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.domains.entities.Actor;
+import com.example.domains.entities.dtos.ActorDTO;
+import com.example.domains.entities.dtos.ActorShort;
 
 public interface ActorRepository extends JpaRepository<Actor, Integer>, JpaSpecificationExecutor<Actor> {
 	
 	//métodos construidos de manera automática
 	List<Actor> findTop5ByFirstNameStartingWithOrderByLastNameDesc(String prefijo);
 	List<Actor> findTop5ByFirstNameStartingWith(String prefijo, Sort order);
+	
+	List<ActorShort> findByActorIdNotNull();
 	
 	//métodos construidos para hacer la query mediante SQL/JPQL escrito
 	@Query("SELECT a FROM Actor a WHERE a.actorId < ?1")

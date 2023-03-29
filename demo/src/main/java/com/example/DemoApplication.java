@@ -41,9 +41,10 @@ public class DemoApplication implements CommandLineRunner{
 //			dao.save(actor);
 //		}
 //		dao.findAll().forEach(System.out::println);
-		
-		var rslt = dao.findAll(PageRequest.of(1,20, Sort.by("actorId")));
-		rslt.getContent().stream().map(item -> ActorDTO.from(item)).forEach(System.out::println);
+//		var rslt = dao.findAll(PageRequest.of(1,20, Sort.by("actorId")));
+//		rslt.getContent().stream().map(item -> ActorDTO.from(item)).forEach(System.out::println);
+		//dao.findByActorIdNotNull().forEach(System.out::println);
+		dao.findByActorIdNotNull().forEach(item -> System.out.println(item.getActorId() + " " + item.getNombre()));
 		
 	}
 
