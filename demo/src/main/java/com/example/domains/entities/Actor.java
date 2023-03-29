@@ -32,7 +32,6 @@ public class Actor implements Serializable {
 	@Column(name="first_name", nullable=false, length=45)
 	@NotBlank	//no puede ser una String llena de espacios vacíos "     "
 	@Size(max=45, min=2)	//no puede tener más de 45 carácteres y añadimos una regla "de cliente" para forzar un mínimo de 2 carácteres
-	@Pattern(regexp = "[A-Z]+", message="Tiene que estar en mayusculas.")
 	private String firstName;
 
 	@Column(name="last_name", nullable=false, length=45)
