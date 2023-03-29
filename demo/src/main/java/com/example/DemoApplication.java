@@ -9,6 +9,8 @@ import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 
 
@@ -27,13 +29,19 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		var item = dao.findById(1);
-		if (item.isPresent()) {
-			var actor = item.get();
-			actor.getFilmActors().forEach(o -> System.out.println(o.getFilm().getTitle()));
+		//creación de un nuevo actor
+		var actor = new Actor(0, "Peter","Pan");
+		
+		//antes de almacenarlo se debe validar
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		var err = validator.validate(actor);
+		//si hay errores en la validación se muestran por consola
+		if (err.size()>0) {
+			err.forEach(e -> System.out.println(e.getPropertyPath() + ": " + e.getMessage()));
 		}
+		//si no hay errores se guarda
 		else {
-			System.out.println("Actor not found");
+			dao.save(actor);
 		}
 	}
 
