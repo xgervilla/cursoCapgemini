@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.example.domains.contracts.repositories.ActorRepository;
+import com.example.domains.contracts.services.ActorService;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
@@ -20,7 +21,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 
 
-
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner{
 
@@ -29,23 +29,26 @@ public class DemoApplication implements CommandLineRunner{
 	}
 	
 	@Autowired
-	ActorRepository dao;
+	//ActorRepository dao;
+	ActorService srv;
 	
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		dao.findAllBy(ActorDTO.class).stream().map(item -> {
-			try {
-				return objectMapper.writeValueAsString(item);
-			}
-			catch (JsonProcessingException e) {
-				e.printStackTrace();
-				return "";
-			}
-		}).forEach(System.out::println);
+		//srv.add(new Actor(0,"4","d"));
+		
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		dao.findAllBy(ActorDTO.class).stream().map(item -> {
+//			try {
+//				return objectMapper.writeValueAsString(item);
+//			}
+//			catch (JsonProcessingException e) {
+//				e.printStackTrace();
+//				return "";
+//			}
+//		}).forEach(System.out::println);
 	}
 
 }
