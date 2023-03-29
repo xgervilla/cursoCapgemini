@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.dtos.ActorDTO;
+import com.example.domains.entities.dtos.ActorShort;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validation;
@@ -40,11 +41,12 @@ public class DemoApplication implements CommandLineRunner{
 //		else {
 //			dao.save(actor);
 //		}
-//		dao.findAll().forEach(System.out::println);
-//		var rslt = dao.findAll(PageRequest.of(1,20, Sort.by("actorId")));
-//		rslt.getContent().stream().map(item -> ActorDTO.from(item)).forEach(System.out::println);
-		dao.findByActorIdNotNull().forEach(System.out::println);
-		//dao.findByActorIdNotNull().forEach(item -> System.out.println(item.getActorId() + " " + item.getNombre()));
+		
+		dao.findAllBy(ActorDTO.class).forEach(System.out::println);
+		
+		System.out.println("");
+		
+		dao.findAllBy(ActorShort.class).forEach(System.out::println);
 		
 	}
 

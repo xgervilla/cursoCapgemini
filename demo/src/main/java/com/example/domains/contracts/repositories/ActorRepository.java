@@ -17,7 +17,8 @@ public interface ActorRepository extends JpaRepository<Actor, Integer>, JpaSpeci
 	List<Actor> findTop5ByFirstNameStartingWithOrderByLastNameDesc(String prefijo);
 	List<Actor> findTop5ByFirstNameStartingWith(String prefijo, Sort order);
 	
-	List<ActorDTO> findByActorIdNotNull();
+	//Pasando la clase como parámetro (ActorShort o ActorDTO) se puede cambiar el comportamiento para devolver objetos tal y como especifican sus respectivas clases
+	<T> List<T> findAllBy(Class<T> type);
 	
 	//métodos construidos para hacer la query mediante SQL/JPQL escrito
 	@Query("SELECT a FROM Actor a WHERE a.actorId < ?1")
