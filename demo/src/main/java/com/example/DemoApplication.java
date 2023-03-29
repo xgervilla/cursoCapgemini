@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.example.domains.contracts.repositories.ActorRepository;
@@ -29,14 +30,18 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
-		var actor = new Actor(0, "4G","");
+//		var actor = new Actor(0, "4G","");
+//		
+//		if (actor.isInvalid())
+//			System.out.println(actor.getErrorsMessage());
+//		else {
+//			dao.save(actor);
+//		}
+//		dao.findAll().forEach(System.out::println);
 		
-		if (actor.isInvalid())
-			System.out.println(actor.getErrorsMessage());
-		else {
-			dao.save(actor);
-		}
-		//dao.findAll().forEach(System.out::println);
+		var rslt = dao.findAll(PageRequest.of(1,20, Sort.by("actorId")));
+		rslt.getContent().forEach(System.out::println);
+		
 	}
 
 }
