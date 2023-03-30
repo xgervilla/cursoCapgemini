@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Max;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.example.domains.core.entities.EntityBase;
+
 
 /**
  * The persistent class for the category database table.
@@ -15,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
-public class Category implements Serializable {
+public class Category extends EntityBase<Category> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
