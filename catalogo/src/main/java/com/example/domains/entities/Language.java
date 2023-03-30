@@ -49,6 +49,17 @@ public class Language extends EntityBase<Language> implements Serializable {
 	public Language() {
 	}
 
+	public Language(int languageId, String name) {
+		super();
+		this.languageId = languageId;
+		this.name = name;
+	}
+	
+	public Language(int languageId) {
+		super();
+		this.languageId = languageId;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(languageId);
