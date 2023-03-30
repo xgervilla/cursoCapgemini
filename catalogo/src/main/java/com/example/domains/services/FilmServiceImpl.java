@@ -3,6 +3,8 @@ package com.example.domains.services;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.example.domains.contracts.repositories.FilmRepository;
 import com.example.domains.contracts.services.FilmService;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.FilmActor;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -80,6 +83,7 @@ public class FilmServiceImpl implements FilmService {
 	}
 
 	@Override
+	@Transactional
 	public Film modify(Film item) throws NotFoundException, InvalidDataException {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
@@ -88,7 +92,30 @@ public class FilmServiceImpl implements FilmService {
 		if(!dao.existsById(item.getFilmId()))
 			throw new NotFoundException();
 		
-		return dao.save(item);
+		var leido = dao.findById(item.getFilmId());
+		if (leido.isEmpty())
+			throw new NotFoundException();
+		
+		var target = leido.get();
+		target.setDescription(item.getDescription());
+		target.setLength(item.getLength());
+		target.setLanguage(item.getLanguage());
+		target.setLanguageVO(item.getLanguageVO());
+		
+		//borro los actores que sobran
+		target.getActors().stream().filter(old -> !target.getActors().contains(old)).forEach(old -> target.removeActor(old));
+		
+		//añado los actores que faltan
+		item.getActors().stream().filter(nue -> !target.getActors().contains(nue)).forEach(nue -> target.addActor(nue));
+		
+		//borro las categorias que sobran
+		target.getCategories().stream().filter(old -> !target.getCategories().contains(old)).forEach(old -> target.removeCategory(old));
+		
+		//añado las categorias que faltan
+		item.getCategories().stream().filter(nue -> !target.getCategories().contains(nue)).forEach(nue -> target.addCategory(nue));
+		
+		return dao.save(target);
+		
 	}
 
 	@Override

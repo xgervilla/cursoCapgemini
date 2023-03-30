@@ -16,6 +16,7 @@ import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.Category;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.Film.Rating;
 import com.example.domains.entities.FilmCategory;
 import com.example.domains.entities.FilmCategoryPK;
 import com.example.domains.entities.Language;
@@ -45,29 +46,18 @@ public class CatalogoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		System.out.println("------------------ Aplicación arrancada ------------------");
 		
-		/*var actor = new Actor(0, "Peter","PAN");
-
-		//si el actor no es válido, mostramos los errores
-		if (actor.isInvalid())
-			System.out.println(actor.getErrorsMessage());
-		//si es valido lo almacenamos
-		else
-			daoActor.save(actor);*/
+		//srvFilm.getAll().forEach(System.out::println);
 		
-		srvActor.getAll().forEach(System.out::println);
-		
-		srvCategory.getAll().forEach(System.out::println);
-		
-		srvFilm.getAll().forEach(System.out::println);
-		
-		//srvLanguage.getAll().forEach(System.out::println);
-		
-		/*Film f =new Film(0, "Title", new Language(0,"Catalan"));
-		Category c = new Category(0, "Drama");
-		
-		FilmCategory fc = new FilmCategory(new FilmCategoryPK(f.getFilmId(), (byte)c.getCategoryId()), c, f);
-		
-		System.out.println(fc.toString());*/
+		var movie = new Film("Hola Mundo", new Language(2));
+		movie.setRentalDuration((byte)3);
+		movie.setRating(Rating.GENERAL_AUDIENCES);
+		movie.setLength(3);
+		movie.addActor(1);
+		movie.addActor(2);
+		movie.addActor(3);
+		movie.addCategory(2);
+		movie.addCategory(4);
+		//srvFilm.add(movie);
 	}
 
 }
