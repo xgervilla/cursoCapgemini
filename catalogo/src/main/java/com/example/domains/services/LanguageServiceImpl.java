@@ -1,5 +1,6 @@
 package com.example.domains.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.LanguageRepository;
 import com.example.domains.contracts.services.LanguageService;
+import com.example.domains.entities.Actor;
 import com.example.domains.entities.Language;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -94,5 +96,8 @@ public class LanguageServiceImpl implements LanguageService{
 		dao.deleteById(id);
 		
 	}
-
+	@Override
+	public List<Language> novedades(Timestamp fecha) {
+		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
+	}
 }

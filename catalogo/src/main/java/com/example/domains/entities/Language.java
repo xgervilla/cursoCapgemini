@@ -2,7 +2,11 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -11,6 +15,7 @@ import java.util.Objects;
 import com.example.domains.core.entities.EntityBase;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 /**
@@ -26,24 +31,30 @@ public class Language extends EntityBase<Language> implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="language_id", unique=true, nullable=false)
+	@Positive
 	@JsonProperty("ID")
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	@JsonIgnore
+	@NotNull
 	@PastOrPresent	//no puede actualizarse en el futuro 
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)
 	@JsonProperty("Language")
+	@NotBlank
+	@Max(20)
 	private String name;
 
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="language")
+	@JsonIgnore
 	private List<Film> films;
 
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="languageVO")
+	@JsonIgnore
 	private List<Film> filmsVO;
 
 	public Language() {
@@ -79,7 +90,7 @@ public class Language extends EntityBase<Language> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Language [languageId=" + languageId + ", lastUpdate=" + lastUpdate + ", name=" + name + "]";
+		return "Language [languageId=" + languageId + ", name=" + name + "]";
 	}
 
 	public int getLanguageId() {
