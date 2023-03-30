@@ -40,6 +40,13 @@ public class FilmActor implements Serializable {
 		this.actor = actor;
 		this.film = film;
 	}
+	
+	public FilmActor(Film film, Actor actor) {
+		super();
+		this.id = new FilmActorPK(actor.getActorId(), film.getFilmId());
+		this.actor = actor;
+		this.film = film;
+	}
 
 	@Override
 	public String toString() {
