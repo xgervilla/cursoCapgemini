@@ -1,10 +1,9 @@
 package com.example.domains.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,15 +12,18 @@ import org.springframework.stereotype.Service;
 import com.example.domains.contracts.repositories.FilmRepository;
 import com.example.domains.contracts.services.FilmService;
 import com.example.domains.entities.Film;
+import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+import jakarta.transaction.Transactional;
+import lombok.NonNull;
+
 @Service
 public class FilmServiceImpl implements FilmService {
-
 	@Autowired
 	FilmRepository dao;
-	
+
 	@Override
 	public <T> List<T> getByProjection(Class<T> type) {
 		return dao.findAllBy(type);
@@ -56,17 +58,25 @@ public class FilmServiceImpl implements FilmService {
 	public Optional<Film> getOne(Integer id) {
 		return dao.findById(id);
 	}
-
+	
 	@Override
+	@Transactional
 	public Film add(Film item) throws DuplicateKeyException, InvalidDataException {
-		if (item == null)
+		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
 			throw new InvalidDataException(item.getErrorsMessage());
+	
 		if(dao.existsById(item.getFilmId()))
 			throw new DuplicateKeyException(item.getErrorsMessage());
-		
-		return dao.save(item);
+		var actores = item.getActors();
+		var categorias = item.getCategories();
+		item.clearActors();
+		item.clearCategories();
+		var newItem = dao.save(item);
+		actores.forEach(ele -> newItem.addActor(ele));
+		categorias.forEach(ele->newItem.addCategory(ele));
+		return dao.save(newItem);
 	}
 
 	@Override
@@ -86,13 +96,16 @@ public class FilmServiceImpl implements FilmService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		deleteById(item.getFilmId());
-		
 	}
 
 	@Override
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
-		
+	}
+
+	@Override
+	public List<Film> novedades(@NonNull Timestamp fecha) {
+		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
 	}
 
 }
