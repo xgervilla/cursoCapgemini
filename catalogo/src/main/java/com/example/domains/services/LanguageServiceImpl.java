@@ -3,12 +3,14 @@ package com.example.domains.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.domains.contracts.repositories.LanguageRepository;
 import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.Language;
 import com.example.exceptions.InvalidDataException;
@@ -17,69 +19,79 @@ import com.example.exceptions.NotFoundException;
 @Service
 public class LanguageServiceImpl implements LanguageService{
 
+	@Autowired
+	LanguageRepository dao;
+	
 	@Override
 	public <T> List<T> getByProjection(Class<T> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAllBy(type);
 	}
 
 	@Override
 	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAllBy(sort, type);
 	}
 
 	@Override
 	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAllBy(pageable, type);
 	}
 
 	@Override
 	public Iterable<Language> getAll(Sort sort) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll(sort);
 	}
 
 	@Override
 	public Page<Language> getAll(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll(pageable);
 	}
 
 	@Override
 	public List<Language> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll();
 	}
 
 	@Override
 	public Optional<Language> getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return dao.findById(id);
 	}
 
 	@Override
 	public Language add(Language item) throws DuplicateKeyException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if (item == null)
+			throw new InvalidDataException("No puede ser nulo");
+		if(item.isInvalid())
+			throw new InvalidDataException(item.getErrorsMessage());
+		if(dao.existsById(item.getLanguageId()))
+			throw new DuplicateKeyException(item.getErrorsMessage());
+		
+		return dao.save(item);
 	}
 
 	@Override
 	public Language modify(Language item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null)
+			throw new InvalidDataException("No puede ser nulo");
+		if(item.isInvalid())
+			throw new InvalidDataException(item.getErrorsMessage());
+		if(!dao.existsById(item.getLanguageId()))
+			throw new NotFoundException();
+		
+		return dao.save(item);
 	}
 
 	@Override
 	public void delete(Language item) throws InvalidDataException {
-		// TODO Auto-generated method stub
+		if(item == null)
+			throw new InvalidDataException("No puede ser nulo");
+		deleteById(item.getLanguageId());
 		
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		dao.deleteById(id);
 		
 	}
 
