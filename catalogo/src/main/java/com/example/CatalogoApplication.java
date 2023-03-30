@@ -48,7 +48,7 @@ public class CatalogoApplication implements CommandLineRunner{
 		
 		//srvFilm.getAll().forEach(System.out::println);
 		
-		var movie = new Film("Hola Mundo", new Language(2));
+		/*var movie = new Film("Hola Mundo", new Language(2));
 		movie.setRentalDuration((byte)3);
 		movie.setRating(Rating.GENERAL_AUDIENCES);
 		movie.setLength(3);
@@ -56,8 +56,17 @@ public class CatalogoApplication implements CommandLineRunner{
 		movie.addActor(2);
 		movie.addActor(3);
 		movie.addCategory(2);
-		movie.addCategory(4);
+		movie.addCategory(4);*/
 		//srvFilm.add(movie);
+		//------------
+		var movie = srvFilm.getOne(1000).get();
+		movie.removeActor(new Actor(1));
+		movie.removeActor(new Actor(2));
+		movie.removeCategory(movie.getCategories().get(0));
+		movie.addCategory(1);
+		movie.setTitle("Adios mundo");
+		//srvFilm.modify(movie);
+		
 	}
 
 }
