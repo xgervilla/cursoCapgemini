@@ -9,5 +9,5 @@ import com.example.domains.core.repositories.contracts.RepositoryWithProjections
 import com.example.domains.entities.Film;
 
 public interface FilmRepository extends JpaRepository<Film, Integer>, JpaSpecificationExecutor<Film>, RepositoryWithProjections {
-	<T> List<T> findAllBy(Class<T> type);
+	//<T> List<T> findAllBy(Class<T> type);
 }

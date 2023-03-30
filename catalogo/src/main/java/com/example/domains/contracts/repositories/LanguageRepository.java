@@ -9,5 +9,5 @@ import com.example.domains.core.repositories.contracts.RepositoryWithProjections
 import com.example.domains.entities.Language;
 
 public interface LanguageRepository extends JpaRepository<Language, Integer>, JpaSpecificationExecutor<Language>, RepositoryWithProjections{
-	<T> List<T> findAllBy(Class<T> type);
+	//<T> List<T> findAllBy(Class<T> type);
 }
