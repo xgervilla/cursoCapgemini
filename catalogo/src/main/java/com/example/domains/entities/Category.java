@@ -7,6 +7,7 @@ import jakarta.validation.constraints.PastOrPresent;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 import com.example.domains.core.entities.EntityBase;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,8 +47,36 @@ public class Category extends EntityBase<Category> implements Serializable {
 	public Category() {
 	}
 
+	public Category(int categoryId, String name) {
+		super();
+		this.categoryId = categoryId;
+		this.name = name;
+	}
+	
+	public Category(int categoryId) {
+		super();
+		this.categoryId = categoryId;
+	}
+
 	public int getCategoryId() {
 		return this.categoryId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return categoryId == other.categoryId;
 	}
 
 	@Override
