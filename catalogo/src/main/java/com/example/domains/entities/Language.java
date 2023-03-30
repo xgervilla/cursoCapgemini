@@ -7,12 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
 import com.example.domains.core.entities.EntityBase;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -31,20 +33,18 @@ public class Language extends EntityBase<Language> implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="language_id", unique=true, nullable=false)
-	@Positive
 	@JsonProperty("ID")
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	@JsonIgnore
-	@NotNull
-	@PastOrPresent	//no puede actualizarse en el futuro 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss") 
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)
 	@JsonProperty("Language")
 	@NotBlank
-	@Max(20)
+	@Size(max=20)
 	private String name;
 
 	//bi-directional many-to-one association to Film
