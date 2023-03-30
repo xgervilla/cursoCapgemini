@@ -23,6 +23,8 @@ import com.example.domains.entities.Language;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootApplication
 public class CatalogoApplication implements CommandLineRunner{
 
@@ -43,6 +45,7 @@ public class CatalogoApplication implements CommandLineRunner{
 	LanguageService srvLanguage;
 	
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("------------------ Aplicación arrancada ------------------");
 		
@@ -59,13 +62,14 @@ public class CatalogoApplication implements CommandLineRunner{
 		movie.addCategory(4);*/
 		//srvFilm.add(movie);
 		//------------
-		var movie = srvFilm.getOne(1000).get();
-		movie.removeActor(new Actor(1));
-		movie.removeActor(new Actor(2));
+		var movie = srvFilm.getOne(1007).get();
+		System.out.println(movie);
+		movie.removeActor(new Actor(3));
+		movie.addActor(new Actor(4));
 		movie.removeCategory(movie.getCategories().get(0));
-		movie.addCategory(1);
+		movie.addCategory(3);
 		movie.setTitle("Adios mundo");
-		//srvFilm.modify(movie);
+		srvFilm.modify(movie);
 		
 	}
 
