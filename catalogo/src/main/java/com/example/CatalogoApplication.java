@@ -9,12 +9,15 @@ import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.contracts.repositories.CategoryRepository;
 import com.example.domains.contracts.repositories.FilmRepository;
 import com.example.domains.contracts.repositories.LanguageRepository;
+import com.example.domains.contracts.services.ActorService;
 import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.contracts.services.FilmService;
 import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.Category;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.FilmCategory;
+import com.example.domains.entities.FilmCategoryPK;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
@@ -27,16 +30,16 @@ public class CatalogoApplication implements CommandLineRunner{
 	}
 	
 	@Autowired
-	ActorRepository daoActor;
+	ActorService srvActor;
 	
 	@Autowired
-	FilmRepository daoFilm;
+	FilmService srvFilm;
 	
 	@Autowired
-	CategoryRepository daoCategory;
+	CategoryService srvCategory;
 	
 	@Autowired
-	LanguageRepository daoLanguage;
+	LanguageService srvLanguage;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -51,19 +54,26 @@ public class CatalogoApplication implements CommandLineRunner{
 		else
 			daoActor.save(actor);*/
 		
-		daoActor.findAllBy(Actor.class).forEach(System.out::println);
+		srvActor.getAll().forEach(System.out::println);
 		
 		System.out.println("");
 		
-		daoCategory.findAllBy(Category.class).forEach(System.out::println);
+		srvCategory.getAll().forEach(System.out::println);
 		
 		System.out.println("");
 		
-		daoFilm.findAllBy(Film.class).forEach(System.out::println);
+		srvFilm.getAll().forEach(System.out::println);
 		
 		System.out.println("");
 		
-		daoLanguage.findAllBy(Language.class).forEach(System.out::println);
+		srvLanguage.getAll().forEach(System.out::println);
+		
+		/*Film f =new Film(0, "Title", new Language(0,"Catalan"));
+		Category c = new Category(0, "Drama");
+		
+		FilmCategory fc = new FilmCategory(new FilmCategoryPK(f.getFilmId(), (byte)c.getCategoryId()), c, f);
+		
+		System.out.println(fc.toString());*/
 	}
 
 }
