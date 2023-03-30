@@ -43,7 +43,7 @@ public class CatalogoApplication implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Aplicación arrancada");
+		System.out.println("------------------ Aplicación arrancada ------------------");
 		
 		/*var actor = new Actor(0, "Peter","PAN");
 
@@ -56,17 +56,11 @@ public class CatalogoApplication implements CommandLineRunner{
 		
 		srvActor.getAll().forEach(System.out::println);
 		
-		System.out.println("");
-		
 		srvCategory.getAll().forEach(System.out::println);
-		
-		System.out.println("");
 		
 		srvFilm.getAll().forEach(System.out::println);
 		
-		System.out.println("");
-		
-		srvLanguage.getAll().forEach(System.out::println);
+		//srvLanguage.getAll().forEach(System.out::println);
 		
 		/*Film f =new Film(0, "Title", new Language(0,"Catalan"));
 		Category c = new Category(0, "Drama");
