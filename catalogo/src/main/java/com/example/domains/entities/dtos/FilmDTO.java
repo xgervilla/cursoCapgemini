@@ -3,6 +3,7 @@ package com.example.domains.entities.dtos;
 import java.math.BigDecimal;
 
 import com.example.domains.entities.Film;
+import com.example.domains.entities.Film.Rating;
 import com.example.domains.entities.Language;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,7 +20,7 @@ public class FilmDTO {
 	@JsonProperty("duracion")
 	private int length;
 	@JsonProperty("valoracion")
-	private String rating;
+	private Rating rating;
 	@JsonProperty("release_year")
 	private Short releaseYear;
 	@JsonProperty("rental_duration")
