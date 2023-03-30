@@ -20,6 +20,20 @@ public class FilmCategoryPK implements Serializable {
 
 	public FilmCategoryPK() {
 	}
+	
+	public FilmCategoryPK(int filmId, byte categoryId) {
+		super();
+		this.filmId = filmId;
+		this.categoryId = categoryId;
+	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "FilmCategoryPK [filmId=" + filmId + ", categoryId=" + categoryId + "]";
+	}
+
 	public int getFilmId() {
 		return this.filmId;
 	}

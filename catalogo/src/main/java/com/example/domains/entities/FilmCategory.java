@@ -34,6 +34,23 @@ public class FilmCategory implements Serializable {
 	public FilmCategory() {
 	}
 
+	public FilmCategory(FilmCategoryPK id, Category category, Film film) {
+		super();
+		this.id = id;
+		this.category = category;
+		this.film = film;
+	}
+
+	public FilmCategory(FilmCategoryPK id) {
+		super();
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "FilmCategory [id=" + id + ", category=" + category + ", film=" + film + "]";
+	}
+
 	public FilmCategoryPK getId() {
 		return this.id;
 	}
