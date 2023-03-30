@@ -66,10 +66,6 @@ public class Film implements Serializable {
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmCategory> filmCategories;
 
-	//bi-directional many-to-one association to Inventory
-	//@OneToMan
-	//private List<Inventory> inventories;
-
 	public Film() {
 	}
 
@@ -212,28 +208,5 @@ public class Film implements Serializable {
 
 		return filmCategory;
 	}
-
-	/*
-	public List<Inventory> getInventories() {
-		return this.inventories;
-	}
-
-	public void setInventories(List<Inventory> inventories) {
-		this.inventories = inventories;
-	}
-
-	public Inventory addInventory(Inventory inventory) {
-		getInventories().add(inventory);
-		inventory.setFilm(this);
-
-		return inventory;
-	}
-
-	public Inventory removeInventory(Inventory inventory) {
-		getInventories().remove(inventory);
-		inventory.setFilm(null);
-
-		return inventory;
-	}*/
 
 }
