@@ -61,12 +61,12 @@ public class Actor extends EntityBase<Actor> implements Serializable {
 	}
 	
 	//constructor con parámetros
-		public Actor(int actorId, String firstName, String lastName) {
-			super();
-			this.actorId = actorId;
-			this.firstName = firstName;
-			this.lastName = lastName;
-		}
+	public Actor(int actorId, String firstName, String lastName) {
+		super();
+		this.actorId = actorId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
 
 	//si es necesario modificar más de un atributo es 'necesario' crear un método para que se gestion todo de manera automática
