@@ -50,6 +50,14 @@ public class Film extends EntityBase<Film> implements Serializable {
 	@Column(nullable=false, length=128)
 	private String title;
 
+	@Override
+	public String toString() {
+		return "Film [filmId=" + filmId + ", description=" + description + ", lastUpdate=" + lastUpdate + ", length="
+				+ length + ", rating=" + rating + ", releaseYear=" + releaseYear + ", rentalDuration=" + rentalDuration
+				+ ", rentalRate=" + rentalRate + ", replacementCost=" + replacementCost + ", title=" + title
+				+ ", language=" + language + ", languageVO=" + languageVO + "]";
+	}
+
 	//bi-directional many-to-one association to Language
 	@ManyToOne
 	@JoinColumn(name="language_id", nullable=false)

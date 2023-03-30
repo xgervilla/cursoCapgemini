@@ -3,11 +3,14 @@ package com.example.domains.entities;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 import com.example.domains.core.entities.EntityBase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -24,12 +27,16 @@ public class Category extends EntityBase<Category> implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="category_id", unique=true, nullable=false)
 	@Max(255) //inicialmente tipo de datos byte, al cambiarlo a entero limitamos los valores mediante la anotación de validación
+	@JsonProperty("ID")
 	private int categoryId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@JsonIgnore
+	@PastOrPresent	//no puede actualizarse en el futuro 
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=25)
+	@JsonProperty("Category")
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
@@ -41,6 +48,11 @@ public class Category extends EntityBase<Category> implements Serializable {
 
 	public int getCategoryId() {
 		return this.categoryId;
+	}
+
+	@Override
+	public String toString() {
+		return "Category [categoryId=" + categoryId + ", lastUpdate=" + lastUpdate + ", name=" + name + "]";
 	}
 
 	public void setCategoryId(int categoryId) {

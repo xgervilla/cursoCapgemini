@@ -51,11 +51,17 @@ public class CatalogoApplication implements CommandLineRunner{
 		else
 			daoActor.save(actor);*/
 		
-		//daoActor.findAllBy(Actor.class).forEach(System.out::println);
+		daoActor.findAllBy(Actor.class).forEach(System.out::println);
 		
-		//daoCategory.findAllBy(Category.class).forEach(System.out::println);
+		System.out.println("");
 		
-		//daoFilm.findAllBy(Film.class).forEach(System.out::println);
+		daoCategory.findAllBy(Category.class).forEach(System.out::println);
+		
+		System.out.println("");
+		
+		daoFilm.findAllBy(Film.class).forEach(System.out::println);
+		
+		System.out.println("");
 		
 		daoLanguage.findAllBy(Language.class).forEach(System.out::println);
 	}

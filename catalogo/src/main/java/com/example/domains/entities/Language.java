@@ -2,10 +2,14 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 import com.example.domains.core.entities.EntityBase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -21,12 +25,16 @@ public class Language extends EntityBase<Language> implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="language_id", unique=true, nullable=false)
+	@JsonProperty("ID")
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@JsonIgnore
+	@PastOrPresent	//no puede actualizarse en el futuro 
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)
+	@JsonProperty("Language")
 	private String name;
 
 	//bi-directional many-to-one association to Film
@@ -38,6 +46,11 @@ public class Language extends EntityBase<Language> implements Serializable {
 	private List<Film> filmsVO;
 
 	public Language() {
+	}
+
+	@Override
+	public String toString() {
+		return "Language [languageId=" + languageId + ", lastUpdate=" + lastUpdate + ", name=" + name + "]";
 	}
 
 	public int getLanguageId() {
