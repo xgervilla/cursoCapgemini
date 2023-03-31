@@ -28,12 +28,12 @@ public class DemoApplication implements CommandLineRunner{
 		SpringApplication.run(DemoApplication.class, args);
 	}
 	
-	@Autowired
+	//@Autowired
 	//ActorRepository dao;
-	ActorService srv;
+	//ActorService srv;
 	
 	@Override
-	@Transactional
+	//@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		

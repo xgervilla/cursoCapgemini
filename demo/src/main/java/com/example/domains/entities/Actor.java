@@ -35,7 +35,7 @@ public class Actor extends EntityBase<Actor> implements Serializable {
 	@Column(name="first_name", nullable=false, length=45)
 	@NotBlank	//no puede ser una String llena de espacios vacíos "     "
 	@Size(max=45, min=2)	//no puede tener más de 45 carácteres y añadimos una regla "de cliente" para forzar un mínimo de 2 carácteres
-	@NIF
+	//@NIF
 	private String firstName;
 
 	@Column(name="last_name", nullable=false, length=45)
@@ -44,7 +44,7 @@ public class Actor extends EntityBase<Actor> implements Serializable {
 	@Pattern(regexp = "[A-Z]+", message="Tiene que estar en mayusculas")
 	private String lastName;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", insertable=true, updatable=false, nullable=false)
 	@PastOrPresent	//no puede actualizarse en el futuro 
 	private Timestamp lastUpdate;
 
