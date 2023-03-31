@@ -175,6 +175,37 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.language = language;
 	}
 
+	
+	
+	public Film merge(Film target) {
+		target.filmId = filmId;
+		target.description = description;
+		target.length = length;
+		target.rating = rating;
+		target.releaseYear = releaseYear;
+		target.rentalDuration = rentalDuration;
+		target.rentalRate = rentalRate;
+		target.replacementCost = replacementCost;
+		target.title = title;
+		target.language = language;
+		target.languageVO = languageVO;
+		target.filmActors = filmActors;
+		target.filmCategories = filmCategories;
+		
+		target.getActors().stream().filter(old -> !target.getActors().contains(old)).forEach(old -> target.removeActor(old));
+		
+		//añado los actores que faltan
+		getActors().stream().filter(nue -> !target.getActors().contains(nue)).forEach(nue -> target.addActor(nue));
+		
+		//borro las categorias que sobran
+		target.getCategories().stream().filter(old -> !target.getCategories().contains(old)).forEach(old -> target.removeCategory(old));
+		
+		//añado las categorias que faltan
+		getCategories().stream().filter(nue -> !target.getCategories().contains(nue)).forEach(nue -> target.addCategory(nue));
+		
+		return target;
+	}
+
 	public int getFilmId() {
 		return this.filmId;
 	}

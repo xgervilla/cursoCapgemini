@@ -95,26 +95,7 @@ public class FilmServiceImpl implements FilmService {
 		var leido = dao.findById(item.getFilmId());
 		if (leido.isEmpty())
 			throw new NotFoundException();
-		
-		var target = leido.get();
-		target.setDescription(item.getDescription());
-		target.setLength(item.getLength());
-		target.setLanguage(item.getLanguage());
-		target.setLanguageVO(item.getLanguageVO());
-		
-		//borro los actores que sobran
-		target.getActors().stream().filter(old -> !target.getActors().contains(old)).forEach(old -> target.removeActor(old));
-		
-		//añado los actores que faltan
-		item.getActors().stream().filter(nue -> !target.getActors().contains(nue)).forEach(nue -> target.addActor(nue));
-		
-		//borro las categorias que sobran
-		target.getCategories().stream().filter(old -> !target.getCategories().contains(old)).forEach(old -> target.removeCategory(old));
-		
-		//añado las categorias que faltan
-		item.getCategories().stream().filter(nue -> !target.getCategories().contains(nue)).forEach(nue -> target.addCategory(nue));
-		
-		return dao.save(target);
+		return dao.save(item.merge(leido.get()));
 		
 	}
 
