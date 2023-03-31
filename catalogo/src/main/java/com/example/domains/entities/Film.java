@@ -96,7 +96,6 @@ public class Film extends EntityBase<Film> implements Serializable {
 	@Convert(converter = RatingConverter.class)
 	private Rating rating;
 
-	//@Temporal(TemporalType.DATE)
 	@Column(name="release_year")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
 	@Min(1895)
@@ -170,44 +169,33 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.title = title;
 		this.language = language;
 	}
-
 	
-	
-	public Film merge(Film target) {
-		target.description = description;
-		target.length = length;
-		target.rating = rating;
-		target.releaseYear = releaseYear;
-		target.rentalDuration = rentalDuration;
-		target.rentalRate = rentalRate;
-		target.replacementCost = replacementCost;
-		target.title = title;
-		target.language = language;
-		target.languageVO = languageVO;
-		
-		//borro los actores que sobran
-		target.getActors().stream()
-			.filter(item -> !getActors().contains(item))
-			.forEach(item -> target.removeActor(item));
-		
-		//añado los actores que faltan
-		getActors().stream()
-			.filter(item -> !target.getActors().contains(item))
-			.forEach(item -> target.addActor(item));
-		
-		//borro las categorias que sobran
-		target.getCategories().stream()
-			.filter(item -> !getCategories().contains(item))
-			.forEach(item -> target.removeCategory(item));
-		
-		//añado las categorias que faltan
-		getCategories().stream()
-			.filter(item -> !target.getCategories().contains(item))
-			.forEach(item -> target.addCategory(item));
-		
-		return target;
+	@Override
+	public int hashCode() {
+		return Objects.hash(filmId);
 	}
 
+	@Override
+	public String toString() {
+		return "Film [filmId=" + filmId + ", description=" + description + ", length=" + length + ", rating=" + rating
+				+ ", releaseYear=" + releaseYear + ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate
+				+ ", replacementCost=" + replacementCost + ", title=" + title + ", language=" + language
+				+ ", languageVO=" + languageVO + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Film other = (Film) obj;
+		return filmId == other.filmId;
+	}
+
+	
 	public int getFilmId() {
 		return this.filmId;
 	}
@@ -407,32 +395,43 @@ public class Film extends EntityBase<Film> implements Serializable {
 
 		return filmCategory;
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(filmId);
-	}
 	
+	public Film merge(Film target) {
+		target.description = description;
+		target.length = length;
+		target.rating = rating;
+		target.releaseYear = releaseYear;
+		target.rentalDuration = rentalDuration;
+		target.rentalRate = rentalRate;
+		target.replacementCost = replacementCost;
+		target.title = title;
+		target.language = language;
+		target.languageVO = languageVO;
+		
+		//borro los actores que sobran
+		target.getActors().stream()
+			.filter(item -> !getActors().contains(item))
+			.forEach(item -> target.removeActor(item));
+		
+		//añado los actores que faltan
+		getActors().stream()
+			.filter(item -> !target.getActors().contains(item))
+			.forEach(item -> target.addActor(item));
+		
+		//borro las categorias que sobran
+		target.getCategories().stream()
+			.filter(item -> !getCategories().contains(item))
+			.forEach(item -> target.removeCategory(item));
+		
+		//añado las categorias que faltan
+		getCategories().stream()
+			.filter(item -> !target.getCategories().contains(item))
+			.forEach(item -> target.addCategory(item));
+		
+		return target;
+	}
+
+
 	
-
-	@Override
-	public String toString() {
-		return "Film [filmId=" + filmId + ", description=" + description + ", length=" + length + ", rating=" + rating
-				+ ", releaseYear=" + releaseYear + ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate
-				+ ", replacementCost=" + replacementCost + ", title=" + title + ", language=" + language
-				+ ", languageVO=" + languageVO + "]";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Film other = (Film) obj;
-		return filmId == other.filmId;
-	}
 
 }
