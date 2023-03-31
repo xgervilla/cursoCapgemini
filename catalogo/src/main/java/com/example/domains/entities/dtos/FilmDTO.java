@@ -1,7 +1,10 @@
 package com.example.domains.entities.dtos;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import com.example.domains.entities.Actor;
+import com.example.domains.entities.Category;
 import com.example.domains.entities.Film;
 import com.example.domains.entities.Film.Rating;
 import com.example.domains.entities.Language;
@@ -34,8 +37,17 @@ public class FilmDTO {
 	@JsonProperty("vo")
 	private Language languageVO;
 	
+	private List<String> actors;
+	
+	private List<String> categories;
+	
 	public static FilmDTO from(Film target) {
-		return new FilmDTO(target.getFilmId(), target.getTitle(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(), target.getLanguage(), target.getLanguageVO());
+		return new FilmDTO(target.getFilmId(), target.getTitle(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(),
+				target.getLanguage() == null ? null : target.getLanguage(),
+				target.getLanguageVO() == null ? null : target.getLanguageVO(),
+				target.getActors().stream().map(item-> item.getFirstName() + " " + item.getLastName()).sorted().toList(),
+				target.getCategories().stream().map(item->item.getName()).sorted().toList()
+				);
 	}
 	
 	public static Film from(FilmDTO target) {
