@@ -80,7 +80,10 @@ public class LanguageServiceImpl implements LanguageService{
 		if(!dao.existsById(item.getLanguageId()))
 			throw new NotFoundException();
 		
-		return dao.save(item);
+		var leido = dao.findById(item.getLanguageId());
+		if (leido.isEmpty())
+			throw new NotFoundException();
+		return dao.save(item.merge(leido.get()));
 	}
 
 	@Override

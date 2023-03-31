@@ -19,6 +19,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
+/*
+ * Add/update films
+ * */
+
 
 /**
  * The persistent class for the language database table.
@@ -133,6 +137,7 @@ public class Language extends EntityBase<Language> implements Serializable {
 	}
 
 	public Film removeFilm(Film film) {
+		//si el film no pertenecía a getFilms remove  devolverá falso pero no saltará ninguna excepción
 		getFilms().remove(film);
 		film.setLanguage(null);
 
@@ -160,5 +165,32 @@ public class Language extends EntityBase<Language> implements Serializable {
 
 		return filmsVO;
 	}
+	
+	public Language merge(Language target) {
+		target.name = name;
+		
+		//borro los actores que sobran
+		target.getFilms().stream()
+			.filter(item -> !getFilms().contains(item))
+			.forEach(item -> target.removeFilm(item));
+		
+		//añado los actores que faltan
+		getFilms().stream()
+			.filter(item -> !target.getFilms().contains(item))
+			.forEach(item -> target.addFilm(item));
+		
+		//borro las categorias que sobran
+		target.getFilmsVO().stream()
+			.filter(item -> !getFilmsVO().contains(item))
+			.forEach(item -> target.removeFilmsVO(item));
+		
+		//añado las categorias que faltan
+		getFilmsVO().stream()
+			.filter(item -> !target.getFilmsVO().contains(item))
+			.forEach(item -> target.addFilmsVO(item));
+		
+		return target;
+	}
+
 
 }
