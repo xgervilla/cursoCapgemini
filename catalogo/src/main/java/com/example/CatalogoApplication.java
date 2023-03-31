@@ -51,25 +51,35 @@ public class CatalogoApplication implements CommandLineRunner{
 		
 		//srvFilm.getAll().forEach(System.out::println);
 		
-		/*var movie = new Film("Hola Mundo", new Language(2));
+		/*var movie = new Film("Prueba numero 2", new Language(3));
 		movie.setRentalDuration((byte)3);
-		movie.setRating(Rating.GENERAL_AUDIENCES);
-		movie.setLength(3);
-		movie.addActor(1);
-		movie.addActor(2);
-		movie.addActor(3);
+		movie.setRating(Rating.RESTRICTED);
+		movie.setLength(72);
+		movie.addActor(5);
+		movie.addActor(6);
+		movie.addActor(7);
+		movie.addCategory(1);
 		movie.addCategory(2);
-		movie.addCategory(4);*/
-		//srvFilm.add(movie);
+		movie.addCategory(4);
+		movie.addCategory(5);
+		srvFilm.add(movie);
+		
 		//------------
-		var movie = srvFilm.getOne(1007).get();
+		movie = srvFilm.getOne(movie.getFilmId()).get();
 		System.out.println(movie);
-		movie.removeActor(new Actor(3));
-		movie.addActor(new Actor(4));
+		movie.removeActor(new Actor(5));
+		movie.addActor(new Actor(8));
+		movie.addActor(new Actor(9));
 		movie.removeCategory(movie.getCategories().get(0));
 		movie.addCategory(3);
-		movie.setTitle("Adios mundo");
-		srvFilm.modify(movie);
+		movie.setTitle("Fin de la pelicula");
+		srvFilm.modify(movie);*/
+		
+		//--------------
+		srvFilm.deleteById(1015);
+		srvFilm.deleteById(1014);
+		srvFilm.deleteById(1013);
+		srvFilm.deleteById(1008);
 		
 	}
 

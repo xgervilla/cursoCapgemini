@@ -189,6 +189,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 		target.language = language;
 		target.languageVO = languageVO;
 		
+		//borro los actores que sobran
 		target.getActors().stream()
 			.filter(item -> !getActors().contains(item))
 			.forEach(item -> target.removeActor(item));
