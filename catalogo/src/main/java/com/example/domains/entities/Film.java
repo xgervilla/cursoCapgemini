@@ -90,7 +90,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 	private Timestamp lastUpdate;
 
 	@Positive
-	private int length;
+	private Integer length;
 
 	@Convert(converter = RatingConverter.class)
 	private Rating rating;
