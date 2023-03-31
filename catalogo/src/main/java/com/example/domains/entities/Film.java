@@ -30,6 +30,7 @@ import java.util.Objects;
 @NamedQuery(name="Film.findAll", query="SELECT f FROM Film f")
 public class Film extends EntityBase<Film> implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	public static enum Rating {
 	    GENERAL_AUDIENCES("G"),
 	    PARENTAL_GUIDANCE_SUGGESTED("PG"),
@@ -163,14 +164,9 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.languageVO = languageVO;
 	}
 	
-
 	public Film(@NotBlank @Size(max = 128) String title, @NotNull Language language) {
 		super();
 		this.filmId = 0;
-		this.rating = Rating.GENERAL_AUDIENCES;
-		this.rentalDuration = (byte) 3;
-		this.rentalRate = new BigDecimal(10.0);
-		this.replacementCost = new BigDecimal(10.0);
 		this.title = title;
 		this.language = language;
 	}
