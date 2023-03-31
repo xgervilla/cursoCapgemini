@@ -178,7 +178,6 @@ public class Film extends EntityBase<Film> implements Serializable {
 	
 	
 	public Film merge(Film target) {
-		target.filmId = filmId;
 		target.description = description;
 		target.length = length;
 		target.rating = rating;
@@ -189,19 +188,25 @@ public class Film extends EntityBase<Film> implements Serializable {
 		target.title = title;
 		target.language = language;
 		target.languageVO = languageVO;
-		target.filmActors = filmActors;
-		target.filmCategories = filmCategories;
 		
-		target.getActors().stream().filter(old -> !target.getActors().contains(old)).forEach(old -> target.removeActor(old));
+		target.getActors().stream()
+			.filter(item -> !getActors().contains(item))
+			.forEach(item -> target.removeActor(item));
 		
 		//añado los actores que faltan
-		getActors().stream().filter(nue -> !target.getActors().contains(nue)).forEach(nue -> target.addActor(nue));
+		getActors().stream()
+			.filter(item -> !target.getActors().contains(item))
+			.forEach(item -> target.addActor(item));
 		
 		//borro las categorias que sobran
-		target.getCategories().stream().filter(old -> !target.getCategories().contains(old)).forEach(old -> target.removeCategory(old));
+		target.getCategories().stream()
+			.filter(item -> !getCategories().contains(item))
+			.forEach(item -> target.removeCategory(item));
 		
 		//añado las categorias que faltan
-		getCategories().stream().filter(nue -> !target.getCategories().contains(nue)).forEach(nue -> target.addCategory(nue));
+		getCategories().stream()
+			.filter(item -> !target.getCategories().contains(item))
+			.forEach(item -> target.addCategory(item));
 		
 		return target;
 	}
