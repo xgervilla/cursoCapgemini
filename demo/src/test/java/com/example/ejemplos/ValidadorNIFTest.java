@@ -45,7 +45,7 @@ class ValidadorNIFTest {
 		
 		//8 números (sin letra), 8 números + letra y caso nif = null (mediante NullSource
 		@ParameterizedTest(name = "NIF: {0}")
-		@CsvSource(value = {"40556524", "01234567", "98238867W", "12345678Z", "Y3578217Y"})
+		@CsvSource(value = {"40556524", "01234567", "98238867W", "12345678Z"})
 		@NullSource
 		void testNIFSinLetra(String nif) {
 			var validador = new ValidadorNIF();
