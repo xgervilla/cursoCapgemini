@@ -78,7 +78,10 @@ public class ActorServiceImpl implements ActorService {
 		if(!dao.existsById(item.getActorId()))
 			throw new NotFoundException();
 		
-		return dao.save(item);
+		var leido = dao.findById(item.getActorId());
+		if (leido.isEmpty())
+			throw new NotFoundException();
+		return dao.save(item.merge(leido.get()));
 	}
 
 	@Override

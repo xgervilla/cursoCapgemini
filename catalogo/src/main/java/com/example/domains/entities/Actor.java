@@ -146,6 +146,53 @@ public class Actor extends EntityBase<Actor> implements Serializable {
 
 		return filmActor;
 	}
+	
+	public List<Film> getFilms(){
+		return this.filmActors.stream().map(item -> item.getFilm()).toList();
+	}
+	
+	public void clearFilms() {
+		filmActors = new ArrayList<FilmActor>();
+	}
+	
+	public void removeFilm(Film film) {
+		var filmActor = filmActors.stream().filter(item -> item.getFilm().equals(film)).findFirst();
+		if(filmActor.isEmpty())
+			return;
+		filmActors.remove(filmActor.get());
+	}
+	
+	public FilmActor addFilmActor(Film film) {
+		FilmActor filmActor = new FilmActor(film, this);
+		getFilmActors().add(filmActor);
+		return filmActor;
+	}
+	
+	public void addFilm(Film film) {
+		FilmActor filmActor = new FilmActor(film, this);
+		getFilmActors().add(filmActor);
+	}
+	
+	public void addFilm(int filmId) {
+		addFilm(new Film(filmId));
+	}
+	
+	public Actor merge(Actor target) {
+		target.firstName = firstName;
+		target.lastName = lastName;
+		
+		//borro los actores que sobran
+		target.getFilms().stream()
+			.filter(item -> !getFilms().contains(item))
+			.forEach(item -> target.removeFilm(item));
+		
+		//añado los actores que faltan
+		getFilms().stream()
+			.filter(item -> !target.getFilms().contains(item))
+			.forEach(item -> target.addFilm(item));
+		
+		return target;
+	}
 
 	public FilmActor removeFilmActor(FilmActor filmActor) {
 		getFilmActors().remove(filmActor);
