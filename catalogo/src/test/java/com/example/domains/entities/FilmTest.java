@@ -5,10 +5,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 
 import com.example.domains.entities.Film.Rating;
+
+import jakarta.annotation.Nullable;
 
 /*
  * Entity Film:
@@ -49,18 +56,43 @@ class FilmTest {
 	}
 	
 	//tamaño máximo de 128 carácteres Y no puede ser blank
-	void testTitleIsInvalid() {
-		fail("Not yet implemented");
+	@DisplayName("Invalid film title")
+	@ParameterizedTest(name="Title: {0}, Error: {1}")
+	@CsvSource(value = {
+			"'    ','ERRORES: title: must not be blank.'",
+			"'123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890','ERRORES: title: size must be between 0 and 128.'"
+	})
+	void testTitleIsInvalid(String title, String errorMessage) {
+		var item = new Film(title, new Language(0)); 
+		assertTrue(item.isInvalid());
+		assertEquals(errorMessage,item.getErrorsMessage());
+	}
+	
+	@DisplayName("Null film title")
+	@Test
+	void testTitleIsNull() {
+		var item = new Film(null, new Language(0)); 
+		assertTrue(item.isInvalid());
+		assertEquals("ERRORES: title: must not be blank.",item.getErrorsMessage());
 	}
 	
 	//de tipo Language, no puede ser un atributo nulo
+	@DisplayName("Invalid language")
+	@Test
 	void testLanguageIsInvalid() {
-		fail("Not yet implemented");
+		var item = new Film("Film title", null); 
+		assertTrue(item.isInvalid());
+		assertEquals("ERRORES: language: must not be null.",item.getErrorsMessage());
 	}
 	
 	//permite null, si hay valor debe ser positivo
-	void testLengthIsInvalid() {
-		fail("Not yet implemented");
+	@DisplayName("Invalid film length")
+	@ParameterizedTest(name = "Length: {0}, Error: {1}")
+	@CsvSource(value = {"-10,'ERRORES: length: must be greater than 0.'"})
+	void testLengthIsInvalid(Integer length, String errorMessage) {
+		var item = new Film(0, "Description of the movie", length, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
+		assertTrue(item.isInvalid());
+		assertEquals(errorMessage, item.getErrorsMessage());
 	}
 	
 	//valor superior o igual a 1895
