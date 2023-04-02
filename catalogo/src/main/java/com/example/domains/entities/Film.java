@@ -1,6 +1,8 @@
 package com.example.domains.entities;
 
 import java.io.Serializable;
+
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -103,7 +105,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 	private Short releaseYear;
 
 	@Column(name="rental_duration")
-	@Positive
+	@Min(0)
 	private byte rentalDuration;
 
 	@Column(name="rental_rate")
