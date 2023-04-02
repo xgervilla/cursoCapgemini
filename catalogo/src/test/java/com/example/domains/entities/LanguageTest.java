@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.CsvSource;
  * Entidad Language:
  	*  languageId	--> siempre 0, dejamos a la BD la responsabilidad de asignar el ID que corresponda 
  	*  name			--> nombre del lenguaje: hasta un máximo de 20 carácteres, sin límite inferior PERO no puede ser blank ni nulo
- 	*  last_update	--> "intocable", viene dado por la BD así que no se debe modificar 
+ 	*  lastUpdate	--> "intocable", viene dado por la BD así que no se debe modificar 
  	*  films		--> lista de peliculas que tienen el lenguaje: sin restricciones en la construcción del objeto
  	*  filmsVO		--> lista de peliculas que tienen el lenguaje en VO: sin restricciones en la construcción del objeto
 */

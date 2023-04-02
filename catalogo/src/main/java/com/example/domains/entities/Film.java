@@ -60,6 +60,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 		}
 		public static final String[] VALUES = {"G", "PG", "PG-13", "R", "NC-17"};
 	}
+	
 	@Converter
 	private static class RatingConverter implements AttributeConverter<Rating, String> {
 	    @Override
