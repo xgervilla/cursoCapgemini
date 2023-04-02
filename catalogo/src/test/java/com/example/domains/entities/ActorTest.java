@@ -1,24 +1,19 @@
-package com.example.entities;
+package com.example.domains.entities;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.example.domains.entities.Actor;
+class ActorTest {
 
-public class ActorTest {
 	@BeforeEach
 	void setUp() throws Exception {
-		
 	}
-	
+
 	@Test
 	void testIsValid() {
 		var fixture = new Actor(0,"Pepito","GRILLO");
@@ -38,4 +33,5 @@ public class ActorTest {
 		assertTrue(actor.isInvalid());
 		assertEquals(error, actor.getErrorsMessage());
 	}
+
 }
