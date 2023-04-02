@@ -96,22 +96,38 @@ class FilmTest {
 	}
 	
 	//valor superior o igual a 1895
-	void testReleaseYearIsInvalid() {
-		fail("Not yet implemented");
+	@Test
+	@DisplayName("Invalid releaseYear")
+	void testReleaseYearIsInvalid(){
+		var item = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("1800"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2)); 
+		assertTrue(item.isInvalid());
+		assertEquals("ERRORES: releaseYear: must be greater than or equal to 1895.",item.getErrorsMessage());
 	}
 	
-	//duración del alquiler: positive > 0.0
+	//duración del alquiler: positive >= 0
+	@Test
+	@DisplayName("Invalid rentalDuration")
 	void testRentalDurationIsInvalid() {
-		fail("Not yet implemented");
+		var item = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) -1, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2)); 
+		assertTrue(item.isInvalid());
+		assertEquals("ERRORES: rentalDuration: must be greater than or equal to 0.",item.getErrorsMessage());
 	}
 	
 	//positive, digits(2,2) > 0.0
+	@Test
+	@DisplayName("Invalid rentalRate")
 	void testRentalRateIsInvalid() {
-		fail("Not yet implemented");
+		var item = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) 5, new BigDecimal(-10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2)); 
+		assertTrue(item.isInvalid());
+		assertEquals("ERRORES: rentalRate: must be greater than 0.0, must be greater than 0.",item.getErrorsMessage());
 	}
 	
 	//digits(3,2) > 0.0
+	@Test
+	@DisplayName("Invalid replacementCost")
 	void testReplacementCostIsInvalid() {
-		fail("Not yet implemented");
+		var item = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) 5, new BigDecimal(10.0), new BigDecimal(-30), "The revenge of the test part 2", new Language(1), new Language(2)); 
+		assertTrue(item.isInvalid());
+		assertEquals("ERRORES: replacementCost: must be greater than 0.0.",item.getErrorsMessage());
 	}
 }
