@@ -21,6 +21,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
+import com.example.domains.entities.Film;
+import com.example.domains.entities.Language;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -89,6 +91,18 @@ class ActorServiceImplTest {
 		var result = srv.add(actor);
 		assertEquals(actor, result);
 	}
+	
+	@Test
+	@DisplayName("Add null actor")
+	void testAddNull() throws DuplicateKeyException, InvalidDataException {
+		assertThrows(InvalidDataException.class, () -> srv.add(null));
+	}
+	
+	@Test
+	@DisplayName("Add invalid actor")
+	void testAddInvalid() throws DuplicateKeyException, InvalidDataException{
+		assertThrows(InvalidDataException.class, () -> srv.add(new Actor(0,"     ","GRILLO")));
+	}
 
 	@Test
 	@DisplayName("Modify actor")
@@ -103,6 +117,26 @@ class ActorServiceImplTest {
 		
 		verify(dao, times(1)).existsById(0);
 		assertEquals(actor, result);
+	}
+	
+	@Test
+	@DisplayName("Modify null actor")
+	void testModifyNull() throws NotFoundException, InvalidDataException {
+		assertThrows(InvalidDataException.class, () -> srv.modify(null));
+	}
+	
+	@Test
+	@DisplayName("Modify invalid actor")
+	void testModifyInvalid() throws NotFoundException, InvalidDataException {
+		assertThrows(InvalidDataException.class, () -> srv.modify(new Actor(0, "     ", "ACTORINVALID")));
+	}
+	
+	@Test
+	@DisplayName("Modify actor not found")
+	void testModifyNotFound() throws NotFoundException, InvalidDataException {
+		
+		when(dao.existsById(0)).thenReturn(false);
+		assertThrows(NotFoundException.class, () -> srv.modify(new Actor(0,"Not","FOUND")));
 	}
 
 	//cuando se hace un delete de null salta una excepción, en caso contrario se ejecuta deleteById
