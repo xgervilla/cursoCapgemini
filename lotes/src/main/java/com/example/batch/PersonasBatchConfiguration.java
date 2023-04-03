@@ -72,16 +72,16 @@ public class PersonasBatchConfiguration {
 			.build();
 	}
 	
-	@Bean
+	/*@Bean
 	public Job personasJob(PersonaJobListener listener, Step importCSV2DBStep1) {
 		return new JobBuilder("personasJob", jobRepository)
 			.incrementer(new RunIdIncrementer())
 			.listener(listener)
 			.start(importCSV2DBStep1)
 			.build();
-	}
+	}*/
 
-	/*
+	
 	//----------------- CSV TO BD -----------------//
 	@Bean
 	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
@@ -120,7 +120,7 @@ public class PersonasBatchConfiguration {
 			.start(importCSV2DBStep1)
 			.next(exportDB2CSVStep)
 			.build();
-	}*/
+	}
 
 
 }
