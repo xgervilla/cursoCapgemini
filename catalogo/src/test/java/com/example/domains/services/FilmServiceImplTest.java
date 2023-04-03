@@ -81,8 +81,6 @@ class FilmServiceImplTest {
 	
 	@Test
 	void testAdd() throws DuplicateKeyException, InvalidDataException {
-		fail("Not yet implemented");
-		
 		var film = new Film(4, "Film description 4", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3));
 		when(dao.save(film)).thenReturn(film);
 		var result = srv.add(film);
@@ -90,28 +88,64 @@ class FilmServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("Add null film")
+	void testAddNull() throws DuplicateKeyException, InvalidDataException {
+		assertThrows(InvalidDataException.class, () -> srv.add(null));
+	}
+	
+	@Test
+	@DisplayName("Add invalid film")
+	void testAddInvalid() throws DuplicateKeyException, InvalidDataException{
+		assertThrows(InvalidDataException.class, () -> srv.add(new Film("     ",new Language(1))));
+	}
+	
+	@Test
+	@DisplayName("Modify film")
 	void testModify() throws NotFoundException, InvalidDataException {
-		fail("Not yet implemented");
 		var film = new Film(4, "Film description 4", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3));
 		
-		when(dao.existsById(0)).thenReturn(true);
-		when(dao.findById(0)).thenReturn(Optional.of(film));
+		when(dao.existsById(4)).thenReturn(true);
+		when(dao.findById(4)).thenReturn(Optional.of(film));
 		when(dao.save(film)).thenReturn(film);
 		
 		var result = srv.modify(film);
 		
-		verify(dao, times(1)).existsById(0);
+		verify(dao, times(1)).existsById(4);
 		assertEquals(film, result);
 	}
-
+	
 	@Test
+	@DisplayName("Modify null film")
+	void testModifyNull() throws NotFoundException, InvalidDataException {
+		assertThrows(InvalidDataException.class, () -> srv.modify(null));
+	}
+	
+	@Test
+	@DisplayName("Modify invalid film")
+	void testModifyInvalid() throws NotFoundException, InvalidDataException {
+		assertThrows(InvalidDataException.class, () -> srv.modify(new Film("     ", new Language(0))));
+	}
+	
+	@Test
+	@DisplayName("Modify film not found")
+	void testModifyNotFound() throws NotFoundException, InvalidDataException {
+		
+		when(dao.existsById(0)).thenReturn(false);
+		assertThrows(NotFoundException.class, () -> srv.modify(new Film("Movie not found",new Language(0))));
+	}
+
+	//cuando se hace un delete de null salta una excepción, en caso contrario se ejecuta deleteById
+	@Test
+	@DisplayName("Delete null value")
 	void testDelete() {
-		fail("Not yet implemented");
+		assertThrows(InvalidDataException.class, () -> srv.delete(null));
 	}
 
 	@Test
-	void testDeleteById() {
-		fail("Not yet implemented");
+	@DisplayName("Delete by id")
+	void testDeleteById() throws InvalidDataException, NotFoundException{
+		srv.deleteById(0);
+		verify(dao, times(1)).deleteById(0);
 	}
 
 //	@Test
