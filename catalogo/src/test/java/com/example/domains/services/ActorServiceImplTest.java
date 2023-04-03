@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -47,6 +48,7 @@ class ActorServiceImplTest {
 
 
 	@Test
+	@DisplayName("findAll")
 	void testGetAll() {
 		List<Actor> actorList = new ArrayList<>(Arrays.asList(
 				new Actor(1, "Persona", "PRIMERA"),
@@ -59,6 +61,7 @@ class ActorServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("Get one")
 	void testGetOne() {
 		List<Actor> actorList = new ArrayList<>(Arrays.asList(
 				new Actor(1, "Persona", "PRIMERA"),
@@ -66,44 +69,22 @@ class ActorServiceImplTest {
 				new Actor(3,"Carmen","MACHI")
 				));
 		
-		var item = dao.findById(0);
 		when(dao.findById(1)).thenReturn(Optional.of(actorList.get(0)));
+		var item = dao.findById(1);
 		assertTrue(item.isPresent());
 		assertEquals("Persona", item.get().getFirstName());
 	}
-
-	@Test
-	@Disabled
-	void testGetAll_isNotEmpty() {
-		List<Actor> lista = new ArrayList<>(
-				Arrays.asList(new Actor(1,"Pepito", "GRILLO"), new Actor(2, "Carmelo", "COTON"), new Actor(3, "Capitan","TAN"))
-			);
-		when(dao.findAll()).thenReturn(lista);
-		assertEquals(3, dao.findAll().size());
-	}
 	
 	@Test
-	@Disabled
-	void testGetOne_valid() {
-		List<Actor> lista = new ArrayList<>(
-				Arrays.asList(new Actor(1,"Pepito","GRILLO"),
-						new Actor(2, "Carmelo", "COTON"),
-						new Actor(3, "Capitan","TAN")));
-		when(dao.findById(1)).thenReturn(Optional.of(new Actor(1, "Pepito","GRILLO")));
-		
-		assertEquals(lista, dao.findById(1));
-	}
-	
-	@Test
-	@Disabled
-	void testGetOne_notfound() {
+	@DisplayName("Get one but no data")
+	void testGetOneEmptyList() {
 		when(dao.findById(1)).thenReturn(Optional.empty());
-		var result = srv.getOne(1);
-		assertThat(result.isEmpty()).isTrue();
-		
+		var item = dao.findById(1);
+		assertFalse(item.isPresent());
 	}
 	
 	@Test
+	@DisplayName("Add test")
 	void testAdd() throws DuplicateKeyException, InvalidDataException {
 		var actor = new Actor(1, "Juan", "PALOMO");
 		when(dao.save(actor)).thenReturn(actor);
@@ -113,6 +94,7 @@ class ActorServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("Modiy actor")
 	void testModify() throws NotFoundException, InvalidDataException {
 		var actor = new Actor(0, "Lionel","MESSI");
 		
@@ -128,11 +110,13 @@ class ActorServiceImplTest {
 
 	//cuando se hace un delete de null salta una excepción, en caso contrario se ejecuta deleteById
 	@Test
+	@DisplayName("Delete null value")
 	void testDelete() {
 		assertThrows(InvalidDataException.class, () -> srv.delete(null));
 	}
 
 	@Test
+	@DisplayName("Delete by id")
 	void testDeleteById() throws InvalidDataException, NotFoundException{
 		srv.deleteById(0);
 		verify(dao, times(1)).deleteById(0);
