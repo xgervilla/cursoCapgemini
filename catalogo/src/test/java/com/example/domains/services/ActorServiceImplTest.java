@@ -73,10 +73,10 @@ class ActorServiceImplTest {
 	}
 	
 	@Test
-	@DisplayName("Get one but no data")
+	@DisplayName("Get one but no data available")
 	void testGetOneEmptyList() {
 		when(dao.findById(1)).thenReturn(Optional.empty());
-		var item = dao.findById(1);
+		var item = srv.getOne(1);
 		assertFalse(item.isPresent());
 	}
 	
