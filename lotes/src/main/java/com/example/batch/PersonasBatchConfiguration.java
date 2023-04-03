@@ -53,6 +53,7 @@ public class PersonasBatchConfiguration {
 	@Autowired
 	public PersonaItemProcessor personaItemProcessor;
 	
+	//Inserción de los datos a la BD
 	@Bean
 	public JdbcBatchItemWriter<Persona> personaDBItemWriter(DataSource dataSource) {
 		return new JdbcBatchItemWriterBuilder<Persona>()
@@ -62,6 +63,7 @@ public class PersonasBatchConfiguration {
 			.build();
 	}
 	
+	//Step 1: import de CSV a la BD
 	@Bean
 	public Step importCSV2DBStep1(JdbcBatchItemWriter<Persona> personaDBItemWriter) {
 		return new StepBuilder("importCSV2DBStep1", jobRepository)
@@ -72,7 +74,9 @@ public class PersonasBatchConfiguration {
 			.build();
 	}
 	
-	/*@Bean
+	/*
+	//Creación del job que ejecuta el step 1 (import de los datos de csv a la bd)
+	@Bean
 	public Job personasJob(PersonaJobListener listener, Step importCSV2DBStep1) {
 		return new JobBuilder("personasJob", jobRepository)
 			.incrementer(new RunIdIncrementer())
@@ -83,6 +87,8 @@ public class PersonasBatchConfiguration {
 
 	
 	//----------------- CSV TO BD -----------------//
+	
+	//Obtención de los datos de la BD (una persona por fila)
 	@Bean
 	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
 		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
@@ -91,6 +97,7 @@ public class PersonasBatchConfiguration {
 			.build();
 	}
 	
+	//Conversión a CSV
 	@Bean
 	public FlatFileItemWriter<Persona> personaCSVItemWriter() {
 		return new FlatFileItemWriterBuilder<Persona>().name("personaCSVItemWriter")
@@ -103,6 +110,7 @@ public class PersonasBatchConfiguration {
 			}}).build();
 	}
 	
+	//step 2: export de la BD a CSV
 	@Bean
 	public Step exportDB2CSVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
 		return new StepBuilder("exportDB2CSVStep", jobRepository)
@@ -112,6 +120,7 @@ public class PersonasBatchConfiguration {
 			.build();
 	}
 	
+	//Creación del job que ejecuta el step 1 (import de los datos) y el step 2 (export de los datos)
 	@Bean
 	public Job personasJob(PersonaJobListener listener, Step importCSV2DBStep1, Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
