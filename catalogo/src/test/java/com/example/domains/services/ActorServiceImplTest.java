@@ -25,6 +25,7 @@ import com.example.domains.contracts.services.ActorService;
 import com.example.domains.entities.Actor;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
+import com.example.exceptions.NotFoundException;
 
 
 @DataJpaTest
@@ -36,45 +37,27 @@ class ActorServiceImplTest {
 	
 	@Autowired
 	ActorServiceImpl srv;
+	
+	
 
 	@BeforeEach
 	void setUp() throws Exception {
 	}
 
-//	@Test
-//	void testGetByProjectionClassOfT() {
-//		fail("Not yet implemented");
-//	}
+
 //
-//	@Test
-//	void testGetByProjectionSortClassOfT() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	void testGetAll() {
+		assertEquals(3, dao.findAll().size());
+		assertEquals(1, dao.findAll().get(0).getActorId());
+	}
 //
-//	@Test
-//	void testGetByProjectionPageableClassOfT() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testGetAllSort() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testGetAllPageable() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testGetAll() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testGetOne() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	void testGetOne() {
+		var item = dao.findById(0);
+		assertTrue(item.isPresent());
+		assertEquals("Pepito", item.get().getFirstName());
+	}
 
 	@Test
 	@Disabled
@@ -116,21 +99,32 @@ class ActorServiceImplTest {
 		assertEquals(actor, result);
 	}
 
-//	@Test
-//	void testModify() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testDelete() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	void testDeleteById() {
-//		fail("Not yet implemented");
-//	}
-//
+	@Test
+	void testModify() throws NotFoundException, InvalidDataException {
+		var actor = new Actor(0, "Lionel","MESSI");
+		
+		when(dao.existsById(0)).thenReturn(true);
+		when(dao.findById(0)).thenReturn(Optional.of(actor));
+		when(dao.save(actor)).thenReturn(actor);
+		
+		var result = srv.modify(actor);
+		
+		verify(dao, times(1)).existsById(0);
+		assertEquals(actor, result);
+	}
+
+	//cuando se hace un delete de null salta una excepción, en caso contrario se ejecuta deleteById
+	@Test
+	void testDelete() {
+		assertThrows(InvalidDataException.class, () -> srv.delete(null));
+	}
+
+	@Test
+	void testDeleteById() throws InvalidDataException, NotFoundException{
+		srv.deleteById(0);
+		verify(dao, times(1)).deleteById(0);
+	}
+
 //	@Test
 //	void testNovedades() {
 //		fail("Not yet implemented");
