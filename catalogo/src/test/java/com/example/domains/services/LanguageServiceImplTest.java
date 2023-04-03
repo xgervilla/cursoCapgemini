@@ -11,30 +11,30 @@ class LanguageServiceImplTest {
 	void setUp() throws Exception {
 	}
 
-	@Test
-	void testGetByProjectionClassOfT() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetByProjectionSortClassOfT() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetByProjectionPageableClassOfT() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetAllSort() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetAllPageable() {
-		fail("Not yet implemented");
-	}
+//	@Test
+//	void testGetByProjectionClassOfT() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testGetByProjectionSortClassOfT() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testGetByProjectionPageableClassOfT() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testGetAllSort() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	void testGetAllPageable() {
+//		fail("Not yet implemented");
+//	}
 
 	@Test
 	void testGetAll() {

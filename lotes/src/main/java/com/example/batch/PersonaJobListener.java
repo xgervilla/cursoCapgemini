@@ -22,7 +22,7 @@ public class PersonaJobListener implements JobExecutionListener {
 		if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
 			log.info("-------------------> Finalizado");
 			jdbcTemplate.query("SELECT id, nombre, correo, ip FROM personas",
-			(rs, row) -> new Persona(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4)))
+					(rs, row) -> new Persona(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4)))
 			.forEach(p -> log.info("Fila: " + p));
 		}
 	}
