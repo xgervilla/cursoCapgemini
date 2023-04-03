@@ -37,12 +37,14 @@ public class PersonasBatchConfiguration {
 	@Autowired
 	PlatformTransactionManager transactionManager;
 	
+	//----------------- CSV TO BD -----------------//
+	
 	public FlatFileItemReader<PersonaDTO> personaCSVItemReader(String fname) {
 		return new FlatFileItemReaderBuilder<PersonaDTO>().name("personaCSVItemReader")
-			.resource(new ClassPathResource(fname))
-			.linesToSkip(1)
-			.delimited()
-			.names(new String[] { "id", "nombre", "apellidos", "correo", "sexo", "ip" })
+			.resource(new ClassPathResource(fname))	//al crearlo como ClassPathResource comprobamos que el path sea válido
+			.linesToSkip(1)	//skipeamos la línea del header
+			.delimited()	//delimitador entre columnas: ',' como valor por defecto, se le puede pasar un parámetro para marcar un separador distinto 
+			.names(new String[] { "id", "nombre", "apellidos", "correo", "sexo", "ip" })	//como skipeamos la fila del header especificamos los nombres que queremos para cada columna
 			.fieldSetMapper(new BeanWrapperFieldSetMapper<PersonaDTO>() { {
 				setTargetType(PersonaDTO.class);
 			}}).build();
@@ -54,8 +56,8 @@ public class PersonasBatchConfiguration {
 	@Bean
 	public JdbcBatchItemWriter<Persona> personaDBItemWriter(DataSource dataSource) {
 		return new JdbcBatchItemWriterBuilder<Persona>()
-			.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-			.sql("INSERT INTO personas VALUES (:id,:nombre,:correo,:ip)")
+			.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())	//convierte las propiedades de la clase en atributos de sql
+			.sql("INSERT INTO personas VALUES (:id,:nombre,:correo,:ip)")	//los datos se añaden de manera automática mediante la converisón de propiedades a atributos, por lo que se identifican con las variables :propiedad
 			.dataSource(dataSource)
 			.build();
 	}
@@ -79,6 +81,8 @@ public class PersonasBatchConfiguration {
 			.build();
 	}
 
+	/*
+	//----------------- CSV TO BD -----------------//
 	@Bean
 	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
 		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
@@ -116,7 +120,7 @@ public class PersonasBatchConfiguration {
 			.start(importCSV2DBStep1)
 			.next(exportDB2CSVStep)
 			.build();
-	}
+	}*/
 
 
 }
