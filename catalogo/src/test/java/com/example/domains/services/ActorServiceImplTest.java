@@ -45,18 +45,31 @@ class ActorServiceImplTest {
 	}
 
 
-//
+
 	@Test
 	void testGetAll() {
+		List<Actor> actorList = new ArrayList<>(Arrays.asList(
+				new Actor(1, "Persona", "PRIMERA"),
+				new Actor(2,"Jesu","CRISTO"),
+				new Actor(3,"Carmen","MACHI")
+				));
+		when(dao.findAll()).thenReturn(actorList);
 		assertEquals(3, dao.findAll().size());
 		assertEquals(1, dao.findAll().get(0).getActorId());
 	}
-//
+
 	@Test
 	void testGetOne() {
+		List<Actor> actorList = new ArrayList<>(Arrays.asList(
+				new Actor(1, "Persona", "PRIMERA"),
+				new Actor(2,"Jesu","CRISTO"),
+				new Actor(3,"Carmen","MACHI")
+				));
+		
 		var item = dao.findById(0);
+		when(dao.findById(1)).thenReturn(Optional.of(actorList.get(0)));
 		assertTrue(item.isPresent());
-		assertEquals("Pepito", item.get().getFirstName());
+		assertEquals("Persona", item.get().getFirstName());
 	}
 
 	@Test
