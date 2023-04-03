@@ -6,6 +6,7 @@ target/**
 *.class
 kk/**
 sparring_jpa/**
+*.csv
 
 # eclipse specific
 *.pydevproject
