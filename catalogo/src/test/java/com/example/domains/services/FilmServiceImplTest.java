@@ -57,8 +57,11 @@ class FilmServiceImplTest {
 	void testAdd() throws DuplicateKeyException, InvalidDataException {
 		var originalSize = srv.getAll().size();
 		var film = new Film(0, "New film added", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "Film age 2", new Language(2), new Language(3));
-		srv.add(film);
+		var result = srv.add(film);
 		assertEquals(originalSize+1, srv.getAll().size());
+		
+		srv.deleteById(result.getFilmId());
+		
 	}
 
 	@Test
@@ -86,6 +89,8 @@ class FilmServiceImplTest {
 		var result = srv.modify(addedFilm);
 		assertEquals("Film with modified description", result.getDescription());
 		assertEquals(addedFilm.getFilmId(), result.getFilmId());//*/
+		
+		srv.deleteById(result.getFilmId());
 	}
 	
 	@Test
