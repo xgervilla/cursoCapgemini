@@ -2,11 +2,15 @@ package com.example.domains.entities;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import com.example.domains.entities.Film.Rating;
 
 /*
  * Entidad Actor:
@@ -59,6 +63,42 @@ class ActorTest {
 		var actor = new Actor(0, "Pepito", actorSurname);
 		assertTrue(actor.isInvalid());
 		assertEquals(error, actor.getErrorsMessage());
+	}
+	
+	@Test
+	void testMergeValid() {
+		
+		//creation of the original actor
+		var actorOriginal = new Actor(1, "Actor", "ORIGINAL");
+		
+		actorOriginal.addFilm(
+				 new Film(7, "Description of the movie with id 7", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 7", new Language(1), new Language(2))
+				);
+		
+		actorOriginal.addFilm(
+				new Film(9, "Description of the movie with id 9", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 9", new Language(5), new Language(4))
+				);
+		//creation of the modified actor
+		//Modified actor changes its last name and appears on movies 7 and 11 instead of 7 and 9
+		var actorModified = new Actor(1, "Actor", "MODIFIED");
+		
+		actorModified.addFilm(
+				 new Film(7, "Description of the movie with id 7", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 7", new Language(1), new Language(2))
+				);
+		
+		actorModified.addFilm(
+				new Film(11, "Description of the movie with id 11", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 11", new Language(5), new Language(4))
+				);
+		
+		//application of the merge method
+		var actorMerged = actorOriginal.merge(actorModified);
+		
+		//asert to check all changes
+		assertAll("Merge operation",
+				() -> assertEquals(actorModified.getActorId(), actorMerged.getActorId()),
+				() -> assertEquals(actorModified.getFirstName(), actorMerged.getFirstName()),
+				() -> assertEquals(actorModified.getLastName(), actorMerged.getLastName()),
+				() -> assertEquals(actorModified.getFilms(), actorMerged.getFilms()));
 	}
 
 }

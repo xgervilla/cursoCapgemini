@@ -130,4 +130,45 @@ class FilmTest {
 		assertTrue(item.isInvalid());
 		assertEquals("ERRORES: replacementCost: must be greater than 0.0.",item.getErrorsMessage());
 	}
+	
+	
+	void testMergeValid() {
+		//creation of the original film
+		var filmOriginal = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) 5, new BigDecimal(-10.0), new BigDecimal(30), "Film to test: original", new Language(1), new Language(2)); 
+		
+		filmOriginal.addActor(new Actor(1,"Actor","ORIGINALFIRST"));
+		
+		filmOriginal.addActor(new Actor(2,"Actor","ORIGINALSECOND"));
+		
+		filmOriginal.addActor(new Actor(3,"Actor","ORIGINALTHIRD"));
+		
+		//creation of the modified actor
+		//Modified actor changes its last name and appears on movies 7 and 11 instead of 7 and 9
+		var filmModified = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) 5, new BigDecimal(-10.0), new BigDecimal(30), "Film to test: modified", new Language(4), new Language(5)); 
+		
+		filmOriginal.addActor(new Actor(1,"Actor","ORIGINALFIRST"));
+		
+		filmOriginal.addActor(new Actor(4,"Actor","ORIGINALFOURTH"));
+		
+		filmOriginal.addActor(new Actor(5,"Actor","ORIGINALFIFTH"));
+		
+		//application of the merge method
+		var filmMerged = filmOriginal.merge(filmModified);
+		
+		//asert to check all changes
+		assertAll("Merge operation",
+			() -> assertEquals(filmModified.getFilmId(), filmMerged.getFilmId()),
+			() -> assertEquals(filmModified.getDescription(), filmMerged.getDescription()),
+			() -> assertEquals(filmModified.getLanguage(), filmMerged.getLanguage()),
+			() -> assertEquals(filmModified.getLanguageVO(), filmMerged.getLanguageVO()),
+			() -> assertEquals(filmModified.getActors(), filmMerged.getActors()),
+			() -> assertEquals(filmModified.getCategories(), filmMerged.getCategories()),
+			() -> assertEquals(filmModified.getLength(), filmMerged.getLength()),
+			() -> assertEquals(filmModified.getRating(), filmMerged.getRating()),
+			() -> assertEquals(filmModified.getRentalRate(), filmMerged.getRentalRate()),
+			() -> assertEquals(filmModified.getRentalDuration(), filmMerged.getRentalDuration()),
+			() -> assertEquals(filmModified.getTitle(), filmMerged.getTitle()),
+			() -> assertEquals(filmModified.getReplacementCost(), filmMerged.getReplacementCost())
+		);
+	}
 }
