@@ -1,26 +1,23 @@
 package com.example.domains.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.example.domains.contracts.repositories.FilmRepository;
-import com.example.domains.entities.Actor;
 import com.example.domains.entities.Film;
 import com.example.domains.entities.Language;
 import com.example.exceptions.DuplicateKeyException;
@@ -28,11 +25,11 @@ import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 import com.example.domains.entities.Film.Rating;
 
-@DataJpaTest
+@SpringBootTest
 @ComponentScan(basePackages = "com.example")
 class FilmServiceImplTest {
 	
-	@MockBean
+	@Autowired
 	FilmRepository dao;
 	
 	@Autowired
@@ -43,48 +40,25 @@ class FilmServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("findAll")
+	@DisplayName("getAll")
 	void testGetAll() {
-		List<Film> filmList = new ArrayList<>(Arrays.asList(
-				new Film(1, "Film description 1", 82, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) 5, new BigDecimal(10.0), new BigDecimal(35), "The revenge of the test part 1", new Language(1), new Language(2)), 
-				new Film(2, "Film description 2", 91, Rating.ADULTS_ONLY, new Short("2017"), (byte) 5, new BigDecimal(11.0), new BigDecimal(30), "The revenge of the test part 2", new Language(3), new Language(1)),
-				new Film(3, "Film description 3", 78, Rating.PARENTAL_GUIDANCE_SUGGESTED, new Short("2004"), (byte) 5, new BigDecimal(20.0), new BigDecimal(45), "The revenge of the test part 3", new Language(4), new Language(2)), 
-				new Film(4, "Film description 4", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3)) 
-				));
-		when(dao.findAll()).thenReturn(filmList);
-		assertEquals(4, dao.findAll().size());
-		assertEquals(1, dao.findAll().get(0).getFilmId());
+		assertThat(srv.getAll().size()).isGreaterThanOrEqualTo(1000);
 	}
 
 	@Test
 	@DisplayName("getOne")
 	void testGetOne() {
-		List<Film> filmList = new ArrayList<>(Arrays.asList(
-				new Film(1, "Film description 1", 82, Rating.GENERAL_AUDIENCES, new Short("2019"), (byte) 5, new BigDecimal(10.0), new BigDecimal(35), "The revenge of the test part 1", new Language(1), new Language(2)), 
-				new Film(2, "Film description 2", 91, Rating.ADULTS_ONLY, new Short("2017"), (byte) 5, new BigDecimal(11.0), new BigDecimal(30), "The revenge of the test part 2", new Language(3), new Language(1)),
-				new Film(3, "Film description 3", 78, Rating.PARENTAL_GUIDANCE_SUGGESTED, new Short("2004"), (byte) 5, new BigDecimal(20.0), new BigDecimal(45), "The revenge of the test part 3", new Language(4), new Language(2)), 
-				new Film(4, "Film description 4", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3)) 
-				));
-		when(dao.findById(2)).thenReturn(Optional.of(filmList.get(1)));
-		var item = srv.getOne(2);
-		assertTrue(item.isPresent());
-		assertEquals("Film description 2", item.get().getDescription());
-		}
-
-	@Test
-	@DisplayName("Get one but no data available")
-	void testGetOneEmptyList() {
-		when(dao.findById(1)).thenReturn(Optional.empty());
 		var item = srv.getOne(1);
-		assertFalse(item.isPresent());
+		assertTrue(item.isPresent());
 	}
 	
 	@Test
+	@DisplayName("Add new film")
 	void testAdd() throws DuplicateKeyException, InvalidDataException {
-		var film = new Film(4, "Film description 4", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3));
-		when(dao.save(film)).thenReturn(film);
-		var result = srv.add(film);
-		assertEquals(film, result);
+		var originalSize = srv.getAll().size();
+		var film = new Film(0, "New film added", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "Film age 2", new Language(2), new Language(3));
+		srv.add(film);
+		assertEquals(originalSize+1, srv.getAll().size());
 	}
 
 	@Test
@@ -101,17 +75,17 @@ class FilmServiceImplTest {
 	
 	@Test
 	@DisplayName("Modify film")
-	void testModify() throws NotFoundException, InvalidDataException {
-		var film = new Film(4, "Film description 4", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3));
+	void testModify() throws NotFoundException, InvalidDataException, DuplicateKeyException {
 		
-		when(dao.existsById(4)).thenReturn(true);
-		when(dao.findById(4)).thenReturn(Optional.of(film));
-		when(dao.save(film)).thenReturn(film);
+		var film = new Film(0, "Film with original description", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "The revenge of the test part 4", new Language(2), new Language(3));
+	
+		var addedFilm = srv.add(film);
 		
-		var result = srv.modify(film);
+		addedFilm.setDescription("Film with modified description");
 		
-		verify(dao, times(1)).existsById(4);
-		assertEquals(film, result);
+		var result = srv.modify(addedFilm);
+		assertEquals("Film with modified description", result.getDescription());
+		assertEquals(addedFilm.getFilmId(), result.getFilmId());//*/
 	}
 	
 	@Test
@@ -129,9 +103,8 @@ class FilmServiceImplTest {
 	@Test
 	@DisplayName("Modify film not found")
 	void testModifyNotFound() throws NotFoundException, InvalidDataException {
-		
-		when(dao.existsById(0)).thenReturn(false);
-		assertThrows(NotFoundException.class, () -> srv.modify(new Film("Movie not found",new Language(0))));
+		var film = new Film(2000, "Film not found", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "NOT FOUND", new Language(2), new Language(3));
+		assertThrows(NotFoundException.class, () -> srv.modify(film));
 	}
 
 	//cuando se hace un delete de null salta una excepción, en caso contrario se ejecuta deleteById
@@ -143,14 +116,28 @@ class FilmServiceImplTest {
 
 	@Test
 	@DisplayName("Delete by id")
-	void testDeleteById() throws InvalidDataException, NotFoundException{
-		srv.deleteById(0);
-		verify(dao, times(1)).deleteById(0);
+	void testDeleteById() throws InvalidDataException, NotFoundException, DuplicateKeyException{
+		
+		var film = new Film(0, "Film to be deleted", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "Film deleted begins", new Language(2), new Language(3));
+		var addedFilmId = srv.add(film).getFilmId();
+		
+		var originalSize = srv.getAll().size();
+		srv.deleteById(addedFilmId);
+		
+		assertEquals(originalSize-1, srv.getAll().size());
 	}
-
-//	@Test
-//	void testNovedades() {
-//		fail("Not yet implemented");
-//	}
+	
+	@Test
+	@DisplayName("Delete by id not exists")
+	void testDeleteByIdNotFound() throws InvalidDataException, NotFoundException, DuplicateKeyException{
+		
+		var film = new Film(0, "Latest film added", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "Latest film", new Language(2), new Language(3));
+		var addedFilmId = srv.add(film).getFilmId();
+		
+		var originalSize = srv.getAll().size();
+		srv.deleteById(addedFilmId+1);
+		
+		assertEquals(originalSize, srv.getAll().size());
+	}
 
 }
