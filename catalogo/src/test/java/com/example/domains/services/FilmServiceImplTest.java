@@ -134,7 +134,7 @@ class FilmServiceImplTest {
 	
 	@Test
 	@DisplayName("Delete by id not exists")
-	void testDeleteByIdNotFound() throws InvalidDataException, NotFoundException, DuplicateKeyException{
+	void testDeleteByIdNotExists() throws InvalidDataException, NotFoundException, DuplicateKeyException{
 		
 		var film = new Film(0, "Latest film added", 65, Rating.PARENTS_STRONGLY_CAUTIONED, new Short("2011"), (byte) 5, new BigDecimal(30.0), new BigDecimal(40), "Latest film", new Language(2), new Language(3));
 		var addedFilmId = srv.add(film).getFilmId();
@@ -143,6 +143,8 @@ class FilmServiceImplTest {
 		srv.deleteById(addedFilmId+1);
 		
 		assertEquals(originalSize, srv.getAll().size());
+		
+		srv.deleteById(addedFilmId);
 	}
 
 }
