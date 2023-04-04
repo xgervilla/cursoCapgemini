@@ -98,7 +98,6 @@ class LanguageServiceImplTest {
 	@Test
 	@DisplayName("Modify language")
 	void testModify() throws NotFoundException, InvalidDataException {
-		fail("Error on merge method must be fixed");
 		var language = new Language(5, "German");
 		when(dao.existsById(5)).thenReturn(true);
 		when(dao.findById(5)).thenReturn(Optional.of(language));
