@@ -1,12 +1,22 @@
 package com.example.domains.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.example.domains.contracts.repositories.LanguageRepository;
@@ -15,11 +25,11 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
-@SpringBootTest
+@DataJpaTest
 @ComponentScan(basePackages = "com.example")
-class LanguageServiceImplTest {
+class LanguageServiceImplMockTest {
 	
-	@Autowired
+	@MockBean
 	LanguageRepository dao;
 	
 	@Autowired
@@ -29,38 +39,45 @@ class LanguageServiceImplTest {
 	void setUp() throws Exception {
 	}
 
-	@Test
-	@DisplayName("getAll")
 	void testGetAll() {
-		assertThat(srv.getAll().size()).isEqualTo(6);
+		List<Language> languageList = new ArrayList<>(Arrays.asList(
+				new Language(1, "English"),
+				new Language(2, "Catalan"),
+				new Language(3, "Spanish")
+				));
+		when(dao.findAll()).thenReturn(languageList);
+		assertEquals(3, dao.findAll().size());
+		assertEquals(1, dao.findAll().get(0).getLanguageId());
 	}
 
 	@Test
 	@DisplayName("getOne")
 	void testGetOne() {
-		var item = srv.getOne(1);
+		List<Language> languageList = new ArrayList<>(Arrays.asList(
+				new Language(1, "English"),
+				new Language(2, "Catalan"),
+				new Language(3, "Spanish")
+				));
+		when(dao.findById(2)).thenReturn(Optional.of(languageList.get(1)));
+		var item = srv.getOne(2);
 		assertTrue(item.isPresent());
-	}
-	
+		assertEquals("Catalan", item.get().getName());
+		}
+
 	@Test
-	@DisplayName("Get one but no valid ID")
-	void testGetOneNotFound() {
-		var item = srv.getOne(8);
+	@DisplayName("Get one but no data available")
+	void testGetOneEmptyList() {
+		when(dao.findById(1)).thenReturn(Optional.empty());
+		var item = srv.getOne(1);
 		assertFalse(item.isPresent());
 	}
 	
 	@Test
 	void testAdd() throws DuplicateKeyException, InvalidDataException {
-		
-		var originalSize = srv.getAll().size();
-		
-		var category = new Language(0, "New language");
-		
-		var result = srv.add(category);
-		assertEquals(originalSize+1, srv.getAll().size());
-		
-		srv.deleteById(result.getLanguageId());
-		
+		var language = new Language(4, "French");
+		when(dao.save(language)).thenReturn(language);
+		var result = srv.add(language);
+		assertEquals(language, result);
 	}
 
 	@Test
@@ -78,16 +95,15 @@ class LanguageServiceImplTest {
 	@Test
 	@DisplayName("Modify language")
 	void testModify() throws NotFoundException, InvalidDataException {
+		var language = new Language(5, "German");
+		when(dao.existsById(5)).thenReturn(true);
+		when(dao.findById(5)).thenReturn(Optional.of(language));
+		when(dao.save(any(Language.class))).thenReturn(language);
 		
-		var category = new Language(0, "Portuguese");
-		var addedLanguage = srv.add(category);
-		addedLanguage.setName("Portuguese modified");
+		var result = srv.modify(language);
 		
-		var result = srv.modify(category);
-		assertEquals("Portuguese modified", result.getName());
-		assertEquals(category.getLanguageId(), result.getLanguageId());
-		
-		srv.deleteById(result.getLanguageId());
+		verify(dao, times(1)).existsById(5);
+		assertEquals(language, result);
 	}
 	
 	@Test
@@ -105,6 +121,8 @@ class LanguageServiceImplTest {
 	@Test
 	@DisplayName("Modify language not found")
 	void testModifyNotFound() throws NotFoundException, InvalidDataException {
+		
+		when(dao.existsById(0)).thenReturn(false);
 		assertThrows(NotFoundException.class, () -> srv.modify(new Language(0,"NotFound")));
 	}
 
@@ -118,32 +136,13 @@ class LanguageServiceImplTest {
 	@Test
 	@DisplayName("Delete by id")
 	void testDeleteById() throws InvalidDataException, NotFoundException{
-		
-		var language = new Language(0,"Language to delete");
-		
-		var addedLanguageId = srv.add(language).getLanguageId();
-		
-		var originalSize = srv.getAll().size();
-		
-		srv.deleteById(addedLanguageId);
-		
-		assertEquals(originalSize-1, srv.getAll().size());
+		srv.deleteById(0);
+		verify(dao, times(1)).deleteById(0);
 	}
-	
-	@Test
-	@DisplayName("Delete by id not exists")
-	void testDeleteByIdNotExists() throws InvalidDataException, NotFoundException{
-		
-		var language = new Language(0,"Language to delete");
-		
-		var addedLanguageId = srv.add(language).getLanguageId();
-		
-		var originalSize = srv.getAll().size();
-		
-		srv.deleteById(addedLanguageId+1);
-		
-		assertEquals(originalSize, srv.getAll().size());
-		
-		srv.deleteById(addedLanguageId);
-	}
+
+//	@Test
+//	void testNovedades() {
+//		fail("Not yet implemented");
+//	}
+
 }
