@@ -18,7 +18,7 @@ public class FilmActor implements Serializable {
 	@EmbeddedId
 	private FilmActorPK id;
 
-	@Column(name="last_update", nullable=false)
+	@Column(name="last_update", insertable=false, updatable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Actor
@@ -32,6 +32,25 @@ public class FilmActor implements Serializable {
 	private Film film;
 
 	public FilmActor() {
+	}
+
+	public FilmActor(FilmActorPK id, Actor actor, Film film) {
+		super();
+		this.id = id;
+		this.actor = actor;
+		this.film = film;
+	}
+	
+	public FilmActor(Film film, Actor actor) {
+		super();
+		this.actor = actor;
+		this.film = film;
+		setId(new FilmActorPK(actor.getActorId(), film.getFilmId()));
+	}
+
+	@Override
+	public String toString() {
+		return "FilmActor [id=" + id + ", actor=" + actor + ", film=" + film + "]";
 	}
 
 	public FilmActorPK getId() {

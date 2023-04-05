@@ -18,7 +18,7 @@ public class FilmCategory implements Serializable {
 	@EmbeddedId
 	private FilmCategoryPK id;
 
-	@Column(name="last_update", nullable=false)
+	@Column(name="last_update", insertable=false, updatable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Category
@@ -32,6 +32,30 @@ public class FilmCategory implements Serializable {
 	private Film film;
 
 	public FilmCategory() {
+	}
+
+	public FilmCategory(FilmCategoryPK id, Category category, Film film) {
+		super();
+		this.id = id;
+		this.category = category;
+		this.film = film;
+	}
+	
+	public FilmCategory(Film film, Category category) {
+		super();
+		this.id = new FilmCategoryPK(film.getFilmId(), (byte)category.getCategoryId());
+		this.category = category;
+		this.film = film;
+	}
+
+	public FilmCategory(FilmCategoryPK id) {
+		super();
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "FilmCategory [id=" + id + ", category=" + category + ", film=" + film + "]";
 	}
 
 	public FilmCategoryPK getId() {
