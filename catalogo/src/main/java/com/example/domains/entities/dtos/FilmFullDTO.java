@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
 @Value
-public class FilmDTO {
+public class FilmFullDTO {
 	@JsonProperty("id")
 	private int filmId;
 	@JsonProperty("titulo")
@@ -37,15 +37,20 @@ public class FilmDTO {
 	@JsonProperty("vo")
 	private Language languageVO;
 	
-	public static FilmDTO from(Film target) {
-		return new FilmDTO(target.getFilmId(), target.getTitle(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(),
+	private List<String> actors;
+	
+	private List<String> categories;
+	
+	public static FilmFullDTO from(Film target) {
+		return new FilmFullDTO(target.getFilmId(), target.getTitle(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(),
 				target.getLanguage() == null ? null : target.getLanguage(),
-				target.getLanguageVO() == null ? null : target.getLanguageVO()
+				target.getLanguageVO() == null ? null : target.getLanguageVO(),
+				target.getActors().stream().map(item-> item.getFirstName() + " " + item.getLastName()).sorted().toList(),
+				target.getCategories().stream().map(item->item.getName()).sorted().toList()
 				);
 	}
 	
-	
-	public static Film from(FilmDTO target) {
+	public static Film from(FilmFullDTO target) {
 		return new Film(target.getFilmId(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(), target.getTitle(), target.getLanguage(), target.getLanguageVO());
 	}
 }
