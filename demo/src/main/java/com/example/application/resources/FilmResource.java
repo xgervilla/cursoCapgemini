@@ -34,7 +34,7 @@ public class FilmResource {
 	@Autowired
 	private FilmService srv;
 
-	//get all actors (as FilmDTO)
+	//get all films (as FilmDTO)
 	
 	@GetMapping
 	public List<FilmDTO> getAll() {
@@ -53,7 +53,7 @@ public class FilmResource {
 		return FilmDTO.from(item.get());
 	}
 	
-	//create new actor (received as FilmDTO BUT saved as Film)
+	//create new film (received as FilmDTO BUT saved as Film)
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody FilmDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
 		
