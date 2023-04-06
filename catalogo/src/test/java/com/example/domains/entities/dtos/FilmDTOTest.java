@@ -21,13 +21,13 @@ class FilmDTOTest {
 	void setUp() throws Exception {
 	}
 
-	//conversión de Film a FilmDTO
+	//conversión de Film a FilmFullDTO
 	@Test
 	void testFromFilm() {
 		List<String> filmActorList = new ArrayList<String>();
 		List<String> filmCategoryList = new ArrayList<String>();
-		var film = new FilmDTO(0, "The revenge of the test part 3", "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), new Language(1), new Language(2), filmActorList, filmCategoryList);
-		var filmDTO = FilmDTO.from(film);
+		var film = new FilmFullDTO(0, "The revenge of the test part 3", "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), new Language(1), new Language(2), filmActorList, filmCategoryList);
+		var filmDTO = FilmFullDTO.from(film);
 		assertEquals(Film.class,filmDTO.getClass());
 		
 		assertAll("Attributes",
