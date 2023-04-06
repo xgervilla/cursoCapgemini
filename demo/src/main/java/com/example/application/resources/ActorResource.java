@@ -57,7 +57,7 @@ public class ActorResource {
 	}
 
 	//get one actor found by its id (as ActorDTO)
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/{id:\\d+}")
 	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
