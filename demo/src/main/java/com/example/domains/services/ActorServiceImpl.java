@@ -1,10 +1,10 @@
 package com.example.domains.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.contracts.services.ActorService;
 import com.example.domains.entities.Actor;
+import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import lombok.NonNull;
 
 @Service
 public class ActorServiceImpl implements ActorService {
@@ -61,7 +64,7 @@ public class ActorServiceImpl implements ActorService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
-			throw new InvalidDataException(item.getErrorsMessage());
+			throw new InvalidDataException(item.getErrorsMessage(), item.getErrorsFields());
 		if(dao.existsById(item.getActorId()))
 			throw new DuplicateKeyException(item.getErrorsMessage());
 		
@@ -73,7 +76,7 @@ public class ActorServiceImpl implements ActorService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
-			throw new InvalidDataException(item.getErrorsMessage());
+			throw new InvalidDataException(item.getErrorsMessage(), item.getErrorsFields());
 		if(!dao.existsById(item.getActorId()))
 			throw new NotFoundException();
 		
@@ -91,5 +94,10 @@ public class ActorServiceImpl implements ActorService {
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
 	}
+
+	/*@Override
+	public List<Actor> novedades(@NonNull Timestamp fecha) {
+		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
+	}*/
 
 }
