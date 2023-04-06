@@ -32,17 +32,17 @@ public class CatalogoApplication implements CommandLineRunner{
 		SpringApplication.run(CatalogoApplication.class, args);
 	}
 	
-	@Autowired
-	ActorService srvActor;
-	
-	@Autowired
-	FilmService srvFilm;
-	
-	@Autowired
-	CategoryService srvCategory;
-	
-	@Autowired
-	LanguageService srvLanguage;
+//	@Autowired
+//	ActorService srvActor;
+//	
+//	@Autowired
+//	FilmService srvFilm;
+//	
+//	@Autowired
+//	CategoryService srvCategory;
+//	
+//	@Autowired
+//	LanguageService srvLanguage;
 	
 	@Override
 	@Transactional
