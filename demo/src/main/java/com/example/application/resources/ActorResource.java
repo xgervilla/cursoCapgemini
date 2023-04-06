@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.ActorService;
-import com.example.domains.entities.dtos.ActorDTO;
+import com.example.domains.entities.dtos.ActorShort;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -26,6 +26,8 @@ import com.example.exceptions.DuplicateKeyException;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
@@ -36,33 +38,38 @@ public class ActorResource {
 	@Autowired
 	private ActorService srv;
 
-	//get all actors (as ActorDTO)
+	//get all actors (as ActorShort)
 	
 	@GetMapping
-	public List<ActorDTO> getAll(@RequestParam(required = false) String sort) {
+	public List<ActorShort> getAll(@RequestParam(required = false) String sort) {
 		if (sort != null)
-			return (List<ActorDTO>)srv.getByProjection(Sort.by(sort), ActorDTO.class);
+			return (List<ActorShort>)srv.getByProjection(Sort.by(sort), ActorShort.class);
 		
-		return srv.getByProjection(ActorDTO.class);
+		return srv.getByProjection(ActorShort.class);
+	}
+	
+	@GetMapping(params="page")
+	public Page<ActorShort> getAll(Pageable pageable) {
+		return srv.getByProjection(pageable, ActorShort.class);
 	}
 
-	//get one actor found by its id (as ActorDTO)
+	//get one actor found by its id (as ActorShort)
 	@GetMapping(path = "/{id}")
-	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
+	public ActorShort getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
 		if(item.isEmpty())
 			throw new NotFoundException();
 		
-		return ActorDTO.from(item.get());
+		return ActorShort.from(item.get());
 	}
 	
-	//create new actor (received as ActorDTO BUT saved as Actor)
+	//create new actor (received as ActorShort BUT saved as Actor)
 	@PostMapping
-	public ResponseEntity<Object> create(@Valid @RequestBody ActorDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
+	public ResponseEntity<Object> create(@Valid @RequestBody ActorShort item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
 		
-		//conversión de ActorDTO a Actor
-		var actorConverted = ActorDTO.from(item);
+		//conversión de ActorShort a Actor
+		var actorConverted = ActorShort.from(item);
 		
 		//operación de create (post), se hace la validación del objeto por lo que si no es valida no se guardará 
 		var newItem = srv.add(actorConverted); 
@@ -74,16 +81,16 @@ public class ActorResource {
 
 	}
 
-	//modify existing actor (received as ActorDTO BUT modified as Actor)
+	//modify existing actor (received as ActorShort BUT modified as Actor)
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void update(@PathVariable int id, @Valid @RequestBody ActorDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
+	public void update(@PathVariable int id, @Valid @RequestBody ActorShort item) throws BadRequestException, NotFoundException, InvalidDataException {
 		//si lo que cambia es el actorID lanzamos excepción ya que es un atributo que no debe modificarse
 		if(id != item.getActorId())
 			throw new BadRequestException("IDs of actor don't match");
 		
 		//si los IDs son válidos modificamos el actor; dentro se hacen las validaciones
-		srv.modify(ActorDTO.from(item));
+		srv.modify(ActorShort.from(item));
 	}
 
 	//delete an actor by its id
