@@ -29,10 +29,12 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping(path = { "/api/lenguajes/v1", "/api/lenguajes" })
+@RequestMapping(path = { "/api/lenguajes/v1", "/api/lenguajes" ,"/api/languages/v1", "/api/languages"})
 public class LanguageResource {
 	
 	@Autowired
@@ -43,6 +45,11 @@ public class LanguageResource {
 	@GetMapping
 	public List<Language> getAll() {
 		return srv.getByProjection(Language.class);
+	}
+	
+	@GetMapping(params = "page")
+	public Page<Language> getAllPageable(Pageable page) {
+		return srv.getByProjection(page, Language.class);
 	}
 
 	//get one language found by its id

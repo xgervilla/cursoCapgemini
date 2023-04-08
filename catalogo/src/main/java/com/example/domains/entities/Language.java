@@ -46,7 +46,7 @@ public class Language extends EntityBase<Language> implements Serializable {
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)
-	@JsonProperty("Language")
+	@JsonProperty("Name")
 	@NotBlank
 	@Size(max=20)
 	private String name;

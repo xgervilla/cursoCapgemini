@@ -29,6 +29,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -41,6 +43,11 @@ public class CategoryResource {
 	@GetMapping
 	public List<Category> getAll() {
 		return srv.getByProjection(Category.class);
+	}
+	
+	@GetMapping(params = "page")
+	public Page<Category> getAllPageable(Pageable page) {
+		return srv.getByProjection(page, Category.class);
 	}
 
 	@GetMapping(path = "/{id}")
