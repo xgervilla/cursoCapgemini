@@ -35,7 +35,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping(path = { "/api/actores/v1", "/api/actors" })
+@RequestMapping(path = { "/api/actores/v1", "/api/actores", "/api/actors/v1" , "/api/actors/v1"})
 public class ActorResource {
 	
 	@Autowired
@@ -43,16 +43,19 @@ public class ActorResource {
 
 	//get all actors (as ActorDTO)
 	
+	
 	@GetMapping
-	public List<ActorDTO> getAll(@RequestParam(required = false) String sort) {
+	public List<ActorShort> getAll(@RequestParam(required = false) String sort) {
 		if (sort != null)
-			return (List<ActorDTO>)srv.getByProjection(Sort.by(sort), ActorDTO.class);
+			return (List<ActorShort>)srv.getByProjection(Sort.by(sort), ActorShort.class);
 		
-		return srv.getByProjection(ActorDTO.class);
+		return srv.getByProjection(ActorShort.class);
 	}
 	
+	
+	
 	@GetMapping(params="page")
-	public Page<ActorShort> getAll(Pageable pageable) {
+	public Page<ActorShort> getAllPageable(Pageable pageable) {
 		return srv.getByProjection(pageable, ActorShort.class);
 	}
 

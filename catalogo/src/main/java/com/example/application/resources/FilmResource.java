@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +20,7 @@ import com.example.domains.contracts.services.FilmService;
 import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmDTO;
 import com.example.domains.entities.dtos.FilmFullDTO;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -28,10 +30,12 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping(path = { "/api/peliculas/v1", "/api/peliculas" })
+@RequestMapping(path = { "/api/peliculas/v1", "/api/peliculas", "/api/films", "/api/films/v1"})
 public class FilmResource {
 	
 	@Autowired
@@ -40,9 +44,13 @@ public class FilmResource {
 	//get all films (as FilmDTO)
 	
 	@GetMapping
-	@Transactional
-	public List<FilmDTO> getAll() {
-		return srv.getByProjection(FilmDTO.class);
+	public List<FilmShortDTO> getAll() {
+		return srv.getByProjection(FilmShortDTO.class);
+	}
+	
+	@GetMapping(params="page")
+	public Page<FilmShortDTO> getAllPageable(Pageable page) {
+		return srv.getByProjection(page, FilmShortDTO.class);
 	}
 
 	//get one actor found by its id (as FilmDTO)
