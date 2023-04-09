@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.domains.contracts.services.LanguageService;
+import com.example.domains.entities.Category;
 import com.example.domains.entities.Language;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,89 +49,169 @@ class LanguageResourceTest {
 	void setUp() throws Exception {
 	}
 
-	//getAll actors as string (json)
-	@Test
-	void testGetAllString() throws Exception {
+	@Nested
+	class GetMethods{
 		
-		List<Language> lista = new ArrayList<>(
-		        Arrays.asList(new Language(1, "Spanish"),
-		        		new Language(2, "English"),
-		        		new Language(3, "German"),
-		        		new Language(4, "French"),
-		        		new Language(5, "Italian"),
-		        		new Language(6, "Russian")
-		        		));
-		
-		when(srv.getByProjection(Language.class)).thenReturn(lista);
-		mockMvc.perform(get("/api/languages/v1").accept(MediaType.APPLICATION_JSON))
-			.andExpectAll(
-					status().isOk(), 
-					content().contentType("application/json"),
-					jsonPath("$.size()").value(6)
-					);
-	}
+		@Nested
+		class OK{
 
-	//getAll languages as pageable
-	@Test
-	void testGetAllPageable() throws Exception {
-		List<Language> lista = new ArrayList<>(
-		        Arrays.asList(new Language(1, "Spanish"),
-		        		new Language(2, "English"),
-		        		new Language(3, "German"),
-		        		new Language(4, "French"),
-		        		new Language(5, "Italian"),
-		        		new Language(6, "Russian")
-		        		));
+			@Test
+			@DisplayName("Get all languages")
+			void testGetAll() throws Exception {
+				
+				List<Language> lista = new ArrayList<>(
+				        Arrays.asList(new Language(1, "Spanish"),
+				        		new Language(2, "English"),
+				        		new Language(3, "German"),
+				        		new Language(4, "French"),
+				        		new Language(5, "Italian"),
+				        		new Language(6, "Russian")
+				        		));
+				
+				when(srv.getByProjection(Language.class)).thenReturn(lista);
+				mockMvc.perform(get("/api/languages/v1").accept(MediaType.APPLICATION_JSON))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.size()").value(6)
+							);
+			}
+			
+			@Test
+			@DisplayName("Get all languages in page format")
+			void testGetAllPageable() throws Exception {
+				List<Language> lista = new ArrayList<>(
+				        Arrays.asList(new Language(1, "Spanish"),
+				        		new Language(2, "English"),
+				        		new Language(3, "German"),
+				        		new Language(4, "French"),
+				        		new Language(5, "Italian"),
+				        		new Language(6, "Russian")
+				        		));
 
-		when(srv.getByProjection(PageRequest.of(0, 20), Language.class))
-			.thenReturn(new PageImpl<>(lista));
-		
-		var result = mockMvc.perform(get("/api/lenguajes/v1").queryParam("page", "0"))
-			.andExpectAll(
-				status().isOk(), 
-				content().contentType("application/json"),
-				jsonPath("$.content.size()").value(6),
-				jsonPath("$.size").value(6))
-			.andReturn();
-		System.out.println(result.getResponse().getContentAsString());
-	}
+				when(srv.getByProjection(PageRequest.of(0, 20), Language.class))
+					.thenReturn(new PageImpl<>(lista));
+				
+				var result = mockMvc.perform(get("/api/lenguajes/v1").queryParam("page", "0"))
+					.andExpectAll(
+						status().isOk(), 
+						content().contentType("application/json"),
+						jsonPath("$.content.size()").value(6),
+						jsonPath("$.size").value(6))
+					.andReturn();
+				System.out.println(result.getResponse().getContentAsString());
+			}
 
-	@Test
-	void testGetOne() throws Exception {
-		int id = 1;
-		var ele = new Language(1,"Catalan");
-		when(srv.getOne(id)).thenReturn(Optional.of(ele));
-		mockMvc.perform(get("/api/lenguajes/v1/{id}", id))
-			.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.ID").value(id))
-	        .andExpect(jsonPath("$.Name").value(ele.getName()))
-	        .andDo(print());
-	}
-		
-	@Test
-	void testGetOne404() throws Exception {
-		int id = 1;
-		
-		when(srv.getOne(id)).thenReturn(Optional.empty());
-		mockMvc.perform(get("/api/languages/v1/{id}", id))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.title").value("Not Found"))
-	        .andDo(print());
-	}
+			@Test
+			@DisplayName("Get one language by its id")
+			void testGetOne() throws Exception {
+				int id = 1;
+				var ele = new Language(1,"Catalan");
+				when(srv.getOne(id)).thenReturn(Optional.of(ele));
+				mockMvc.perform(get("/api/lenguajes/v1/{id}", id))
+					.andExpect(status().isOk())
+			        .andExpect(jsonPath("$.ID").value(id))
+			        .andExpect(jsonPath("$.Name").value(ele.getName()))
+			        .andDo(print());
+			}
 
-	@Test
-	void testCreate() throws Exception {
-		int id = 1;
-		var ele = new Language(1,"Catalan");
-		when(srv.add(ele)).thenReturn(ele);
-		mockMvc.perform(post("/api/languages/v1")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(ele))
-			)
-			.andExpect(status().isCreated())
-	        .andExpect(header().string("Location", "http://localhost/api/languages/v1/1"))
-	        .andDo(print())
-	        ;
+			@Test
+			@DisplayName("Get films from language")
+			void testGetLanguageFilms() throws Exception{
+				fail("Not yet implemented");
+			}
+			
+			@Test
+			@DisplayName("Get all but empty")
+			void testGetAllEmpty() throws Exception {
+				
+				List<Language> lista = new ArrayList<>(
+				        Arrays.asList());
+				
+				when(srv.getByProjection(Language.class)).thenReturn(lista);
+				mockMvc.perform(get("/api/lenguajes/v1").accept(MediaType.APPLICATION_JSON))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.size()").value(0)
+							);
+			}
+			
+		}
+		
+		@Nested
+		class KO{
+			@Test
+			void testGetOneInvalid() throws Exception {
+				int id = 1;
+				
+				when(srv.getOne(id)).thenReturn(Optional.empty());
+				mockMvc.perform(get("/api/languages/v1/{id}", id))
+					.andExpect(status().isNotFound())
+					.andExpect(jsonPath("$.title").value("Not Found"))
+			        .andDo(print());
+			}
+		}
+	}
+		
+	@Nested
+	class PostMethods{
+		@Test
+		@DisplayName("Create new language")
+		void testCreate() throws Exception {
+			int id = 1;
+			var ele = new Language(1,"Catalan");
+			when(srv.add(ele)).thenReturn(ele);
+			mockMvc.perform(post("/api/languages/v1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(ele))
+				)
+				.andExpect(status().isCreated())
+		        .andExpect(header().string("Location", "http://localhost/api/languages/v1/1"))
+		        .andDo(print())
+		        ;
+		}
+		
+		@Test
+		@DisplayName("Create new language invalid")
+		void testCreateInvalid() throws Exception {
+			fail("Not yet implemented");
+			int id = 1;
+			var ele = new Language(1,"Catalan");
+			when(srv.add(ele)).thenReturn(ele);
+			mockMvc.perform(post("/api/languages/v1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(ele))
+				)
+				.andExpect(status().isCreated())
+		        .andExpect(header().string("Location", "http://localhost/api/languages/v1/1"))
+		        .andDo(print())
+		        ;
+		}
+	}
+	
+	class PutMethods{
+		
+		@Test
+		@DisplayName("Update language")
+		void testUpdate() throws Exception {
+			fail("Not yet implemented");
+		}
+		
+		@Test
+		@DisplayName("Update language invalid")
+		void testUpdateInvalid() throws Exception {
+			fail("Not yet implemented");
+		}
+	}
+	
+	@Nested
+	class DeleteMethods{
+		@Test
+		@DisplayName("Delete language")
+		void testDelete() throws Exception {
+			fail("Not yet implemented");
+		}
 	}
 
 }

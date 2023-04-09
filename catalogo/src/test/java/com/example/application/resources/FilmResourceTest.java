@@ -18,6 +18,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -50,88 +52,165 @@ class FilmResourceTest {
 	void setUp() throws Exception {
 	}
 
-	@AfterEach
-	void tearDown() throws Exception {
+	@Nested
+	class GetMethods{
+		
+		@Nested
+		class OK {
+			
+			@Test
+			@DisplayName("Get all films")
+			void testGetAll() throws Exception {
+				
+				List<FilmShortDTO> lista = new ArrayList<>(
+				        Arrays.asList(new FilmShortDTO(1, "Jurassic Park"),
+				        		new FilmShortDTO(2, "Jurassic Park 2"),
+				        		new FilmShortDTO(3, "Jurassic Park 3"),
+				        		new FilmShortDTO(4, "The empire strikes back"),
+				        		new FilmShortDTO(5, "The revenge of the Sith"),
+				        		new FilmShortDTO(6, "Superman returns")
+				        		));
+				
+				when(srv.getByProjection(FilmShortDTO.class)).thenReturn(lista);
+				mockMvc.perform(get("/api/films/v1").accept(MediaType.APPLICATION_JSON))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.size()").value(6)
+							);
+			}
+			
+			@Test
+			@DisplayName("Get all films in page format")
+			void testGetAllPageable() throws Exception {
+				List<FilmShortDTO> lista = new ArrayList<>(
+				        Arrays.asList(new FilmShortDTO(1, "Pepito Grillo"),
+				        		new FilmShortDTO(2, "Carmelo Coton"),
+				        		new FilmShortDTO(3, "Capitan Tan")));
+
+				when(srv.getByProjection(PageRequest.of(0, 20), FilmShortDTO.class))
+					.thenReturn(new PageImpl<>(lista));
+				
+				mockMvc.perform(get("/api/films/v1").queryParam("page", "0"))
+					.andExpectAll(
+						status().isOk(), 
+						content().contentType("application/json"),
+						jsonPath("$.content.size()").value(3),
+						jsonPath("$.size").value(3));
+				}
+
+			@Test
+			@DisplayName("Get all but empty")
+			void testGetAllEmpty() throws Exception {
+				
+				List<FilmShortDTO> lista = new ArrayList<>(
+				        Arrays.asList());
+				
+				when(srv.getByProjection(FilmShortDTO.class)).thenReturn(lista);
+				mockMvc.perform(get("/api/films/v1").accept(MediaType.APPLICATION_JSON))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.size()").value(0)
+							);
+			}
+			
+			@Test
+			@DisplayName("Get one film in basic format")
+			void testGetOneBasic() throws Exception {
+				fail("Not yet implemented");
+			}
+			
+			@Test
+			@DisplayName("Get one film by its id")
+			void testGetOne() throws Exception {
+				int id = 1;
+				var ele = new Film(1, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
+				when(srv.getOne(id)).thenReturn(Optional.of(ele));
+				mockMvc.perform(get("/api/peliculas/v1/{id}", id))
+					.andExpect(status().isOk())
+			        .andExpect(jsonPath("$.id").value(id))
+			        .andExpect(jsonPath("$.titulo").value(ele.getTitle()))
+			        .andExpect(jsonPath("$.descripcion").value(ele.getDescription()))
+			        .andDo(print());
+			}
+		}
+		
+		@Nested
+		class KO {
+			
+			@Test
+			@DisplayName("Get one film invalid")
+			void testGetOneInvalid() throws Exception {
+				int id = 1;
+				when(srv.getOne(id)).thenReturn(Optional.empty());
+				mockMvc.perform(get("/api/peliculas/v1/{id}", id))
+					.andExpect(status().isNotFound())
+					.andExpect(jsonPath("$.title").value("Not Found"))
+			        .andDo(print());
+			}
+		}
+	}
+
+	@Nested
+	class PostMethods{
+		
+		@Test
+		@DisplayName("Create new film")
+		void testCreate() throws Exception {
+			int id = 1;
+			var ele = new Film(1, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
+			when(srv.add(ele)).thenReturn(ele);
+			mockMvc.perform(post("/api/peliculas/v1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(FilmDTO.from(ele)))
+				)
+				.andExpect(status().isCreated())
+		        .andExpect(header().string("Location", "http://localhost/api/peliculas/v1/1"))
+		        .andDo(print())
+		        ;
+		}
+		
+		@Test
+		@DisplayName("Create new film invalid")
+		void testCreateInvalid() throws Exception {
+			fail("Not yet implemented");
+			int id = 1;
+			var ele = new Film(1, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
+			when(srv.add(ele)).thenReturn(ele);
+			mockMvc.perform(post("/api/peliculas/v1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(FilmDTO.from(ele)))
+				)
+				.andExpect(status().isCreated())
+		        .andExpect(header().string("Location", "http://localhost/api/peliculas/v1/1"))
+		        .andDo(print())
+		        ;
+		}
+	}
+
+	@Nested
+	class PutMethods{
+		
+		@Test
+		@DisplayName("Update film")
+		void testUpdate() throws Exception {
+			fail("Not yet implemented");
+		}
+		
+		@Test
+		@DisplayName("Update film invalid")
+		void testUpdateInvalid() throws Exception {
+			fail("Not yet implemented");
+		}
 	}
 	
-	@Test
-	void testGetAll() throws Exception {
-		
-		List<FilmShortDTO> lista = new ArrayList<>(
-		        Arrays.asList(new FilmShortDTO(1, "Jurassic Park"),
-		        		new FilmShortDTO(2, "Jurassic Park 2"),
-		        		new FilmShortDTO(3, "Jurassic Park 3"),
-		        		new FilmShortDTO(4, "The empire strikes back"),
-		        		new FilmShortDTO(5, "The revenge of the Sith"),
-		        		new FilmShortDTO(6, "Superman returns")
-		        		));
-		
-		when(srv.getByProjection(FilmShortDTO.class)).thenReturn(lista);
-		mockMvc.perform(get("/api/films/v1").accept(MediaType.APPLICATION_JSON))
-			.andExpectAll(
-					status().isOk(), 
-					content().contentType("application/json"),
-					jsonPath("$.size()").value(6)
-					);
+	@Nested
+	class DeleteMethods{
+		@Test
+		@DisplayName("Delete film")
+		void testDelete() throws Exception {
+			fail("Not yet implemented");
+		}
 	}
-
-	//getAll actors as pageable
-	@Test
-	void testGetAllPageable() throws Exception {
-		List<FilmShortDTO> lista = new ArrayList<>(
-		        Arrays.asList(new FilmShortDTO(1, "Pepito Grillo"),
-		        		new FilmShortDTO(2, "Carmelo Coton"),
-		        		new FilmShortDTO(3, "Capitan Tan")));
-
-		when(srv.getByProjection(PageRequest.of(0, 20), FilmShortDTO.class))
-			.thenReturn(new PageImpl<>(lista));
-		
-		var result = mockMvc.perform(get("/api/films/v1").queryParam("page", "0"))
-			.andExpectAll(
-				status().isOk(), 
-				content().contentType("application/json"),
-				jsonPath("$.content.size()").value(3),
-				jsonPath("$.size").value(3))
-			.andReturn();
-		System.out.println(result.getResponse().getContentAsString());
-	}
-
-	@Test
-	void testGetOne() throws Exception {
-		int id = 1;
-		var ele = new Film(1, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
-		when(srv.getOne(id)).thenReturn(Optional.of(ele));
-		mockMvc.perform(get("/api/peliculas/v1/{id}", id))
-			.andExpect(status().isOk())
-	        .andExpect(jsonPath("$.id").value(id))
-	        .andExpect(jsonPath("$.titulo").value(ele.getTitle()))
-	        .andExpect(jsonPath("$.descripcion").value(ele.getDescription()))
-	        .andDo(print());
-	}
-	
-	@Test
-	void testGetOne404() throws Exception {
-		int id = 1;
-		when(srv.getOne(id)).thenReturn(Optional.empty());
-		mockMvc.perform(get("/api/peliculas/v1/{id}", id))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.title").value("Not Found"))
-	        .andDo(print());
-	}
-
-	@Test
-	void testCreate() throws Exception {
-		int id = 1;
-		var ele = new Film(1, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
-		when(srv.add(ele)).thenReturn(ele);
-		mockMvc.perform(post("/api/peliculas/v1")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(FilmDTO.from(ele)))
-			)
-			.andExpect(status().isCreated())
-	        .andExpect(header().string("Location", "http://localhost/api/peliculas/v1/1"))
-	        .andDo(print())
-	        ;
-	}
-
 }
