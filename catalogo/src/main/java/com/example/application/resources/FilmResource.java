@@ -54,7 +54,7 @@ public class FilmResource {
 	}
 
 	//get one actor found by its id (as FilmDTO)
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/{id:\\d+}")
 	public FilmFullDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
@@ -64,7 +64,7 @@ public class FilmResource {
 		return FilmFullDTO.from(item.get());
 	}
 	
-	@GetMapping(path = "/{id}", params = "basic")
+	@GetMapping(path = "/{id:\\d+}", params = "basic")
 	public ElementoDTO<Integer, String> getOneBasic(@PathVariable int id, String param) throws NotFoundException {
 		var item = srv.getOne(id);
 		
@@ -89,7 +89,7 @@ public class FilmResource {
 	}
 
 	//modify existing actor (received as FilmDTO BUT modified as Film)
-	@PutMapping("/{id}")
+	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody FilmDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
 		//si lo que cambia es el actorID lanzamos excepción ya que es un atributo que no debe modificarse
@@ -101,7 +101,7 @@ public class FilmResource {
 	}
 
 	//delete an actor by its id
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
 		srv.deleteById(id);

@@ -50,7 +50,7 @@ public class CategoryResource {
 		return srv.getByProjection(page, Category.class);
 	}
 
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/{id:\\d+}")
 	public Category getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
@@ -72,7 +72,7 @@ public class CategoryResource {
 
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody Category item) throws BadRequestException, NotFoundException, InvalidDataException {
 		if(id != item.getCategoryId())
@@ -81,7 +81,7 @@ public class CategoryResource {
 		srv.modify(item);
 	}
 	
-	@GetMapping(path = "/{id}/pelis")
+	@GetMapping(path = "/{id:\\d+}/pelis")
 	@Transactional
 	public List<ElementoDTO<Integer, String>> getFilms(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -92,7 +92,7 @@ public class CategoryResource {
 		return item.get().getFilmCategories().stream().map(o -> new ElementoDTO<>(o.getFilm().getFilmId(), o.getFilm().getTitle())).toList();
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
 		srv.deleteById(id);

@@ -70,7 +70,7 @@ public class ActorResource {
 		return ActorDTO.from(item.get());
 	}
 	
-	@GetMapping(path = "/{id}/pelis")
+	@GetMapping(path = "/{id:\\d+}/pelis")
 	@Transactional
 	public List<ElementoDTO<Integer, String>> getFilms(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -100,7 +100,7 @@ public class ActorResource {
 	}
 
 	//modify existing actor (received as ActorDTO BUT modified as Actor)
-	@PutMapping("/{id}")
+	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody ActorDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
 		//si lo que cambia es el actorID lanzamos excepción ya que es un atributo que no debe modificarse
@@ -112,7 +112,7 @@ public class ActorResource {
 	}
 
 	//delete an actor by its id
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
 		srv.deleteById(id);

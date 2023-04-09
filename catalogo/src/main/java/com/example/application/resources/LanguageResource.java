@@ -53,7 +53,7 @@ public class LanguageResource {
 	}
 
 	//get one language found by its id
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/{id:\\d+}")
 	public Language getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
@@ -76,7 +76,7 @@ public class LanguageResource {
 	}
 
 	//modify existing language
-	@PutMapping("/{id}")
+	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody Language item) throws BadRequestException, NotFoundException, InvalidDataException {
 		if(id != item.getLanguageId())
@@ -85,7 +85,7 @@ public class LanguageResource {
 		srv.modify(item);
 	}
 	
-	@GetMapping(path = "/{id}/pelis")
+	@GetMapping(path = "/{id:\\d+}/pelis")
 	@Transactional
 	public List<ElementoDTO<Integer, String>> getFilms(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -97,7 +97,7 @@ public class LanguageResource {
 	}
 
 	//delete an actor by its id
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
 		srv.deleteById(id);
