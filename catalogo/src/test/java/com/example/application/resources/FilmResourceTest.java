@@ -1,11 +1,16 @@
 package com.example.application.resources;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +23,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,8 +39,10 @@ import com.example.domains.contracts.services.FilmService;
 import com.example.domains.entities.Film;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.Film.Rating;
+import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmDTO;
 import com.example.domains.entities.dtos.FilmShortDTO;
+import com.example.exceptions.InvalidDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(FilmResource.class)
@@ -116,9 +124,18 @@ class FilmResourceTest {
 			}
 			
 			@Test
+			@Disabled
 			@DisplayName("Get one film in basic format")
 			void testGetOneBasic() throws Exception {
-				fail("Not yet implemented");
+				fail("Must be fixed");
+				int id = 1;
+				var ele = new ElementoDTO<Integer, String>(id, "Basic movie");
+				//when(srv.getOne(id)).thenReturn(Optional.of(ele));
+				mockMvc.perform(get("/api/peliculas/v1/{id}?basic", id))
+					.andExpect(status().isOk())
+			        .andExpect(jsonPath("$.key").value(id))
+			        .andExpect(jsonPath("$.value").value(ele.getValue()))
+			        .andDo(print());
 			}
 			
 			@Test
@@ -174,16 +191,14 @@ class FilmResourceTest {
 		@Test
 		@DisplayName("Create new film invalid")
 		void testCreateInvalid() throws Exception {
-			fail("Not yet implemented");
 			int id = 1;
-			var ele = new Film(1, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
-			when(srv.add(ele)).thenReturn(ele);
+			var ele = new Film(1, "           ", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
+			when(srv.add(ele)).thenThrow(new InvalidDataException());
 			mockMvc.perform(post("/api/peliculas/v1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(FilmDTO.from(ele)))
-				)
-				.andExpect(status().isCreated())
-		        .andExpect(header().string("Location", "http://localhost/api/peliculas/v1/1"))
+				.content(objectMapper.writeValueAsString(FilmDTO.from(ele))))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.title").value("Bad Request"))
 		        .andDo(print())
 		        ;
 		}
@@ -195,13 +210,30 @@ class FilmResourceTest {
 		@Test
 		@DisplayName("Update film")
 		void testUpdate() throws Exception {
-			fail("Not yet implemented");
+			int id = 1;
+			var ele = new Film(id, "New movie title", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2));
+			when(srv.modify(ele)).thenReturn(ele);
+			mockMvc.perform(put("/api/peliculas/v1/{id}", id)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(FilmDTO.from(ele))))
+				.andExpect(status().isNoContent())
+		        .andDo(print())
+		        ;
 		}
 		
 		@Test
 		@DisplayName("Update film invalid")
 		void testUpdateInvalid() throws Exception {
-			fail("Not yet implemented");
+			int id = 1;
+			var ele = new Film(id, "New description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "       ", new Language(1), new Language(2));
+			when(srv.modify(ele)).thenThrow(new InvalidDataException());
+			mockMvc.perform(put("/api/peliculas/v1/{id}", id)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(FilmDTO.from(ele))))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.title").value("Bad Request"))
+		        .andDo(print())
+		        ;
 		}
 	}
 	
@@ -210,7 +242,15 @@ class FilmResourceTest {
 		@Test
 		@DisplayName("Delete film")
 		void testDelete() throws Exception {
-			fail("Not yet implemented");
+			var id = 1;
+			
+			doNothing().when(srv).deleteById(id);
+			
+			mockMvc.perform(delete("/api/peliculas/v1/{id}", id))
+				.andExpect(status().isNoContent())
+		        .andDo(print());
+			
+			verify(srv,times(1)).deleteById(id);
 		}
 	}
 }

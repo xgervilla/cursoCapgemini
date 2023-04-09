@@ -38,6 +38,7 @@ import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.Category;
 import com.example.domains.entities.dtos.FilmShortDTO;
+import com.example.exceptions.InvalidDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(CategoryResource.class)
@@ -120,7 +121,7 @@ class CategoryResourceTest {
 				        		new FilmShortDTO(6, "Superman returns")
 				        		));
 				
-				//como "forzar" el return?
+				//necesario "forzar" el return
 				//when(srv.getOne(id).get().getFilmCategories()).thenReturn();
 				
 				var result = mockMvc.perform(get("/api/categorias/v1/{id}/pelis",id).accept(MediaType.APPLICATION_JSON))
@@ -190,7 +191,7 @@ class CategoryResourceTest {
 		@DisplayName("Create new category")
 		void testCreate() throws Exception {
 			int id = 1;
-			var ele = new Category(1,"Animation");
+			var ele = new Category(id,"Animation");
 			when(srv.add(ele)).thenReturn(ele);
 			mockMvc.perform(post("/api/categorias/v1")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -205,16 +206,16 @@ class CategoryResourceTest {
 		@Test
 		@DisplayName("Create new category invalid")
 		void testCreateInvalid() throws Exception {
-			int id = 1;
 			var ele = new Category(1, "            ");
-			when(srv.add(ele)).thenReturn(ele);
+			
+			when(srv.add(ele)).thenThrow(new InvalidDataException());
+			
 			mockMvc.perform(post("/api/categorias/v1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(ele)))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.title").value("Invalid Data"))
-		        .andDo(print())
-		        ;
+		        .andDo(print());
 		}	
 	}
 	
@@ -250,7 +251,8 @@ class CategoryResourceTest {
 			mockMvc.perform(put("/api/categorias/v1/{id}", id)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(ele)))
-				.andExpect(status().is4xxClientError())
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.title").value("Bad Request"))
 		        .andDo(print())
 		        ;
 		}
