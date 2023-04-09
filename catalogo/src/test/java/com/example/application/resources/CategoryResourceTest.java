@@ -1,9 +1,14 @@
 package com.example.application.resources;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -17,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.Category;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(CategoryResource.class)
@@ -100,8 +107,30 @@ class CategoryResourceTest {
 		
 			@Test
 			@DisplayName("Get category films")
+			@Disabled
 			void testGetCategoryFilms() throws Exception{
-				fail("Not yet implemented");
+				fail("Must be fixed");
+				var id = 1;
+				List<FilmShortDTO> lista = new ArrayList<>(
+				        Arrays.asList(new FilmShortDTO(1, "Jurassic Park"),
+				        		new FilmShortDTO(2, "Jurassic Park 2"),
+				        		new FilmShortDTO(3, "Jurassic Park 3"),
+				        		new FilmShortDTO(4, "The empire strikes back"),
+				        		new FilmShortDTO(5, "The revenge of the Sith"),
+				        		new FilmShortDTO(6, "Superman returns")
+				        		));
+				
+				//como "forzar" el return?
+				//when(srv.getOne(id).get().getFilmCategories()).thenReturn();
+				
+				var result = mockMvc.perform(get("/api/categorias/v1/{id}/pelis",id).accept(MediaType.APPLICATION_JSON))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"))
+					.andReturn();//,
+							//jsonPath("$.size").value(6),
+							//jsonPath("$.content.size()").value(6));
+				System.out.println(result.getResponse().getContentAsString());
 			}
 			
 			@Test
@@ -125,7 +154,9 @@ class CategoryResourceTest {
 			void testGetOne() throws Exception {
 				int id = 1;
 				var ele = new Category(1,"Animation");
+				
 				when(srv.getOne(id)).thenReturn(Optional.of(ele));
+				
 				mockMvc.perform(get("/api/categorias/v1/{id}", id))
 					.andExpect(status().isOk())
 			        .andExpect(jsonPath("$.ID").value(id))
@@ -150,6 +181,7 @@ class CategoryResourceTest {
 		}
 		
 	}
+	
 
 	@Nested
 	class PostMethods{
@@ -173,20 +205,19 @@ class CategoryResourceTest {
 		@Test
 		@DisplayName("Create new category invalid")
 		void testCreateInvalid() throws Exception {
-			fail("Not yet implemented");
 			int id = 1;
-			var ele = new Category(1,"Animation");
+			var ele = new Category(1, "            ");
 			when(srv.add(ele)).thenReturn(ele);
 			mockMvc.perform(post("/api/categorias/v1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(ele))
-				)
-				.andExpect(status().isCreated())
-		        .andExpect(header().string("Location", "http://localhost/api/categorias/v1/1"))
+				.content(objectMapper.writeValueAsString(ele)))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.title").value("Invalid Data"))
 		        .andDo(print())
 		        ;
 		}	
 	}
+	
 	
 	@Nested
 	class PutMethods{
@@ -194,22 +225,51 @@ class CategoryResourceTest {
 		@Test
 		@DisplayName("Update category")
 		void testUpdate() throws Exception {
-			fail("Not yet implemented");
+			int id = 1;
+			var ele = new Category(1,"Animation");
+			
+			when(srv.modify(ele)).thenReturn(ele);
+			
+			mockMvc.perform(put("/api/categorias/v1/{id}", id)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(ele))
+				)
+				.andExpect(status().isNoContent())
+		        .andDo(print())
+		        ;
 		}
 		
 		@Test
 		@DisplayName("Update category invalid")
 		void testUpdateInvalid() throws Exception {
-			fail("Not yet implemented");
+			int id = 1;
+			var ele = new Category(id+1,"Animation");
+			
+			when(srv.modify(ele)).thenReturn(ele);
+			
+			mockMvc.perform(put("/api/categorias/v1/{id}", id)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(ele)))
+				.andExpect(status().is4xxClientError())
+		        .andDo(print())
+		        ;
 		}
 	}
 	
 	@Nested
 	class DeleteMethods{
 		@Test
-		@DisplayName("Delete film")
+		@DisplayName("Delete category")
 		void testDelete() throws Exception {
-			fail("Not yet implemented");
+			var id = 1;
+			
+			doNothing().when(srv).deleteById(id);
+			
+			mockMvc.perform(delete("/api/categorias/v1/{id}", id))
+				.andExpect(status().isNoContent())
+		        .andDo(print());
+			
+			verify(srv,times(1)).deleteById(id);
 		}
 	}
 

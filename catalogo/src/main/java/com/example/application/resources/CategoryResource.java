@@ -20,6 +20,7 @@ import com.example.domains.contracts.services.FilmService;
 import com.example.domains.entities.Category;
 import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmDTO;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -82,14 +83,13 @@ public class CategoryResource {
 	}
 	
 	@GetMapping(path = "/{id:\\d+}/pelis")
-	@Transactional
-	public List<ElementoDTO<Integer, String>> getFilms(@PathVariable int id) throws NotFoundException {
+	public List<FilmShortDTO> getFilms(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
 		if(item.isEmpty())
 			throw new NotFoundException();
 		
-		return item.get().getFilmCategories().stream().map(o -> new ElementoDTO<>(o.getFilm().getFilmId(), o.getFilm().getTitle())).toList();
+		return item.get().getFilmCategories().stream().map(o -> new FilmShortDTO(o.getFilm().getFilmId(), o.getFilm().getTitle())).toList();
 	}
 
 	@DeleteMapping("/{id:\\d+}")
