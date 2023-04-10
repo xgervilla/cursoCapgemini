@@ -884,7 +884,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"ID\": 0,\r\n    \"Language\": \"Portuguese\"\r\n}",
+									"raw": "{\r\n    \"ID\": 0,\r\n    \"Name\": \"Portuguese\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -927,7 +927,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"ID\": 14,\r\n    \"Language\": \"Brazilian\"\r\n}",
+									"raw": "{\r\n    \"ID\": 15,\r\n    \"Name\": \"Brazilian\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -935,7 +935,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8001/api/lenguajes/v1/14",
+									"raw": "http://localhost:8001/api/lenguajes/v1/15",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -945,7 +945,7 @@
 										"api",
 										"lenguajes",
 										"v1",
-										"14"
+										"15"
 									]
 								}
 							},
