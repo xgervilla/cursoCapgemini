@@ -37,20 +37,26 @@ public class FilmFullDTO {
 	@JsonProperty("vo")
 	private Language languageVO;
 	
-	private List<String> actors;
+	private List<Integer> actors;
 	
-	private List<String> categories;
+	private List<Integer> categories;
 	
 	public static FilmFullDTO from(Film target) {
 		return new FilmFullDTO(target.getFilmId(), target.getTitle(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(),
 				target.getLanguage() == null ? null : target.getLanguage(),
 				target.getLanguageVO() == null ? null : target.getLanguageVO(),
-				target.getActors().stream().map(item-> item.getFirstName() + " " + item.getLastName()).sorted().toList(),
-				target.getCategories().stream().map(item->item.getName()).sorted().toList()
+				target.getActors().stream().map(item-> item.getActorId()).sorted().toList(),
+				target.getCategories().stream().map(item->item.getCategoryId()).sorted().toList()
 				);
 	}
 	
 	public static Film from(FilmFullDTO target) {
-		return new Film(target.getFilmId(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(), target.getTitle(), target.getLanguage(), target.getLanguageVO());
+		Film newFilm = new Film(target.getFilmId(), target.getDescription(), target.getLength(), target.getRating(), target.getReleaseYear(), target.getRentalDuration(), target.getRentalRate(), target.getReplacementCost(), target.getTitle(), target.getLanguage(), target.getLanguageVO());
+		if (target.getActors() != null)
+			target.getActors().stream().forEach(id -> newFilm.addActor(id));
+		if (target.getCategories() != null)
+			target.getCategories().stream().forEach(id -> newFilm.addCategory(id));
+		
+		return newFilm;
 	}
 }

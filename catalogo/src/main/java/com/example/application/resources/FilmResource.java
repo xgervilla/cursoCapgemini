@@ -40,8 +40,6 @@ public class FilmResource {
 	
 	@Autowired
 	private FilmService srv;
-
-	//get all films (as FilmDTO)
 	
 	@GetMapping
 	public List<FilmShortDTO> getAll() {
@@ -53,7 +51,6 @@ public class FilmResource {
 		return srv.getByProjection(page, FilmShortDTO.class);
 	}
 
-	//get one actor found by its id (as FilmDTO)
 	@GetMapping(path = "/{id:\\d+}")
 	public FilmFullDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -74,11 +71,10 @@ public class FilmResource {
 		return new ElementoDTO<Integer, String>(item.get().getFilmId(), item.get().getTitle());
 	}
 	
-	//create new film (received as FilmDTO BUT saved as Film)
 	@PostMapping
-	public ResponseEntity<Object> create(@Valid @RequestBody FilmDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
+	public ResponseEntity<Object> create(@Valid @RequestBody FilmFullDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
 		
-		var filmConverted = FilmDTO.from(item);
+		var filmConverted = FilmFullDTO.from(item);
 		
 		var newItem = srv.add(filmConverted); 
 		
@@ -88,19 +84,15 @@ public class FilmResource {
 
 	}
 
-	//modify existing actor (received as FilmDTO BUT modified as Film)
 	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void update(@PathVariable int id, @Valid @RequestBody FilmDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
-		//si lo que cambia es el actorID lanzamos excepción ya que es un atributo que no debe modificarse
+	public void update(@PathVariable int id, @Valid @RequestBody FilmFullDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
 		if(id != item.getFilmId())
 			throw new BadRequestException("IDs of film don't match");
 		
-		//si los IDs son válidos modificamos el actor; dentro se hacen las validaciones
-		srv.modify(FilmDTO.from(item));
+		srv.modify(FilmFullDTO.from(item));
 	}
 
-	//delete an actor by its id
 	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
