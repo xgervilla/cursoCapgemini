@@ -105,34 +105,6 @@ class CategoryResourceTest {
 						jsonPath("$.content.size()").value(5),
 						jsonPath("$.size").value(5));
 				}
-		
-			@Test
-			@DisplayName("Get category films")
-			@Disabled
-			void testGetCategoryFilms() throws Exception{
-				fail("Must be fixed");
-				var id = 1;
-				List<FilmShortDTO> lista = new ArrayList<>(
-				        Arrays.asList(new FilmShortDTO(1, "Jurassic Park"),
-				        		new FilmShortDTO(2, "Jurassic Park 2"),
-				        		new FilmShortDTO(3, "Jurassic Park 3"),
-				        		new FilmShortDTO(4, "The empire strikes back"),
-				        		new FilmShortDTO(5, "The revenge of the Sith"),
-				        		new FilmShortDTO(6, "Superman returns")
-				        		));
-				
-				//necesario "forzar" el return
-				//when(srv.getOne(id).get().getFilmCategories()).thenReturn();
-				
-				var result = mockMvc.perform(get("/api/categorias/v1/{id}/pelis",id).accept(MediaType.APPLICATION_JSON))
-					.andExpectAll(
-							status().isOk(), 
-							content().contentType("application/json"))
-					.andReturn();//,
-							//jsonPath("$.size").value(6),
-							//jsonPath("$.content.size()").value(6));
-				System.out.println(result.getResponse().getContentAsString());
-			}
 			
 			@Test
 			@DisplayName("Get all but empty")

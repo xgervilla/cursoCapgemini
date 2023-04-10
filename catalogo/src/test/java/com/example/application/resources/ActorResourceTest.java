@@ -91,26 +91,6 @@ class ActorResourceTest {
 			}
 			
 			@Test
-			@DisplayName("Get all films from actor")
-			@Disabled
-			void testGetActorFilms() throws Exception{
-				fail("Must be fixed");
-				var id = 1; 
-				List<Film> lista = new ArrayList<>(
-				        Arrays.asList(new Film(1, "Description of the first movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 1", new Language(1), new Language(2)),
-				        			new Film(2, "Description of the second movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2))
-				        		));
-				when(srv.getOne(id)).thenReturn(Optional.of(new Actor(id, "Nombre","APELLIDO")));
-				
-				when(srv.getOne(id).get().getFilms()).thenReturn(lista);
-				
-				mockMvc.perform(get("/api/actores/v1/{id}/pelis", id))
-					.andExpect(status().isOk())
-			        .andExpect(jsonPath("$.size").value(2))
-			        .andExpect(jsonPath("$.content.size()").value(2));
-			}
-			
-			@Test
 			@DisplayName("Get all actors in page format")
 			void testGetAllPageable() throws Exception {
 				List<ActorShort> lista = new ArrayList<>(

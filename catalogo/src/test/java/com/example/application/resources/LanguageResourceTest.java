@@ -119,13 +119,6 @@ class LanguageResourceTest {
 			        .andExpect(jsonPath("$.Name").value(ele.getName()))
 			        .andDo(print());
 			}
-
-			@Test
-			@Disabled
-			@DisplayName("Get films from language")
-			void testGetLanguageFilms() throws Exception{
-				fail("Not yet implemented");
-			}
 			
 			@Test
 			@DisplayName("Get all but empty")

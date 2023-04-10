@@ -15,7 +15,7 @@ import com.example.domains.entities.FilmCategory;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.Film.Rating;
 
-class FilmDTOTest {
+class FilmFullDTOTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -24,8 +24,8 @@ class FilmDTOTest {
 	//conversión de Film a FilmFullDTO
 	@Test
 	void testFromFilm() {
-		List<String> filmActorList = new ArrayList<String>();
-		List<String> filmCategoryList = new ArrayList<String>();
+		List<Integer> filmActorList = new ArrayList<Integer>();
+		List<Integer> filmCategoryList = new ArrayList<Integer>();
 		var film = new FilmFullDTO(0, "The revenge of the test part 3", "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), new Language(1), new Language(2), filmActorList, filmCategoryList);
 		var filmDTO = FilmFullDTO.from(film);
 		assertEquals(Film.class,filmDTO.getClass());
@@ -45,12 +45,12 @@ class FilmDTOTest {
 				);
 	}
 
-	//conversión de FilmDTO a Film
+	//conversión de FilmFullDTO a Film
 	@Test
 	void testFromFilmDTO() {
 		var film = new Film(0, "Description of the movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 4", new Language(1), new Language(2));
-		var filmDTO = FilmDTO.from(film);
-		assertEquals(FilmDTO.class,filmDTO.getClass());
+		var filmDTO = FilmFullDTO.from(film);
+		assertEquals(FilmFullDTO.class,filmDTO.getClass());
 		
 		assertAll("Attributes",
 				() -> assertEquals(0,filmDTO.getFilmId()),
