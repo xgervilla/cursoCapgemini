@@ -56,6 +56,7 @@ public class ActorResource {
 	
 	@GetMapping(params = "novedades")
 	public List<ActorDTO> getNovedades(@RequestParam(required = false, name = "novedades", defaultValue = "") String fecha) {
+		System.out.println(fecha);
 		//"2022-01-01 00:00:00"
 		if (fecha.length() != 19)
 			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600))).stream().map(o -> ActorDTO.from(o)).toList();

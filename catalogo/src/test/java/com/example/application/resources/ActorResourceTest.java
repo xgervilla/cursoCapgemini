@@ -157,31 +157,37 @@ class ActorResourceTest {
 							jsonPath("$[0].value").value("The revenge of the test part 1"),
 							jsonPath("$[1].key").value(2),
 							jsonPath("$[1].value").value("The revenge of the test part 2")
-					).andDo(print());
+					)//.andDo(print())
+					;
 			}
 			
 			@Test
 			@DisplayName("Novedades")
-			@Disabled
 			void testGetNovedades() throws Exception {
-				fail("Must be fixed");
 				var timestampString = "2022-01-01 00:00:00";
-				var timestampRest = "2022-01-01%2000:00:00";
 				var timestamp = Timestamp.valueOf(timestampString);
 				List<Actor> lista = new ArrayList<>(
 				        Arrays.asList(new Actor(1, "Primera","INCORPORACION"),
-				        		new Actor(2, "Segunda","ADDICION"),
+				        		new Actor(2, "Segunda","ADICION"),
 				        		new Actor(3, "Nuevo","BECARIO")
 				        		));
 				
 				when(srv.novedades(timestamp)).thenReturn(lista);
 				
-				mockMvc.perform(get("/api/actores/v1").param("novedades", timestampRest))
+				mockMvc.perform(get("/api/actores/v1").queryParam("novedades", timestampString))
 					.andExpectAll(
-					status().isOk(), 
-					content().contentType("application/json"),
-					jsonPath("$.content.size()").value(3),
-					jsonPath("$.size").value(3)
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.length()").value(3),
+							jsonPath("$[0].id").value(1),
+							jsonPath("$[0].nombre").value("Primera"),
+							jsonPath("$[0].apellidos").value("INCORPORACION"),
+							jsonPath("$[1].id").value(2),
+							jsonPath("$[1].nombre").value("Segunda"),
+							jsonPath("$[1].apellidos").value("ADICION"),
+							jsonPath("$[2].id").value(3),
+							jsonPath("$[2].nombre").value("Nuevo"),
+							jsonPath("$[2].apellidos").value("BECARIO")
 					).andDo(print());
 			}
 			
@@ -263,7 +269,7 @@ class ActorResourceTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(ActorDTO.from(ele))))
 				.andExpect(status().isNoContent())
-		        .andDo(print())
+		        //.andDo(print())
 		        ;
 		}
 		
@@ -280,7 +286,7 @@ class ActorResourceTest {
 				.content(objectMapper.writeValueAsString(ActorDTO.from(ele))))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.title").value("Bad Request"))
-		        .andDo(print())
+		        //.andDo(print())
 		        ;
 		}
 	}
@@ -296,7 +302,8 @@ class ActorResourceTest {
 			
 			mockMvc.perform(delete("/api/actores/v1/{id}", id))
 				.andExpect(status().isNoContent())
-		        .andDo(print());
+		        //.andDo(print())
+				;
 			
 			verify(srv,times(1)).deleteById(id);
 		}

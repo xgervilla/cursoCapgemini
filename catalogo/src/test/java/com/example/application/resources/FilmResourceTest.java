@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.domains.contracts.services.FilmService;
+import com.example.domains.entities.Category;
 import com.example.domains.entities.Film;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.Film.Rating;
@@ -136,6 +138,30 @@ class FilmResourceTest {
 			        .andExpect(jsonPath("$.key").value(id))
 			        .andExpect(jsonPath("$.value").value(ele.getValue()))
 			        .andDo(print());
+			}
+			
+			@Test
+			@DisplayName("Novedades")
+			void testGetNovedades() throws Exception {
+				var timestampString = "2022-01-01 00:00:00";
+				var timestamp = Timestamp.valueOf(timestampString);
+				List<Film> lista = new ArrayList<>(
+				        Arrays.asList(new Film(1, "Description of the first new movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "Pelicula nueva 1", new Language(1), new Language(2)),
+				        		new Film(2, "Description of the second new movie", 72, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "Pelicula nueva 2", new Language(1), new Language(2))
+				        		));
+				
+				when(srv.novedades(timestamp)).thenReturn(lista);
+				
+				mockMvc.perform(get("/api/films/v1").queryParam("novedades", timestampString))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.length()").value(2),
+							jsonPath("$[0].filmId").value(1),
+							jsonPath("$[0].title").value("Pelicula nueva 1"),
+							jsonPath("$[1].filmId").value(2),
+							jsonPath("$[1].title").value("Pelicula nueva 2")
+					).andDo(print());
 			}
 			
 			@Test

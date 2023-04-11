@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -153,10 +154,38 @@ class CategoryResourceTest {
 				mockMvc.perform(get("/api/categorias/v1/{id}/pelis", id))
 					.andExpectAll(
 							status().isOk(),
+							jsonPath("$.length()").value(2),
 							jsonPath("$[0].filmId").value(1),
 							jsonPath("$[0].title").value("The revenge of the test part 1"),
 							jsonPath("$[1].filmId").value(2),
 							jsonPath("$[1].title").value("The revenge of the test part 2")
+					).andDo(print());
+			}
+			
+			@Test
+			@DisplayName("Novedades")
+			void testGetNovedades() throws Exception {
+				var timestampString = "2022-12-01 00:00:00";
+				var timestamp = Timestamp.valueOf(timestampString);
+				List<Category> lista = new ArrayList<>(
+				        Arrays.asList(new Category(1, "Drama"),
+				        		new Category(2, "Comedy"),
+				        		new Category(3, "Action")
+				        		));
+				
+				when(srv.novedades(timestamp)).thenReturn(lista);
+				
+				mockMvc.perform(get("/api/categorias/v1").queryParam("novedades", timestampString))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.length()").value(3),
+							jsonPath("$[0].ID").value(1),
+							jsonPath("$[0].Category").value("Drama"),
+							jsonPath("$[1].ID").value(2),
+							jsonPath("$[1].Category").value("Comedy"),
+							jsonPath("$[2].ID").value(3),
+							jsonPath("$[2].Category").value("Action")
 					).andDo(print());
 			}
 			

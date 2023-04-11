@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,6 +115,33 @@ class LanguageResourceTest {
 			}
 			
 			@Test
+			@DisplayName("Novedades")
+			void testGetNovedades() throws Exception {
+				var timestampString = "2022-09-23 00:00:00";
+				var timestamp = Timestamp.valueOf(timestampString);
+				List<Language> lista = new ArrayList<>(
+				        Arrays.asList(new Language(1, "Spanish"),
+				        		new Language(2, "English"),
+				        		new Language(3, "French")
+				        		));
+				
+				when(srv.novedades(timestamp)).thenReturn(lista);
+				
+				mockMvc.perform(get("/api/lenguajes/v1").queryParam("novedades", timestampString))
+					.andExpectAll(
+							status().isOk(), 
+							content().contentType("application/json"),
+							jsonPath("$.length()").value(3),
+							jsonPath("$[0].ID").value(1),
+							jsonPath("$[0].Name").value("Spanish"),
+							jsonPath("$[1].ID").value(2),
+							jsonPath("$[1].Name").value("English"),
+							jsonPath("$[2].ID").value(3),
+							jsonPath("$[2].Name").value("French")
+					).andDo(print());
+			}
+			
+			@Test
 			@DisplayName("Get all films from language")
 			void testGetLanguageFilms() throws Exception{
 				var id = 1; 
@@ -121,7 +149,7 @@ class LanguageResourceTest {
 				        Arrays.asList(new Film(1, "Description of the first movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 1", new Language(1), new Language(2)),
 				        			new Film(2, "Description of the second movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2))
 				        		));
-				
+
 				var language = new Language(id, "Lenguaje");
 				language.addFilm(filmList.get(0));
 				language.addFilm(filmList.get(1));
