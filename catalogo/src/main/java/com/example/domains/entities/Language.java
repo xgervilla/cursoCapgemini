@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,12 +55,12 @@ public class Language extends EntityBase<Language> implements Serializable {
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	private List<Film> films;
+	private List<Film> films = new ArrayList<>();
 
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="languageVO")
 	@JsonIgnore
-	private List<Film> filmsVO;
+	private List<Film> filmsVO = new ArrayList<>();
 
 	public Language() {
 	}

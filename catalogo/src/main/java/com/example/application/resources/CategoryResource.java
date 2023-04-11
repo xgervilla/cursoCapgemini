@@ -20,12 +20,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.entities.Category;
+import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 import com.example.exceptions.DuplicateKeyException;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

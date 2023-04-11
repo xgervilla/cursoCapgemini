@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +35,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.domains.contracts.services.LanguageService;
+import com.example.domains.entities.Category;
+import com.example.domains.entities.Film;
+import com.example.domains.entities.FilmCategory;
 import com.example.domains.entities.Language;
+import com.example.domains.entities.Film.Rating;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.InvalidDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -105,6 +111,31 @@ class LanguageResourceTest {
 						jsonPath("$.size").value(6))
 					.andReturn();
 				System.out.println(result.getResponse().getContentAsString());
+			}
+			
+			@Test
+			@DisplayName("Get all films from language")
+			void testGetLanguageFilms() throws Exception{
+				var id = 1; 
+				List<Film> filmList = new ArrayList<>(
+				        Arrays.asList(new Film(1, "Description of the first movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 1", new Language(1), new Language(2)),
+				        			new Film(2, "Description of the second movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2))
+				        		));
+				
+				var language = new Language(id, "Lenguaje");
+				language.addFilm(filmList.get(0));
+				language.addFilm(filmList.get(1));
+				
+				when(srv.getOne(id)).thenReturn(Optional.of(language));
+				
+				mockMvc.perform(get("/api/lenguajes/v1/{id}/pelis", id))
+					.andExpectAll(
+							status().isOk(),
+							jsonPath("$[0].filmId").value(1),
+							jsonPath("$[0].title").value("The revenge of the test part 1"),
+							jsonPath("$[1].filmId").value(2),
+							jsonPath("$[1].title").value("The revenge of the test part 2")
+					).andDo(print());
 			}
 
 			@Test

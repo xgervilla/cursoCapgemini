@@ -36,7 +36,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.contracts.services.LanguageService;
+import com.example.domains.entities.Actor;
 import com.example.domains.entities.Category;
+import com.example.domains.entities.Film;
+import com.example.domains.entities.FilmActor;
+import com.example.domains.entities.FilmCategory;
+import com.example.domains.entities.Language;
+import com.example.domains.entities.Film.Rating;
 import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.InvalidDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -120,6 +126,38 @@ class CategoryResourceTest {
 							content().contentType("application/json"),
 							jsonPath("$.size()").value(0)
 							);
+			}
+			
+			@Test
+			@DisplayName("Get all films from category")
+			void testGetCategoryFilms() throws Exception{
+				var id = 1; 
+				List<Film> filmList = new ArrayList<>(
+				        Arrays.asList(new Film(1, "Description of the first movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 1", new Language(1), new Language(2)),
+				        			new Film(2, "Description of the second movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2))
+				        		));
+				
+				var category = new Category(id, "Categoria");
+				
+				List<FilmCategory> filmCategories = new ArrayList<>(
+						Arrays.asList(
+								new FilmCategory(filmList.get(0), category),
+								new FilmCategory(filmList.get(1), category)
+								));
+						
+				
+				category.setFilmCategories(filmCategories);
+				
+				when(srv.getOne(id)).thenReturn(Optional.of(category));
+				
+				mockMvc.perform(get("/api/categorias/v1/{id}/pelis", id))
+					.andExpectAll(
+							status().isOk(),
+							jsonPath("$[0].filmId").value(1),
+							jsonPath("$[0].title").value("The revenge of the test part 1"),
+							jsonPath("$[1].filmId").value(2),
+							jsonPath("$[1].title").value("The revenge of the test part 2")
+					).andDo(print());
 			}
 			
 			@Test

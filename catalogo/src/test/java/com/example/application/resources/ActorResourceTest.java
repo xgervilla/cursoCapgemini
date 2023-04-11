@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,8 +32,10 @@ import com.example.domains.entities.Actor;
 import com.example.domains.entities.Film;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.Film.Rating;
+import com.example.domains.entities.FilmActor;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.InvalidDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,7 +49,7 @@ class ActorResourceTest {
 	
 	@MockBean
 	private ActorService srv;
-
+	
 	@Autowired
 	ObjectMapper objectMapper;
 	
@@ -123,6 +126,63 @@ class ActorResourceTest {
 							content().contentType("application/json"),
 							jsonPath("$.size()").value(0)
 							);
+			}
+			
+			@Test
+			@DisplayName("Get all films from actor")
+			void testGetActorFilms() throws Exception{
+				var id = 1; 
+				List<Film> filmList = new ArrayList<>(
+				        Arrays.asList(new Film(1, "Description of the first movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 1", new Language(1), new Language(2)),
+				        			new Film(2, "Description of the second movie", 60, Rating.GENERAL_AUDIENCES, new Short("2023"), (byte) 5, new BigDecimal(10.0), new BigDecimal(30), "The revenge of the test part 2", new Language(1), new Language(2))
+				        		));
+				
+				var actor = new Actor(id, "Nombre","APELLIDO");
+				
+				List<FilmActor> filmActors = new ArrayList<>(
+						Arrays.asList(
+								new FilmActor(filmList.get(0), actor),
+								new FilmActor(filmList.get(1), actor)
+								));
+						
+				
+				actor.setFilmActors(filmActors);
+				
+				when(srv.getOne(id)).thenReturn(Optional.of(actor));
+				
+				mockMvc.perform(get("/api/actores/v1/{id}/pelis", id))
+					.andExpectAll(
+							status().isOk(),
+							jsonPath("$[0].key").value(1),
+							jsonPath("$[0].value").value("The revenge of the test part 1"),
+							jsonPath("$[1].key").value(2),
+							jsonPath("$[1].value").value("The revenge of the test part 2")
+					).andDo(print());
+			}
+			
+			@Test
+			@DisplayName("Novedades")
+			@Disabled
+			void testGetNovedades() throws Exception {
+				fail("Must be fixed");
+				var timestampString = "2022-01-01 00:00:00";
+				var timestampRest = "2022-01-01%2000:00:00";
+				var timestamp = Timestamp.valueOf(timestampString);
+				List<Actor> lista = new ArrayList<>(
+				        Arrays.asList(new Actor(1, "Primera","INCORPORACION"),
+				        		new Actor(2, "Segunda","ADDICION"),
+				        		new Actor(3, "Nuevo","BECARIO")
+				        		));
+				
+				when(srv.novedades(timestamp)).thenReturn(lista);
+				
+				mockMvc.perform(get("/api/actores/v1").param("novedades", timestampRest))
+					.andExpectAll(
+					status().isOk(), 
+					content().contentType("application/json"),
+					jsonPath("$.content.size()").value(3),
+					jsonPath("$.size").value(3)
+					).andDo(print());
 			}
 			
 			@Test

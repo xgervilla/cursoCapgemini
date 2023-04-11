@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.dtos.ElementoDTO;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -96,14 +97,13 @@ public class LanguageResource {
 	}
 	
 	@GetMapping(path = "/{id:\\d+}/pelis")
-	@Transactional
-	public List<ElementoDTO<Integer, String>> getFilms(@PathVariable int id) throws NotFoundException {
+	public List<FilmShortDTO> getFilms(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
 		if(item.isEmpty())
 			throw new NotFoundException();
 		
-		return item.get().getFilms().stream().map(o -> new ElementoDTO<>(o.getFilmId(), o.getTitle())).toList();
+		return item.get().getFilms().stream().map(o -> new FilmShortDTO(o.getFilmId(), o.getTitle())).toList();
 	}
 
 	//delete an actor by its id
