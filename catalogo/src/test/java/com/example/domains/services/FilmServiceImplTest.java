@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -145,6 +146,16 @@ class FilmServiceImplTest {
 		assertEquals(originalSize, srv.getAll().size());
 		
 		srv.deleteById(addedFilmId);
+	}
+	
+	@Test
+	@DisplayName("Novedades of film")
+	void testNovedadesFilm() {
+		var timestamp = Timestamp.valueOf("2007-01-01 00:00:00");
+		var result = srv.novedades(timestamp);
+		
+		assertAll("Novedades of film",
+				() -> assertEquals(22, result.size()));
 	}
 
 }

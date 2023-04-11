@@ -2,6 +2,9 @@ package com.example.domains.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.sql.Timestamp;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -145,5 +148,15 @@ class ActorServiceImplTest {
 		assertEquals(originalSize, srv.getAll().size());
 		
 		srv.deleteById(addedActorId);
+	}
+	
+	@Test
+	@DisplayName("Novedades of actor")
+	void testNovedadesActor() {
+		var timestamp = Timestamp.valueOf("2007-01-01 00:00:00");
+		var result = srv.novedades(timestamp);
+		
+		assertAll("Novedades of actor",
+				() -> assertEquals(9, result.size()));
 	}
 }
