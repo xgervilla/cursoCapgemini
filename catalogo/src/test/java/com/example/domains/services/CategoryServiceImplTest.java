@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -158,5 +159,15 @@ class CategoryServiceImplTest {
 		assertEquals(originalSize, srv.getAll().size());
 		
 		srv.deleteById(addedCategoryId);
+	}
+	
+	@Test
+	@DisplayName("Novedades of category")
+	void testNovedadesCategory() {
+		var timestamp = Timestamp.valueOf("2007-01-01 00:00:00");
+		var result = srv.novedades(timestamp);
+		
+		assertAll("Novedades of category",
+				() -> assertEquals(5, result.size()));
 	}
 }
