@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.ActorService;
-import com.example.domains.entities.Actor;
-import com.example.domains.entities.Language;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
 import com.example.domains.entities.dtos.ElementoDTO;
@@ -32,7 +30,6 @@ import com.example.exceptions.DuplicateKeyException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,9 +55,9 @@ public class ActorResource {
 	}
 	
 	@GetMapping(params = "novedades")
-	public List<ActorDTO> getNovedades(@RequestParam(required = false, name = "novedades") String fecha) {
+	public List<ActorDTO> getNovedades(@RequestParam(required = false, name = "novedades", defaultValue = "") String fecha) {
 		//"2022-01-01 00:00:00"
-		if (fecha == null)
+		if (fecha.length() != 19)
 			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600))).stream().map(o -> ActorDTO.from(o)).toList();
 		return srv.novedades(Timestamp.valueOf(fecha)).stream().map(o -> ActorDTO.from(o)).toList();
 	}
