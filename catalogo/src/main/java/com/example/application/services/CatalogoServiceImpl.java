@@ -6,35 +6,36 @@ import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.domains.contracts.services.*;
+import com.example.domains.contracts.services.ActorService;
+import com.example.domains.contracts.services.CategoryService;
+import com.example.domains.contracts.services.FilmService;
+import com.example.domains.contracts.services.LanguageService;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.FilmDTO;
 import com.example.domains.entities.dtos.NovedadesDTO;
 
 @Service
-public class CatalogoServiceImpl implements CatalogoService{
+public class CatalogoServiceImpl implements CatalogoService {
 	@Autowired
 	private FilmService filmSrv;
-	
 	@Autowired
-	private ActorService actorSrv;
-	
+	private ActorService artorSrv;
 	@Autowired
-	private CategoryService catalogoSrv;
-	
+	private CategoryService categorySrv;
 	@Autowired
 	private LanguageService languageSrv;
-	
+
+	@Override
 	public NovedadesDTO novedades(Timestamp fecha) {
-		if (fecha == null)
+		// Timestamp fecha = Timestamp.valueOf("2019-01-01 00:00:00");
+		if(fecha == null)
 			fecha = Timestamp.from(Instant.now().minusSeconds(36000));
 		return new NovedadesDTO(
-				filmSrv.novedades(fecha).stream().map(item -> FilmDTO.from(item)).toList(),
-				actorSrv.novedades(fecha).stream().map(item -> ActorDTO.from(item)).toList(),
-				catalogoSrv.novedades(fecha),
-				languageSrv.novedades(fecha));
+				filmSrv.novedades(fecha).stream().map(item -> FilmDTO.from(item)).toList(), 
+				artorSrv.novedades(fecha).stream().map(item -> ActorDTO.from(item)).toList(), 
+				categorySrv.novedades(fecha), 
+				languageSrv.novedades(fecha)
+				);
 	}
-	
-	
 
 }

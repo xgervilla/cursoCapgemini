@@ -32,66 +32,10 @@ public class CatalogoApplication implements CommandLineRunner{
 		SpringApplication.run(CatalogoApplication.class, args);
 	}
 	
-//	@Autowired
-//	ActorService srvActor;
-//	
-//	@Autowired
-//	FilmService srvFilm;
-//	
-//	@Autowired
-//	CategoryService srvCategory;
-//	
-//	@Autowired
-//	LanguageService srvLanguage;
 	
 	@Override
-	@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("------------------ Aplicación arrancada ------------------");
-		
-		//srvFilm.getAll().forEach(System.out::println);
-		
-		
-		//------------ ADD A NEW MOVIE
-//		var movie = new Film("Prueba numero 2", new Language(3));
-//		movie.setRentalDuration((byte)3);
-//		movie.setRating(Rating.RESTRICTED);
-//		movie.setLength(72);
-//		movie.addActor(5);
-//		movie.addActor(6);
-//		movie.addActor(7);
-//		movie.addCategory(1);
-//		movie.addCategory(2);
-//		movie.addCategory(4);
-//		movie.addCategory(5);
-//		srvFilm.add(movie);
-//		
-//		
-//		System.out.println("\nCreated movie" + movie.getActors() + "\n" + movie.getCategories());
-//		
-//		//------------ MODIFY A MOVIE
-//		movie = srvFilm.getOne(movie.getFilmId()).get();
-//		movie.removeActor(new Actor(5));
-//		movie.addActor(new Actor(8));
-//		movie.addActor(new Actor(9));
-//		movie.removeCategory(movie.getCategories().get(0));
-//		movie.addCategory(3);
-//		movie.setTitle("Fin de la pelicula");
-//		srvFilm.modify(movie);
-//		
-//		System.out.println("\nModified movie" + movie.getActors() + "\n" + movie.getCategories());
-//		
-//		movie = srvFilm.getOne(movie.getFilmId()).get();
-//		
-//		System.out.println("\nModified from DB" + movie.getActors() + "\n" + movie.getCategories());
-		
-		
-		//-------------- DELETE BY ID
-//		srvFilm.deleteById(1015);
-//		srvFilm.deleteById(1014);
-//		srvFilm.deleteById(1013);
-//		srvFilm.deleteById(1008);
-		
 	}
 
 }
