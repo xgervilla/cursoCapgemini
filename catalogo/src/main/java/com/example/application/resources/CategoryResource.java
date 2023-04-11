@@ -1,6 +1,8 @@
 package com.example.application.resources;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.contracts.services.FilmService;
+import com.example.domains.entities.Actor;
 import com.example.domains.entities.Category;
 import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmDTO;
@@ -49,6 +53,14 @@ public class CategoryResource {
 	@GetMapping(params = "page")
 	public Page<Category> getAllPageable(Pageable page) {
 		return srv.getByProjection(page, Category.class);
+	}
+	
+	@GetMapping(params = "novedades")
+	public List<Category> getNovedades(@RequestParam(required = false, name = "novedades") String fecha) {
+		//"2022-01-01 00:00:00"
+		if (fecha == null)
+			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600)));
+		return srv.novedades(Timestamp.valueOf(fecha));
 	}
 
 	@GetMapping(path = "/{id:\\d+}")

@@ -1,6 +1,8 @@
 package com.example.application.resources;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.FilmService;
+import com.example.domains.entities.Actor;
+import com.example.domains.entities.Film;
 import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmDTO;
 import com.example.domains.entities.dtos.FilmFullDTO;
@@ -49,6 +53,15 @@ public class FilmResource {
 	@GetMapping(params="page")
 	public Page<FilmShortDTO> getAllPageable(Pageable page) {
 		return srv.getByProjection(page, FilmShortDTO.class);
+	}
+	
+	@GetMapping(params = "novedades")
+	public List<FilmShortDTO> getNovedades(@RequestParam(required = false, name = "novedades") String fecha) {
+		//"2022-01-01 00:00:00"
+		if (fecha == null)
+			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600))).stream().map(o -> FilmShortDTO.from(o)).toList();
+		
+		return srv.novedades(Timestamp.valueOf(fecha)).stream().map(o -> FilmShortDTO.from(o)).toList();
 	}
 
 	@GetMapping(path = "/{id:\\d+}")
