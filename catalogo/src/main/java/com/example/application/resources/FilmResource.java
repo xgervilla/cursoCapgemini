@@ -25,16 +25,25 @@ import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+//import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.example.exceptions.DuplicateKeyException;
 
 import jakarta.validation.Valid;
 
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@Tag(name = "films-service", description = "Film management")
 @RequestMapping(path = { "/api/peliculas/v1", "/api/peliculas", "/api/films", "/api/films/v1"})
 public class FilmResource {
 	
@@ -42,15 +51,18 @@ public class FilmResource {
 	private FilmService srv;
 	
 	@GetMapping
+	@Hidden
 	public List<FilmShortDTO> getAll() {
 		return srv.getByProjection(FilmShortDTO.class);
 	}
 	
 	@GetMapping(params="page")
+	@Hidden
 	public Page<FilmShortDTO> getAllPageable(Pageable page) {
 		return srv.getByProjection(page, FilmShortDTO.class);
 	}
 	
+	@Operation(summary = "Films latest releases", description = "Get the latest releases in Short format")
 	@GetMapping(params = "novedades")
 	public List<FilmShortDTO> getNovedades(@RequestParam(required = false, name = "novedades", defaultValue = "") String fecha) {
 		//"2022-01-01 00:00:00"
