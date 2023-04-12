@@ -1,6 +1,5 @@
 package com.example.application.resources;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,12 +34,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.domains.contracts.services.LanguageService;
-import com.example.domains.entities.Category;
 import com.example.domains.entities.Film;
-import com.example.domains.entities.FilmCategory;
 import com.example.domains.entities.Language;
 import com.example.domains.entities.Film.Rating;
-import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.InvalidDataException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

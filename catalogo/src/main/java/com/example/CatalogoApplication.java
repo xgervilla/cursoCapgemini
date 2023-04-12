@@ -1,32 +1,11 @@
 package com.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.domains.contracts.repositories.ActorRepository;
-import com.example.domains.contracts.repositories.CategoryRepository;
-import com.example.domains.contracts.repositories.FilmRepository;
-import com.example.domains.contracts.repositories.LanguageRepository;
-import com.example.domains.contracts.services.ActorService;
-import com.example.domains.contracts.services.CategoryService;
-import com.example.domains.contracts.services.FilmService;
-import com.example.domains.contracts.services.LanguageService;
-import com.example.domains.entities.Actor;
-import com.example.domains.entities.Category;
-import com.example.domains.entities.Film;
-import com.example.domains.entities.Film.Rating;
-import com.example.domains.entities.FilmCategory;
-import com.example.domains.entities.FilmCategoryPK;
-import com.example.domains.entities.Language;
-import com.example.domains.entities.dtos.ActorDTO;
-import com.example.domains.entities.dtos.ActorShort;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
-import jakarta.transaction.Transactional;
 
 @OpenAPIDefinition(
     info = @Info(

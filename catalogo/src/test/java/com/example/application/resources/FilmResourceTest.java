@@ -1,6 +1,5 @@
 package com.example.application.resources;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -22,9 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -126,17 +123,15 @@ class FilmResourceTest {
 			}
 			
 			@Test
-			@Disabled
 			@DisplayName("Get one film in basic format")
 			void testGetOneBasic() throws Exception {
-				fail("Must be fixed");
-				int id = 1;
-				var ele = new ElementoDTO<Integer, String>(id, "Basic movie");
-				//when(srv.getOne(id)).thenReturn(Optional.of(ele));
+				int id = 0;
+				var ele = new Film("Basic movie", new Language(1, "English"));
+				when(srv.getOne(id)).thenReturn(Optional.of(ele));
 				mockMvc.perform(get("/api/peliculas/v1/{id}?basic", id))
 					.andExpect(status().isOk())
 			        .andExpect(jsonPath("$.key").value(id))
-			        .andExpect(jsonPath("$.value").value(ele.getValue()))
+			        .andExpect(jsonPath("$.value").value(ele.getTitle()))
 			        .andDo(print());
 			}
 			
