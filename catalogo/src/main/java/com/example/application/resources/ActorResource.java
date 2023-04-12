@@ -25,6 +25,11 @@ import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.example.exceptions.DuplicateKeyException;
 
 import jakarta.transaction.Transactional;
@@ -37,15 +42,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@Tag(name = "Actors-service", description = "Actor management")
 @RequestMapping(path = { "/api/actores/v1", "/api/actores", "/api/actors/v1" , "/api/actors/v1"})
 public class ActorResource {
 	
 	@Autowired
 	private ActorService srv;
-
-	//get all actors (as ActorDTO)
 	
-	
+	@Operation(summary = "Get all actors", description = "Get all actors in Short format")
 	@GetMapping
 	public List<ActorShort> getAll(@RequestParam(required = false) String sort) {
 		if (sort != null)
@@ -54,23 +58,22 @@ public class ActorResource {
 		return srv.getByProjection(ActorShort.class);
 	}
 	
+	@Operation(summary = "Actor newest releases", description = "Get the newest releases of actors")
 	@GetMapping(params = "novedades")
 	public List<ActorDTO> getNovedades(@RequestParam(required = false, name = "novedades", defaultValue = "") String fecha) {
-		System.out.println(fecha);
-		//"2022-01-01 00:00:00"
 		if (fecha.length() != 19)
 			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600))).stream().map(o -> ActorDTO.from(o)).toList();
 		return srv.novedades(Timestamp.valueOf(fecha)).stream().map(o -> ActorDTO.from(o)).toList();
 	}
 	
 	
-	
+	@Hidden
 	@GetMapping(params="page")
 	public Page<ActorShort> getAllPageable(Pageable pageable) {
 		return srv.getByProjection(pageable, ActorShort.class);
 	}
 
-	//get one actor found by its id (as ActorDTO)
+	@Operation(summary = "Get one actor", description = "Get all attributes of an actor")
 	@GetMapping(path = "/{id:\\d+}")
 	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -81,6 +84,7 @@ public class ActorResource {
 		return ActorDTO.from(item.get());
 	}
 	
+	@Operation(summary = "Get all films of actor", description = "Get all films where the actor appears")
 	@GetMapping(path = "/{id:\\d+}/pelis")
 	@Transactional
 	public List<ElementoDTO<Integer, String>> getFilms(@PathVariable int id) throws NotFoundException {
@@ -93,36 +97,31 @@ public class ActorResource {
 	}
 	
 	
-	//create new actor (received as ActorDTO BUT saved as Actor)
+	@Operation(summary = "Create new actor", description = "Create a new actor")
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody ActorDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
 		
-		//conversión de ActorDTO a Actor
 		var actorConverted = ActorDTO.from(item);
 		
-		//operación de create (post), se hace la validación del objeto por lo que si no es valida no se guardará 
 		var newItem = srv.add(actorConverted); 
 		
-		//en caso de no ser válido saltan excepciones, en caso contrario se añade el nuevo actor a la url de manera dinámica según el current request path
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 			.buildAndExpand(newItem.getActorId()).toUri();
 		return ResponseEntity.created(location).build();
 
 	}
 
-	//modify existing actor (received as ActorDTO BUT modified as Actor)
+	@Operation(summary = "Update an actor", description = "Update an actor with all its attributes")
 	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody ActorDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
-		//si lo que cambia es el actorID lanzamos excepción ya que es un atributo que no debe modificarse
 		if(id != item.getActorId())
 			throw new BadRequestException("IDs of actor don't match");
 		
-		//si los IDs son válidos modificamos el actor; dentro se hacen las validaciones
 		srv.modify(ActorDTO.from(item));
 	}
 
-	//delete an actor by its id
+	@Operation(summary = "Delete an actor", description = "Delete an actor")
 	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {

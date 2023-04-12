@@ -25,6 +25,11 @@ import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.example.exceptions.DuplicateKeyException;
 
 import jakarta.transaction.Transactional;
@@ -36,30 +41,34 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping(path = { "/api/categorias/v1", "/api/categorias" })
+@Tag(name = "Category-service", description = "Category management")
+@RequestMapping(path = { "/api/categorias/v1", "/api/categorias" , "/api/categories", "/api/categories/v1"})
 public class CategoryResource {
 	
 	@Autowired
 	private CategoryService srv;
 	
+	@Operation(summary = "Get all categories", description = "Get all categories")
 	@GetMapping
 	public List<Category> getAll() {
 		return srv.getByProjection(Category.class);
 	}
 	
+	@Hidden
 	@GetMapping(params = "page")
 	public Page<Category> getAllPageable(Pageable page) {
 		return srv.getByProjection(page, Category.class);
 	}
 	
+	@Operation(summary = "Category latest releases", description = "Get the newest releases of categories")
 	@GetMapping(params = "novedades")
 	public List<Category> getNovedades(@RequestParam(required = false, name = "novedades", defaultValue = "") String fecha) {
-		//"2022-01-01 00:00:00"
 		if (fecha.length() != 19)
 			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600)));
 		return srv.novedades(Timestamp.valueOf(fecha));
 	}
 
+	@Operation(summary = "Get one category", description = "Get all attributes of a category")	
 	@GetMapping(path = "/{id:\\d+}")
 	public Category getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -70,6 +79,7 @@ public class CategoryResource {
 		return item.get();
 	}
 	
+	@Operation(summary = "Create new category", description = "Create a new category")
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody Category item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
 		
@@ -82,6 +92,7 @@ public class CategoryResource {
 
 	}
 
+	@Operation(summary = "Update a category", description = "Update a category with all its attributes")
 	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody Category item) throws BadRequestException, NotFoundException, InvalidDataException {
@@ -91,7 +102,9 @@ public class CategoryResource {
 		srv.modify(item);
 	}
 	
+	@Operation(summary = "Get all films of category", description = "Get all films that have the desired category")
 	@GetMapping(path = "/{id:\\d+}/pelis")
+	@Transactional
 	public List<FilmShortDTO> getFilms(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
@@ -101,6 +114,7 @@ public class CategoryResource {
 		return item.get().getFilmCategories().stream().map(o -> new FilmShortDTO(o.getFilm().getFilmId(), o.getFilm().getTitle())).toList();
 	}
 
+	@Operation(summary = "Delete a category", description = "Delete a category")
 	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {

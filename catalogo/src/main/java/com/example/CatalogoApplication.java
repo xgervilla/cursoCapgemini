@@ -23,8 +23,17 @@ import com.example.domains.entities.Language;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import jakarta.transaction.Transactional;
 
+@OpenAPIDefinition(
+    info = @Info(
+            title = "Microservicio: Catalogo de peliculas",
+            version = "1.0",
+            description = "Implementacion de microservicios de un catalogo de peliculas siguiendo la base de datos de muestra de Sakila.<br><br>Desarrollado e implementado por Xavier Gervilla.")
+    )
 @SpringBootApplication
 public class CatalogoApplication implements CommandLineRunner{
 

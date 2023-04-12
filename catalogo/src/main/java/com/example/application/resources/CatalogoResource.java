@@ -21,19 +21,21 @@ import com.example.domains.entities.dtos.FilmDTO;
 import com.example.domains.entities.dtos.NovedadesDTO;
 import com.example.exceptions.NotFoundException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Value;
 
 @RestController
+@Tag(name = "Catalogo-service", description = "Novedades management")
 @RequestMapping(path = { "/api/catalogo/v1", "/api/catalogo"})
 public class CatalogoResource {
 
 	@Autowired
 	CatalogoService srv;
 	
+	@Operation(summary = "Get newest releases", description = "Get all newest releases of films, actors, categories and languages")
 	@GetMapping(path = "/novedades")
-	public NovedadesDTO getNovedaesActor(@RequestParam(required = false, name = "fecha", defaultValue = "") String fecha) {
-		//"2022-01-01 00:00:00"
-		System.out.println(fecha);
+	public NovedadesDTO getNovedades(@RequestParam(required = false, name = "fecha", defaultValue = "") String fecha) {
 		if (fecha.contains("%20"))
 			fecha = fecha.replace("%20", " ");
 		if (fecha.length() != 19)
@@ -42,5 +44,4 @@ public class CatalogoResource {
 		var timestamp = Timestamp.valueOf(fecha);
 		return srv.novedades(timestamp); 
 	}
-	
 }

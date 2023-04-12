@@ -43,7 +43,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@Tag(name = "films-service", description = "Film management")
+@Tag(name = "Films-service", description = "Film management")
 @RequestMapping(path = { "/api/peliculas/v1", "/api/peliculas", "/api/films", "/api/films/v1"})
 public class FilmResource {
 	
@@ -51,7 +51,7 @@ public class FilmResource {
 	private FilmService srv;
 	
 	@GetMapping
-	@Hidden
+	@Operation(summary = "Get all films", description = "Get all films in Short format")
 	public List<FilmShortDTO> getAll() {
 		return srv.getByProjection(FilmShortDTO.class);
 	}
@@ -62,16 +62,16 @@ public class FilmResource {
 		return srv.getByProjection(page, FilmShortDTO.class);
 	}
 	
-	@Operation(summary = "Films latest releases", description = "Get the latest releases in Short format")
+	@Operation(summary = "Films newest releases", description = "Get the newest releases in Short format")
 	@GetMapping(params = "novedades")
 	public List<FilmShortDTO> getNovedades(@RequestParam(required = false, name = "novedades", defaultValue = "") String fecha) {
-		//"2022-01-01 00:00:00"
 		if (fecha.length() != 19)
 			return srv.novedades(Timestamp.from(Instant.now().minusSeconds(3600*24*7))).stream().map(o -> FilmShortDTO.from(o)).toList();
 		
 		return srv.novedades(Timestamp.valueOf(fecha)).stream().map(o -> FilmShortDTO.from(o)).toList();
 	}
 
+	@Operation(summary = "Get one film", description = "Get all attributes of a film")
 	@GetMapping(path = "/{id:\\d+}")
 	public FilmFullDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -82,6 +82,7 @@ public class FilmResource {
 		return FilmFullDTO.from(item.get());
 	}
 	
+	@Hidden
 	@GetMapping(path = "/{id:\\d+}", params = "basic")
 	public ElementoDTO<Integer, String> getOneBasic(@PathVariable int id, String param) throws NotFoundException {
 		var item = srv.getOne(id);
@@ -92,6 +93,7 @@ public class FilmResource {
 		return new ElementoDTO<Integer, String>(item.get().getFilmId(), item.get().getTitle());
 	}
 	
+	@Operation(summary = "Create new film", description = "Create a new film")
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody FilmFullDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
 		
@@ -105,6 +107,7 @@ public class FilmResource {
 
 	}
 
+	@Operation(summary = "Update a film", description = "Update a film with all its attributes")
 	@PutMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@PathVariable int id, @Valid @RequestBody FilmFullDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
@@ -114,6 +117,7 @@ public class FilmResource {
 		srv.modify(FilmFullDTO.from(item));
 	}
 
+	@Operation(summary = "Delete a film", description = "Delete a film")
 	@DeleteMapping("/{id:\\d+}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
