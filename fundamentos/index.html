@@ -9,44 +9,36 @@
 </head>
 <body>
 	<header>
-		<h1 id="pagetitle">¡Hola github!</h1>
+		<h1 id="pagetitle">Cuenta atrás</h1>
 	</header>
 
 	<div class="content">
-		Aquí va el contenido de la página
+		<script src="demo.js"></script>
+		<form>
+			<label>Escoge una hora para hacer la cuenta atrás:<br></label>
+			<input type="datetime-local" id="time-value" name = "time-value" value="2023-04-10T15:00" onload="getCountdown()" onchange="getCountdown()">
+		</form>
+		<br><br>
+		<p id="countdown-timer"></p>
 	</div>
 
 	<footer>
 		<table>
 			<tr>
-				<th colspan="2">Información adicional</th>
-			</tr>
-			<tr>
-				<th>Catalogo</th>
 				<th>Referencias</th>
 			</tr>
 			<tr>
-				<td>Actores</td>
 				<td><a href="https://github.com/xgervilla/cursoCapgemini" target="_blank">Github xgervilla</a></td>
 			</tr>
 			<tr>
-				<td>Peliculas</td>
 				<td><a href="https://github.com/jmagit/BOOT20230320" target="_blank">Github jmagit</a></td>
 			</tr>
-			<tr>
-				<td>Categorias</td>
-			</tr>
-			<tr>
-				<td>Lenguajes</td>
-			</tr>
 		</table>
-		<p>Desarrollado por Xavier Gervilla</p>
 	</footer>
 
 	<!--Ejemplo de inyeccion de javascript-->
-	<script src="demo.js"></script>
 	<script>
-		console.log('Hola mundo');
+		console.log('Main page ejecutando');
 	</script>
 </body>
 </html>
