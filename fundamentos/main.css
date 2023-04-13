@@ -1,0 +1,36 @@
+#pagetitle{
+    font-size: 5vw;
+    /*color: darkslateblue;*/
+    text-transform: uppercase;
+    text-align: center;
+}
+
+html, body{
+    min-height: 100vh;
+}
+
+body{
+    font-family: 'Comic Sans MS', Arial, Helvetica;
+    /*background-color: mistyrose;*/
+    display: flex;
+    flex-direction: column;
+}
+
+.content{
+    flex: 1;
+}
+
+footer{
+    text-align: center;
+    min-height: 50px;
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width:80%;
+}
+
+a:link {
+    text-decoration: none;
+}
