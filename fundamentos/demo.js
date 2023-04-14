@@ -1,4 +1,4 @@
-console.log('Soy el fichero en node')
+console.log('Ejecuto desde un fichero externo')
 
 var x;
 function getCountdown(){
@@ -23,3 +23,25 @@ function getCountdown(){
 		}
 	}, 1000);
 }
+
+class Persona {
+	constructor(id, nombre, apellidos){
+		this.id = id
+		this.nombre = nombre
+		this.apellidos = apellidos
+	}
+	
+	//acceso como un atributo obj.nombreCompleto --> el get es lo que lo identifica como 'atiributo' pese a estar generado como una función
+	get nombreCompleto() { return `${this.apellidos}, ${this.nombre}`}
+	
+	//acceso como una funcion obj.pinta()
+	pinta(){
+		console.log(this.nombreCompleto)
+	}
+}
+
+let p1 = new Persona(1, "Andres", "Iniesta")
+let p2 = new Persona(2, "Iker","Casillas")
+
+p1.pinta()
+console.log(p2.nombreCompleto)
