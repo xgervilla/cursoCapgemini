@@ -1,20 +1,41 @@
+#pagetitle{
+    font-size: 5vw;
+    color: darkslateblue;
+    text-transform: uppercase;
+    text-align: center;
+	font-family: 'Comic Sans MS';
+	margin-top: 10vw;
+}
+
+html, body{
+    min-height: 95vh;
+}
+
 body{
-	font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica;
+    background-color: mistyrose;
+    display: flex;
+    flex-direction: column;
 }
 
-h1 {
-	margin: auto;
-	padding: 0px 20px 0px 0px;
+.content{
+    flex: 1;
 }
 
-header {
-	background-color: green;
-	margin: 0;
-	padding: 0;
+footer{
+    text-align: center;
+	font-size: 1.5vw;
 }
 
-footer {
-	margin-top: 100px;
-	border-top: 2px solid black;
-	text-align: center;
+h1{
+	animation-name: blinkingText;
+	animation-duration: 3s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+@keyframes blinkingText {
+	0% {color: transparent;}
+	80% {color: transparent;}
+	100% {color: darkslateblue;}
 }
