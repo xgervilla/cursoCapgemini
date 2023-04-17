@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset='utf-8'>
+	<title>Curso de Capgemini</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<link rel='stylesheet' type='text/css' media='screen' href='calculadora.css'>
+	<link rel='stylesheet' href='./node_modules/bootstrap/dist/css/bootstrap.css'>
+</head>
+<body>
+	<header>
+		<h1 id="pagetitle">Calculadora</h1>
+	</header>
+
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 calculadora">
+				<div class="row-cols-6">
+					<input type="button" id="inversa" value="1/x">
+					<input type="button" id="modulo" value="%">
+					<input type="button" id="exponencial" value="exp">
+					<input type="button" id="multiplica" value="*">
+				</div>
+				<div class="row-cols-6">
+					<input type="button" id="number7" value="7">
+					<input type="button" id="number8" value="8">
+					<input type="button" id="number9" value="9">
+					<input type="button" id="divide" value="/">
+				</div>
+				<div class="row-cols-6">
+					<input type="button" id="number4" value="4">
+					<input type="button" id="number5" value="5">
+					<input type="button" id="number6" value="6">
+					<input type="button" id="suma" value="+">
+				</div>
+				<div class="row-cols-6">
+					<input type="button" id="number1" value="1">
+					<input type="button" id="number2" value="2">
+					<input type="button" id="number3" value="3">
+					<input type="button" id="resta" value="-">
+				</div>
+				<div class="row-cols-6">
+					<input type="button" id="number0" value="0">
+					<input type="button" id="clear" value="C">
+					<input type="button" id="decimal" value=".">
+					<input type="button" id="calcula" value="=">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="offset-md-4 col-md-3 result">
+				<output>Total: 0</output>
+			</div>
+		</div>
+		<script type="text/javascript" src="calculadora.js"></script>
+		<script type="text/javascript">
+			//funcion anonima
+			(function(){
+				var calc = new Calculadora()
+				let result = document.querySelector('output')
+
+				let btnSuma = document.querySelector('#suma')
+				let btnResta = document.querySelector('#resta')
+				let btnDivide = document.querySelector('#divide')
+				let btnMultiplica = document.querySelector('#multiplica')
+				let btnModulo = document.querySelector('#modulo')
+				let btnExponencial = document.querySelector('#exponencial')
+				let btnInversa = document.querySelector('#inversa')
+				let btnClear = document.querySelector('#clear')
+
+				let btnNumber0 = document.querySelector('#number0')
+				let btnNumber1 = document.querySelector('#number1')
+				let btnNumber2 = document.querySelector('#number2')
+				let btnNumber3 = document.querySelector('#number3')
+				let btnNumber4 = document.querySelector('#number4')
+				let btnNumber5 = document.querySelector('#number5')
+				let btnNumber6 = document.querySelector('#number6')
+				let btnNumber7 = document.querySelector('#number7')
+				let btnNumber8 = document.querySelector('#number8')
+				let btnNumber9 = document.querySelector('#number9')
+
+				let btnCalcula = document.querySelector('#calcula')
+
+				let btnDecimal = document.querySelector('#decimal')
+				btnDecimal.addEventListener('click', calc.startDecimals)
+
+				btnSuma.addEventListener('click', () => {calc.applyOperation('suma')})
+				btnResta.addEventListener('click', () => {calc.applyOperation('resta')})
+				btnDivide.addEventListener('click', () => {calc.applyOperation('division')})
+				btnMultiplica.addEventListener('click', () => {calc.applyOperation('multiplicacion')})
+				btnModulo.addEventListener('click', () => {calc.applyOperation('modulo')})
+				btnExponencial.addEventListener('click', () => {calc.applyOperation('exponenciacion')})
+				btnInversa.addEventListener('click', () => {calc.applyOperation('inversa')})
+				btnClear.addEventListener('click', () => {calc.applyOperation('clear')})
+
+				btnCalcula.addEventListener('click',() => {calc.applyOperation('calculate')})
+				
+				btnNumber0.addEventListener('click', () => {calc.accumulateValues(0)})
+				btnNumber1.addEventListener('click', () => {calc.accumulateValues(1)})
+				btnNumber2.addEventListener('click', () => {calc.accumulateValues(2)})
+				btnNumber3.addEventListener('click', () => {calc.accumulateValues(3)})
+				btnNumber4.addEventListener('click', () => {calc.accumulateValues(4)})
+				btnNumber5.addEventListener('click', () => {calc.accumulateValues(5)})
+				btnNumber6.addEventListener('click', () => {calc.accumulateValues(6)})
+				btnNumber7.addEventListener('click', () => {calc.accumulateValues(7)})
+				btnNumber8.addEventListener('click', () => {calc.accumulateValues(8)})
+				btnNumber9.addEventListener('click', () => {calc.accumulateValues(9)})
+			})();
+		</script>
+	</div>
+
+	<!--Ejemplo de inyeccion de javascript-->
+	<script>
+		console.log('Main page ejecutando');
+	</script>
+</body>
+</html>
