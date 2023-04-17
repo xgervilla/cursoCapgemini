@@ -10,6 +10,24 @@ html, body{
 	min-height: 95vh;
 }
 
+input[type=button] {
+	margin: 10px;
+	color: white;
+	background-color: black;
+	border-radius: 2rem;
+	min-width: 40px;
+	min-height: 40px;
+}
+
+#op2{
+	margin-top: 10px;
+}
+
+output, label {
+	text-align: center;
+}
+
+
 body{
 	font-family: Arial, Helvetica;
 	background-color: ghostwhite;
@@ -17,14 +35,7 @@ body{
 	flex-direction: column;
 }
 
-input[type=button] {
-	margin: 10px;
-	color: white;
-	background-color: black;
-	border-radius: 2rem;
-}
-
-.content{
+.container{
 	flex: 1;
 	text-align: center;
 	margin-top: 10vw;

@@ -5,38 +5,45 @@
 	<title>Curso de Capgemini</title>
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-	<!--link rel='stylesheet' href='./node_modules/bootstrap/dist/css/bootstrap.css'-->
+	<link rel='stylesheet' href='./node_modules/bootstrap/dist/css/bootstrap.css'>
+	<script src="demo.js"></script>
 </head>
 <body>
-	<!-- para iniciar el contador de manera automática al cargar la página se debía añadir onload="getCountdown()" en el elemento body-->
 	<header>
 		<h1 id="pagetitle">Operaciones con numéricos</h1>
 	</header>
 
-	<div class="content">
-		<script src="demo.js"></script>
-		<form>
+	<div class="container">
+		<div class="row">
 			<label>Introduce dos valores para operar</label>
-			<br><br>
-			<!--input type="datetime-local" id="time-value" name = "time-value" value="2023-04-21T15:00" onchange="getCountdown()"-->
-			<div>
-				<p>Primer valor: <input type="number" id="op1" value="0" placeholder="Input del primer operando"></p>
-				<p>Segundo valor: <input type="number" id="op2" value="0" placeholder="Input del segundo operando"></p>
-				<br>
-				<input type="button" id="suma" value="+">
-				<input type="button" id="resta" value="-">
-				<input type="button" id="multiplica" value="x">
-				<br>
-				<input type="button" id="divide" value="/">
-				<input type="button" id="modulo" value="%">
-				<input type="button" id="exponencial" value="^">
-
-				<br><br>
-				<output>Resultado: 0</output>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-md-2">
+				<p>Primer valor:</p>
+				<p>Segundo valor:</p>
 			</div>
-		</form>
-		<br><br>
-		<p id="countdown-timer"></p>
+			<div class="col-md-2">
+				<input type="number" id="op1" value="0" placeholder="Input del primer operando">
+				<input type="number" id="op2" value="0" placeholder="Input del segundo operando">
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-lg-4">
+				<div class="row-cols-4">
+					<input type="button" id="suma" value="+">
+					<input type="button" id="multiplica" value="x">
+					<input type="button" id="modulo" value="%">
+				</div>
+				<div class="row-cols-4">
+					<input type="button" id="resta" value="-">
+					<input type="button" id="divide" value="/">
+					<input type="button" id="exponencial" value="^">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<output>Resultado: 0</output>
+		</div>
 		<script type="module">
 			//funcion anonima
 			(function(){
