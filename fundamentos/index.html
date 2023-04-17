@@ -17,31 +17,34 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-6">
 				<div class="row-cols-6">
-					<input type="button" id="multiplica" value="x">
+					<input type="button" id="inversa" value="1/x">
 					<input type="button" id="modulo" value="%">
-					<input type="button" id="divide" value="/">
 					<input type="button" id="exponencial" value="exp">
+					<input type="button" id="multiplica" value="*">
 				</div>
 				<div class="row-cols-6">
 					<input type="button" id="number7" value="7">
 					<input type="button" id="number8" value="8">
 					<input type="button" id="number9" value="9">
-					<input type="button" id="suma" value="+">
+					<input type="button" id="divide" value="/">
 				</div>
 				<div class="row-cols-6">
 					<input type="button" id="number4" value="4">
 					<input type="button" id="number5" value="5">
 					<input type="button" id="number6" value="6">
-					<input type="button" id="resta" value="-">
+					<input type="button" id="suma" value="+">
 				</div>
 				<div class="row-cols-6">
 					<input type="button" id="number1" value="1">
 					<input type="button" id="number2" value="2">
 					<input type="button" id="number3" value="3">
-					<input type="button" id="calcula" value="=">
+					<input type="button" id="resta" value="-">
 				</div>
 				<div class="row-cols-6">
 					<input type="button" id="number0" value="0">
+					<input type="button" id="clear" value="C">
+					<input type="button" id="decimal" value=",">
+					<input type="button" id="calcula" value="=">
 				</div>
 			</div>
 		</div>
@@ -63,6 +66,8 @@
 				let btnMultiplica = document.querySelector('#multiplica')
 				let btnModulo = document.querySelector('#modulo')
 				let btnExponencial = document.querySelector('#exponencial')
+				let btnInversa = document.querySelector('#inversa')
+				let btnClear = document.querySelector('#clear')
 
 				let btnNumber0 = document.querySelector('#number0')
 				let btnNumber1 = document.querySelector('#number1')
@@ -82,29 +87,51 @@
 					switch(localStorage.lastOP){
 						case('suma'):
 							localStorage.lastResult = +localStorage.lastResult + +localStorage.accumulator
+							localStorage.accumulator = 0
 							break
 						case('resta'):
 							localStorage.lastResult = +localStorage.lastResult - +localStorage.accumulator
+							localStorage.accumulator = 0
 							break;
 						case('division'):
 							localStorage.lastResult = localStorage.lastResult / localStorage.accumulator
+							localStorage.accumulator = 0
 							break;
 						case('multiplicacion'):
 							localStorage.lastResult = localStorage.lastResult * localStorage.accumulator
+							localStorage.accumulator = 0
 							break;
 						case('modulo'):
 							localStorage.lastResult = localStorage.lastResult % localStorage.accumulator
 							break;
 						case('exponenciacion'):
 							localStorage.lastResult = localStorage.lastResult ** localStorage.accumulator
+							localStorage.accumulator = 0
 							break;
+						case('inversa'):
+							if(localStorage.accumulator != 0)
+								localStorage.lastResult = 1 / localStorage.accumulator
+							else if(localStorage.lastResult != 0)
+								localStorage.lastResult = 1 / localStorage.lastResult
+							localStorage.accumulator = 0
+							break
 						case('none'):
 							localStorage.lastResult = +localStorage.accumulator
+							localStorage.accumulator = 0
+							break
+						case('calculate'):
 							break
 					}
-					localStorage.accumulator = 0
-					result.textContent = 'Acumulado: ' + localStorage.lastResult
-					localStorage.lastOP = value
+					if (value == 'clear'){
+							localStorage.lastResult = +0
+							localStorage.accumulator = +0
+							result.textContent = 'Total: 0'
+							localStorage.lastOP = 'none'
+					}
+					else{
+						result.textContent = 'Acumulado: ' + localStorage.lastResult
+						localStorage.lastOP = value
+					}
 				}
 
 				let accumulateValues = (value) => {
@@ -118,8 +145,10 @@
 				btnMultiplica.addEventListener('click', () => {applyOperation('multiplicacion')})
 				btnModulo.addEventListener('click', () => {applyOperation('modulo')})
 				btnExponencial.addEventListener('click', () => {applyOperation('exponenciacion')})
+				btnInversa.addEventListener('click', () => {applyOperation('inversa')})
+				btnClear.addEventListener('click', () => {applyOperation('clear')})
 
-				btnCalcula.addEventListener('click',() => {applyOperation('none')})
+				btnCalcula.addEventListener('click',() => {applyOperation('calculate')})
 				
 				btnNumber0.addEventListener('click', () => {accumulateValues(0)})
 				btnNumber1.addEventListener('click', () => {accumulateValues(1)})
