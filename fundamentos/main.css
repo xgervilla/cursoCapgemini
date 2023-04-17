@@ -17,6 +17,13 @@ body{
 	flex-direction: column;
 }
 
+input[type=button] {
+	margin: 10px;
+	color: white;
+	background-color: black;
+	border-radius: 2rem;
+}
+
 .content{
 	flex: 1;
 	text-align: center;

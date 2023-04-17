@@ -1,4 +1,4 @@
-console.log('Ejecuto desde un fichero externo')
+console.log('Ejecucion del script externo:')
 
 var x;
 function getCountdown(){
