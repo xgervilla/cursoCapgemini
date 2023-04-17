@@ -1,5 +1,6 @@
 #pagetitle{
 	/*font-size: 5vw;*/
+	margin-top: 2vw;
 	/*color: darkslateblue;*/
 	text-transform: uppercase;
 	text-align: center;
@@ -12,17 +13,29 @@ html, body{
 
 input[type=button] {
 	margin: 10px;
-	color: white;
-	background-color: grey;
+	color: black;
+	background-color: lightgrey;
 	border-radius: 2rem;
 	min-width: 40px;
 	min-height: 40px;
 }
 
-#calcula {
-	background-color: blue;
+input[type=button]:hover {
+	color: white;
+	background-color: grey;
 }
 
-output, label {
-	text-align: center;
+#calcula {
+	background-color: blue;
+	color: white;
+}
+
+.calculadora {
+	border: 2px solid purple;
+	border-radius: 1%;
+	background-color: lightblue;
+}
+
+.result {
+	border: 2px solid purple;
 }
