@@ -57,6 +57,7 @@
 				localStorage.lastResult = 0;
 				localStorage.accumulator = 0;
 				localStorage.lastOP = 'none';
+				localStorage.nextDecimal = 0;
 				
 				let result = document.querySelector('output')
 
@@ -82,12 +83,19 @@
 
 				let btnCalcula = document.querySelector('#calcula')
 
+				let btnDecimal = document.querySelector('#decimal')
+				btnDecimal.addEventListener('click', ev => {
+					console.log('clicked on decimal')
+					localStorage.nextDecimal = 1
+					document.getElementById('decimal').disabled = true
+				})
+
 				let applyOperation = (value) => {
 					console.log(value)
 					switch(localStorage.lastOP){
 						case('suma'):
 							localStorage.lastResult = +localStorage.lastResult + +localStorage.accumulator
-							localStorage.accumulator = 0
+							localStorage.accumulator = +0
 							break
 						case('resta'):
 							localStorage.lastResult = +localStorage.lastResult - +localStorage.accumulator
@@ -122,20 +130,37 @@
 						case('calculate'):
 							break
 					}
+
 					if (value == 'clear'){
 							localStorage.lastResult = +0
 							localStorage.accumulator = +0
+							localStorage.nextDecimal = +0
 							result.textContent = 'Total: 0'
 							localStorage.lastOP = 'none'
 					}
 					else{
-						result.textContent = 'Acumulado: ' + localStorage.lastResult
+						let valueRounded = +localStorage.lastResult
+						result.textContent = 'Acumulado: ' + valueRounded.toFixed(10)
 						localStorage.lastOP = value
 					}
+					localStorage.nextDecimal = 0
+					document.getElementById('decimal').disabled = false
 				}
 
 				let accumulateValues = (value) => {
-					localStorage.accumulator = (localStorage.accumulator * 10) + value;
+					if(localStorage.lastOP == 'calculate'){
+						localStorage.lastOP = 'none'
+						localStorage.lastResult = +0
+						localStorage.accumulator = +0
+						localStorage.nextDecimal = 0
+
+					}
+					if(localStorage.nextDecimal>0){
+						localStorage.accumulator = +localStorage.accumulator + +(value / (10**localStorage.nextDecimal))
+						localStorage.nextDecimal +=1
+					}
+					else
+						localStorage.accumulator = +(localStorage.accumulator * 10) + value;
 					result.textContent = 'Acumulado: ' + +localStorage.accumulator
 				}
 
@@ -160,11 +185,6 @@
 				btnNumber7.addEventListener('click', () => {accumulateValues(7)})
 				btnNumber8.addEventListener('click', () => {accumulateValues(8)})
 				btnNumber9.addEventListener('click', () => {accumulateValues(9)})
-
-
-
-
-
 			})();
 		</script>
 	</div>
