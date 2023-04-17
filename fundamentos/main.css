@@ -13,46 +13,16 @@ html, body{
 input[type=button] {
 	margin: 10px;
 	color: white;
-	background-color: black;
+	background-color: grey;
 	border-radius: 2rem;
 	min-width: 40px;
 	min-height: 40px;
 }
 
-#op2{
-	margin-top: 10px;
+#calcula {
+	background-color: blue;
 }
 
 output, label {
 	text-align: center;
-}
-
-
-body{
-	font-family: Arial, Helvetica;
-	background-color: ghostwhite;
-	display: flex;
-	flex-direction: column;
-}
-
-.container{
-	flex: 1;
-	text-align: center;
-	margin-top: 10vw;
-}
-
-footer{
-	text-align: center;
-	min-height: 70px;
-}
-
-table{
-	margin-left: auto;
-	margin-right: auto;
-	width:80%;
-}
-
-a:link {
-	text-decoration: none;
-	color: black
 }
