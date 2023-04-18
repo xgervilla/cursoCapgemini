@@ -1,0 +1,41 @@
+#pagetitle{
+	/*font-size: 5vw;*/
+	margin-top: 2vw;
+	/*color: darkslateblue;*/
+	text-transform: uppercase;
+	text-align: center;
+	font-family: 'Comic Sans MS';
+}
+
+html, body{
+	min-height: 95vh;
+}
+
+input[type=button] {
+	margin: 10px;
+	color: black;
+	background-color: lightgrey;
+	border-radius: 2rem;
+	min-width: 20px;
+	min-height: 40px;
+}
+
+input[type=button]:hover {
+	color: white;
+	background-color: grey;
+}
+
+#calcula {
+	background-color: blue;
+	color: white;
+}
+
+.calculadora {
+	border: 2px solid purple;
+	border-radius: 1% 1% 0% 0%;
+	background-color: lightblue;
+}
+
+.result {
+	border: 2px solid purple;
+}
