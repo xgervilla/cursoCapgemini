@@ -8,6 +8,7 @@
 * **GildedRose**: Código con los tests de la refactorización de Gilded Rose.
 * **catalogo**: Implementación backend de un catálogo de películas, desde la declaración y validación de entidades hasta el desarrollo de microservicios para su uso mediante clientes.
 * **demo-maven**: Creación de un proyecto mediante un arquetipo.
+* **demo-react**: Proyecto inicial de React.
 * **demo-web**: Proyecto ejemplo de la implementación de una página web y la comunicación entre microservicios.
 * **demo**: Proyecto con el desarrollo inicial y pruebas auxiliares del desarrollo backend.
 * **fundamentos**: Proyecto con el desarrollo inicial de la parte frontend.
