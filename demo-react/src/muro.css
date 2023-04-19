@@ -1,4 +1,17 @@
 .advance {
     margin-top: 2vw;
-    margin-bottom: 5vw;
+    margin-bottom: 2vw;
+}
+
+.cardBlock {
+    margin-top: 10px;
+    min-height: 20vw;
+    width: 15vw;
+    background-color: aliceblue;
+}
+
+.buttonMuro {
+    border-radius: 5px;
+    min-width: 10vw;
+    max-width: 35vw;
 }

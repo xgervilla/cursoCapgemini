@@ -25,11 +25,12 @@ export default class App extends Component {
   render() {
     return (
       <>
-      <div>
+      <div className='mainBody'>
         <Header menu={this.menu} active = {this.state.main} onSelectMenu={index => this.setState({main: index})}/>
         <main>
           {this.menu[this.state.main].componente}
         </main>
+        <Footer/>
       </div>
       
       </>
@@ -66,7 +67,9 @@ function Menu({menu, active, onSelectMenu}){
 }
 
 function Footer(){
-  return null
+  return (
+    <p className='mainFooter'>Made by Xavi Gervilla</p>
+  )
 }
 
 
