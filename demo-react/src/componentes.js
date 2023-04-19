@@ -56,3 +56,15 @@ export class Card extends Component {
     )
   }
 }
+
+export function Esperando(){
+  return (
+    <img src='https://raw.githubusercontent.com/jmagit/BOOT20230320/main/demo-react/src/imagenes/loading.gif' alt='esperando respuesta del servidor'></img>
+  )
+}
+
+export function ErrorMessage({msg}){
+  return (
+    <output style={{'color':'red'}}>{msg}</output>
+  )
+}
