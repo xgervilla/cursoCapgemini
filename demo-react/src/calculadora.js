@@ -11,10 +11,6 @@ export class Calculadora extends Component {
         lastResult: 0,
         nextDecimal: 0
       }
-      this.lastOP = 'none'
-      this.accumulator = 0
-      this.lastResult = 0
-      this.nextDecimal = 0
   
       this.applyOperation = this.applyOperation.bind(this)
       this.accumulateValues = this.accumulateValues.bind(this)
@@ -23,88 +19,87 @@ export class Calculadora extends Component {
   
       applyOperation(value){
         console.log(value)
-          switch(this.lastOP){
+          switch(this.state.lastOP){
               case('suma'):
-                  this.lastResult = this.lastResult + this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.lastResult + this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break
               case('resta'):
-                  this.lastResult = this.lastResult - this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.lastResult - this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break;
               case('division'):
-                  this.lastResult = this.lastResult / this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.lastResult / this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break;
               case('multiplicacion'):
-                  this.lastResult = this.lastResult * this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.lastResult * this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break;
               case('modulo'):
-                  this.lastResult = this.lastResult % this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.lastResult % this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break;
               case('exponenciacion'):
-                  this.lastResult = this.lastResult ** this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.lastResult ** this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break;
               case('inversa'):
-                  if(this.accumulator !== 0)
-                    this.lastResult = 1 / this.accumulator
-                  else if(this.lastResult !== 0)
-                    this.lastResult = 1 / this.lastResult
-                  this.accumulator = 0
+                  if(this.state.accumulator !== 0)
+                    this.setState({lastResult: 1 / this.state.accumulator})
+                  else if(this.state.lastResult !== 0)
+                    this.setState({lastResult: 1 / this.state.lastResult})
+                  this.setState({accumulator: 0})
                   break
               case('none'):
-                  this.lastResult = this.accumulator
-                  this.accumulator = 0
+                  this.setState({lastResult: this.state.accumulator})
+                  this.setState({accumulator: 0})
                   break
               case('calculate'):
-                  console.log(this.accumulator)
-                  console.log(this.lastResult)
                   break
               default:
                 break
           }
       
           if (value === 'clear'){
-            this.lastResult = 0
-            this.accumulator = 0
-            this.nextDecimal = 0
-            document.getElementById('output').value = '0'
-            this.lastOP = 'none'
+            this.setState({lastResult: 0})
+            this.setState({accumulator: 0})
+            this.setState({nextDecimal: 0})
+            //document.getElementById('output').value = '0'
+            this.setState({lastOP:'none'})
           }
           else{
-              let valueRounded = this.lastResult
-              document.getElementById('output').value = parseFloat(valueRounded.toFixed(10))
-              this.lastOP = value
+              let valueRounded = this.state.lastResult
+              //document.getElementById('output').value = parseFloat(valueRounded.toFixed(10))
+              this.setState({lastOP: value})
           }
-          this.nextDecimal = 0
+          this.setState({nextDecimal:0})
           document.getElementById('decimal').disabled = false
       }
   
       accumulateValues(value){
-        if(this.lastOP === 'calculate'){
-            this.lastOP = 'none'
-            this.lastResult = 0
-            this.accumulator = 0
-            this.nextDecimal = 0
-    
+        if(this.state.lastOP === 'calculate'){
+          this.setState({lastResult: 0})
+          this.setState({accumulator: 0})
+          this.setState({nextDecimal: 0})
+          this.setState({lastOP:'none'})
         }
-        if(this.nextDecimal>0){
-            this.accumulator =  +this.accumulator + (value / (10**this.nextDecimal))
-            this.nextDecimal += 1
+
+        if(this.state.nextDecimal>0){
+            this.setState({accumulator: +this.state.accumulator + (value / (10**this.state.nextDecimal))})
+            this.setState({nextDecimal: this.state.nextDecimal + 1})
         }
+
         else {
-            this.accumulator = (this.accumulator * 10) + value;
+            this.setState({accumulator: (this.state.accumulator * 10) + value})
         }
-        document.getElementById('output').value = this.accumulator
-        console.log(this.accumulator)
+        
+        console.log(this.state.accumulator)
       }
   
       startDecimals(){
         console.log('clicked on decimal')
-        this.nextDecimal = 1
+        this.setState({nextDecimal: 1})
         document.getElementById('decimal').disabled = true
       }
   
@@ -116,7 +111,9 @@ export class Calculadora extends Component {
                 <div className='col-4'>
                   <div className="row">
                     <div className="result">
-                      <output id="output">0</output>
+                      <output>{parseFloat(this.state.lastResult.toFixed(10))}</output>
+                      <br/>
+                      <output>{parseFloat(this.state.accumulator.toFixed(10))}</output>
                     </div>
                   </div>
 

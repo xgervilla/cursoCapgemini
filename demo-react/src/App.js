@@ -10,7 +10,7 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      main: 2
+      main: 0
     }
 
     this.menu = [
