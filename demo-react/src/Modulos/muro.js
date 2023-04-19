@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ErrorMessage, Esperando } from '../Componentes/componentes'
+import { ErrorMessage, Loading } from '../Componentes/componentes'
 import './muro.css'
 
 export default class Muro extends Component {
@@ -48,7 +48,7 @@ export default class Muro extends Component {
 
     render() {
         if(this.state.loading){
-            return <Esperando/>
+            return <Loading/>
         }
         return (
             <>

@@ -1,3 +1,5 @@
+import './basicos.css'
+
 export function Header(props){
     return(
         <header>

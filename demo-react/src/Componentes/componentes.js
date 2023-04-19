@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import logo from '../logo.svg'
 
 function Pantalla(props){
     return <output>{props.valor}</output>
@@ -57,7 +58,7 @@ export class Card extends Component {
   }
 }
 
-export function Esperando(){
+export function Loading(){
   return (
     <img src='https://raw.githubusercontent.com/jmagit/BOOT20230320/main/demo-react/src/imagenes/loading.gif' alt='esperando respuesta del servidor'></img>
   )
@@ -66,5 +67,30 @@ export function Esperando(){
 export function ErrorMessage({msg}){
   return (
     <output style={{'color':'red'}}>{msg}</output>
+  )
+}
+
+export function Starter() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Hello world</h1>
+        <h2>url: {process.env.REACT_APP_API_URL}</h2>
+        <h2>environment: {process.env.NODE_ENV}</h2>
+
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   )
 }
