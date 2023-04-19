@@ -47,12 +47,12 @@ export class Contador extends Component {
 }
 
 export class Card extends Component {
-  constructor(){
-
-  }
   render() {
     return (
-      <div>componentes</div>
+      <div>
+        <h1>{this.props.title}</h1>
+        {this.props.children}
+      </div>
     )
   }
 }
