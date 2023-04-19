@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../src/calculadora.css'
+import './calculadora.css'
 
 export class Calculadora extends Component {
 
@@ -65,12 +65,9 @@ export class Calculadora extends Component {
             this.setState({lastResult: 0})
             this.setState({accumulator: 0})
             this.setState({nextDecimal: 0})
-            //document.getElementById('output').value = '0'
             this.setState({lastOP:'none'})
           }
           else{
-              let valueRounded = this.state.lastResult
-              //document.getElementById('output').value = parseFloat(valueRounded.toFixed(10))
               this.setState({lastOP: value})
           }
           this.setState({nextDecimal:0})
@@ -111,7 +108,7 @@ export class Calculadora extends Component {
                 <div className='col-4'>
                   <div className="row">
                     <div className="result">
-                      <output>{parseFloat(this.state.lastResult.toFixed(10))}</output>
+                      <output style={{'color':'grey'}}>{parseFloat(this.state.lastResult.toFixed(10))}</output>
                       <br/>
                       <output>{parseFloat(this.state.accumulator.toFixed(10))}</output>
                     </div>

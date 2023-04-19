@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ErrorMessage, Esperando } from './componentes'
+import { ErrorMessage, Esperando } from '../Componentes/componentes'
 import './muro.css'
 
 export default class Muro extends Component {

@@ -1,9 +1,10 @@
 import logo from './logo.svg'
 import './App.css'
 import React, { Component } from 'react'
-import { Card, Contador, Esperando } from './componentes'
-import { Calculadora } from './calculadora'
-import Muro from './muro'
+import { Card, Contador, Esperando } from './Componentes/componentes'
+import { Calculadora } from './Modulos/calculadora'
+import Muro from './Modulos/muro'
+import {Header, Footer} from './Componentes/basicos'
 
 export default class App extends Component {
   constructor(props){
@@ -30,46 +31,12 @@ export default class App extends Component {
         <main>
           {this.menu[this.state.main].componente}
         </main>
-        <Footer/>
+        {/*<Footer/>*/}
       </div>
       
       </>
     )
   }
-}
-
-function Header(props){
-  return(
-    <header>
-      <nav className="navbar navbar-expand-lg">
-      <a className="navbar-brand" href="/">Pruebas de frontend</a>
-      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon" />
-      </button>
-      <div className="collapse navbar-collapse" aria-labelledby="navbarSupportedContent">
-        <Menu {...props}/>
-      </div>
-      
-    </nav>
-    </header>
-  )
-}
-
-
-
-function Menu({menu, active, onSelectMenu}){
-  return(
-    <ul className="navbar-nav mr-auto">
-      {menu.map((item, index) => <li className="nav-item" key={index}><a className={`nav-link ${active===index ? "activeMenu" : ""}`} href="#" onClick={() => {onSelectMenu && onSelectMenu(index)}}>{item.texto}</a></li>)
-      }
-    </ul>
-  )
-}
-
-function Footer(){
-  return (
-    <p className='mainFooter'>Made by Xavi Gervilla</p>
-  )
 }
 
 
