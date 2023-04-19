@@ -10,12 +10,12 @@ export default class Muro extends Component {
             loading: true,
             error: null,
             pageNumber: 1,
-            pageLimit: 18
+            pageLimit: 14
         }
 
         this.nextPage = () => {this.setState({pageNumber: this.state.pageNumber+1}); console.log(this.state.pageNumber) ; this.load(this.state.pageNumber)}
         
-        this.previousPage = () => {this.setState({pageNumber: Math.max(1,this.state.pageNumber-1)}); console.log(this.state.pageNumber) ; this.load(this.state.pageNumber)}
+        this.previousPage = () => {this.setState({pageNumber: Math.max(1,this.state.pageNumber-1)}); this.setState({loading: true}); this.load(this.state.pageNumber)}
 
     }
 
@@ -36,8 +36,7 @@ export default class Muro extends Component {
                             {this.state.listado && this.state.listado.map((item) =>
                                 <>
                                     <div className='col'>
-                                        <img src={item.download_url} width={100} height={100} alt="imagen obtenida del api"/>
-                                        <p>{item.author}</p>
+                                        <BasePicture url={item.download_url} author={item.author} height={item.height} width={item.width}/>
                                     </div>
                                 </>
                             )}
@@ -76,4 +75,15 @@ export default class Muro extends Component {
     componentDidMount(){
         this.load(this.state.pageNumber)
     }
+}
+
+function BasePicture({url, author, width, height}){
+    return (
+        <div className='card' style={{'marginTop':'10px'}}>
+            <img className="card-img-top" width='100' height='100' src={url} alt="Image downloaded from api"/>
+            <div className='card-body'>
+                <h5>{author}</h5>
+                <p>Size: {width}x{height}</p>
+            </div>
+        </div>)
 }
