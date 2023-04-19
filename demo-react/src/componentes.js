@@ -4,6 +4,15 @@ function Pantalla(props){
     return <output>{props.valor}</output>
 }
 
+function Botonera({onSube, onBaja}){
+  return (
+    <div>
+      <input type='button' value='-' onClick={() => onBaja && onBaja()} />
+      {onSube && <input type='button' value='+' onClick={onSube} />}
+    </div>
+  )
+}
+
 export class Contador extends Component {
   constructor(props){
       super(props)
@@ -29,13 +38,21 @@ export class Contador extends Component {
   
   render() {
     return (
-      <div>
+      <div style={{marginLeft:'30px', marginTop:'30px'}}>
         <Pantalla valor={this.state.contador}/>
-        <div>
-            <input type='button' value='+' onClick={this.sube}/>
-            <input type='button' value='-' onClick={this.baja}/>
-        </div>
+        <Botonera onSube={this.sube.bind(this)} onBaja={this.baja}/>
       </div>
+    )
+  }
+}
+
+export class Card extends Component {
+  constructor(){
+
+  }
+  render() {
+    return (
+      <div>componentes</div>
     )
   }
 }
