@@ -4,6 +4,7 @@ import { Card, Contador, Loading, Starter } from './Componentes/componentes'
 import { Calculadora } from './Modulos/calculadora'
 import Muro from './Modulos/muro'
 import {Header, Footer} from './Componentes/basicos'
+import { Catalogo } from './Catalogo/catalogo'
 
 export default class App extends Component {
   constructor(props){
@@ -25,13 +26,14 @@ export default class App extends Component {
   render() {
     return (
       <>
-      <div className='mainBody'>
+      {/*<div className='mainBody'>
         <Header menu={this.menu} active = {this.state.main} onSelectMenu={index => this.setState({main: index})}/>
         <main>
           {this.menu[this.state.main].componente}
         </main>
-        {/*<Footer/>*/}
-      </div>
+        <Footer/>
+      </div>*/}
+      <Catalogo/>
       
       </>
     )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { ErrorMessage, Loading } from '../Componentes/componentes'
 import './muro.css'
+import { PaginationButtons } from '../Componentes/basicos'
 
 export default class Muro extends Component {
     constructor(props){
@@ -72,10 +73,7 @@ export default class Muro extends Component {
                             </>
                         )}
                         </div>
-                        <div className='row advance justify-content-around'>
-                            <button className='col buttonMuro' type='button' onClick={this.previousPage} disabled={this.state.pageNumber<2}>Previous</button>
-                            <button className='col buttonMuro' type='button' onClick={this.nextPage}>Next</button>
-                        </div>
+                        <PaginationButtons pageNumber={this.state.pageNumber} nextPage={this.nextPage} previousPage={this.previousPage}/>
                     </div>
                 </div>
             </div>
@@ -87,7 +85,6 @@ export default class Muro extends Component {
     }
 
     load(num){
-        console.log(`page=${num}&limit=${this.state.pageLimit}`)
         fetch(`https://picsum.photos/v2/list?page=${num}&limit=${this.state.pageLimit}`)
             .then(resp => {
                 if(resp.ok){
@@ -108,7 +105,6 @@ export default class Muro extends Component {
             .finally(() => this.setState({loading: false}))
     }
     componentDidMount(){
-        console.log(this.state.pageNumber)
         this.load(this.state.pageNumber)
     }
 }

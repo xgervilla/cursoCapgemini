@@ -1,4 +1,11 @@
 import React, { Component } from 'react'
+import { Header } from '../Componentes/basicos'
+import Actores from './actores'
+import Peliculas from './peliculas'
+import Categorias from './categorias'
+import Novedades from './novedades'
+import Lenguajes from './lenguajes'
+import Muro from '../Modulos/muro'
 
 /*
   ** 4 tipo de operaciones:
@@ -37,9 +44,30 @@ import React, { Component } from 'react'
             - DELETE: ni siquiera se muestra información, hace falta indicar algo?
 */
 export class Catalogo extends Component {
+  constructor(props){
+    super(props)
+
+    this.state = {
+      main: 0
+    }
+
+    this.menu = [
+      {texto: 'Actores', url:'/actor', componente: <Actores/>},
+      {texto: 'Peliculas', url:'/peliculas', componente: <Peliculas/>},
+      {texto: 'Lenguajes', url:'/lenguajes', componente: <Lenguajes/>},
+      {texto: 'Categorias', url:'/categorias', componente: <Categorias/>},
+      {texto: 'Novedades', url:'/novedades', componente: <Novedades/>},
+      {texto: 'Muro', url: '/muro', componente: <Muro/>}
+    ]
+  }
+
   render() {
     return (
-      <div>
+      <div className='mainBody'>
+        <Header menu={this.menu} active = {this.state.main} onSelectMenu={index => this.setState({main: index})}/>
+        <main>
+          {this.menu[this.state.main].componente}
+        </main>
       </div>
     )
   }
