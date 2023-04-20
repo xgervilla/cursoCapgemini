@@ -3,7 +3,7 @@ import { Loading, ErrorMessage } from '../Componentes/componentes'
 import { PaginationButtons } from '../Componentes/basicos'
 
 
-export default class Actores extends Component {
+export default class ActoresView extends Component {
   constructor(props) {
     super(props)
     this.state = {

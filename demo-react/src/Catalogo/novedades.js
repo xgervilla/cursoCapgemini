@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Loading } from '../Componentes/componentes'
 
-export default class Novedades extends Component {
+export default class NovedadesView extends Component {
     constructor(props){
         super(props)
         this.state = {

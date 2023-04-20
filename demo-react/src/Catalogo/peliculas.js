@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Loading, ErrorMessage } from '../Componentes/componentes'
 import { PaginationButtons } from '../Componentes/basicos'
 
-export default class Peliculas extends Component {
+export default class PeliculasView extends Component {
   constructor(props) {
     super(props)
     this.state = {

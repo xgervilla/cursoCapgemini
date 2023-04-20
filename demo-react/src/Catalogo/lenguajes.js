@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Loading, ErrorMessage } from '../Componentes/componentes'
 
-export default class Lenguajes extends Component {
+export default class LenguajesView extends Component {
   constructor(props) {
     super(props)
     this.state = {
