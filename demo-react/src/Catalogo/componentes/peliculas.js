@@ -293,24 +293,12 @@ class FilmsForm extends Component {
         });
         this.validar();
     }
-    validarCntr(cntr) {
-        if (cntr.name) {
-            // eslint-disable-next-line default-case
-            switch (cntr.name) {
-                case "apellidos":
-                    cntr.setCustomValidity(cntr.value !== cntr.value.toUpperCase()
-                        ? "Debe estar en mayúsculas" : '');
-                    break;
-            }
-        }
-    }
     validar() {
         if (this.form) {
             const errors = {};
             let invalid = false;
             for (var cntr of this.form.elements) {
                 if (cntr.name) {
-                    this.validarCntr(cntr);
                     errors[cntr.name] = cntr.validationMessage;
                     invalid = invalid || !cntr.validity.valid;
                 }
@@ -343,7 +331,7 @@ class FilmsForm extends Component {
                     <input type="text" className="form-control"
                         id="titulo" name="titulo"
                         value={this.state.elemento.titulo}
-                        onChange={this.handleChange} required
+                        onChange={this.handleChange} required minLength={2} maxLength={128}
                     />
                     <ValidationMessage msg={this.state.msgErr.title} />
                 </div>
@@ -361,7 +349,7 @@ class FilmsForm extends Component {
                     <input type="number" className="form-control"
                         id="duracion" name="duracion"
                         value={this.state.elemento.duracion}
-                        onChange={this.handleChange}
+                        onChange={this.handleChange} min={1}
                     />
                     <ValidationMessage msg={this.state.msgErr.duracion} />
                 </div>
@@ -376,37 +364,37 @@ class FilmsForm extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="release_year">Release year</label>
-                    <input type="text" className="form-control"
+                    <input type="number" className="form-control"
                         id="release_year" name="release_year"
                         value={this.state.elemento.release_year}
-                        onChange={this.handleChange}
+                        onChange={this.handleChange} min={1895}
                     />
                     <ValidationMessage msg={this.state.msgErr.release_year} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="rental_duration">Rental duration</label>
-                    <input type="text" className="form-control"
+                    <input type="number" className="form-control"
                         id="rental_duration" name="rental_duration"
                         value={this.state.elemento.rental_duration}
-                        onChange={this.handleChange}
+                        onChange={this.handleChange} min={0.00} step={0.01}
                     />
                     <ValidationMessage msg={this.state.msgErr.rental_duration} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="rental_rate">Rental rate</label>
-                    <input type="text" className="form-control"
+                    <input type="number" className="form-control"
                         id="rental_rate" name="rental_rate"
                         value={this.state.elemento.rental_rate}
-                        onChange={this.handleChange}
+                        onChange={this.handleChange} min={0.00} step={0.01}
                     />
                     <ValidationMessage msg={this.state.msgErr.rental_rate} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="replacement_cost">Replacement cost</label>
-                    <input type="text" className="form-control"
+                    <input type="number" className="form-control"
                         id="replacement_cost" name="replacement_cost"
                         value={this.state.elemento.replacement_cost}
-                        onChange={this.handleChange}
+                        onChange={this.handleChange} min={0.00} step={0.01}
                     />
                     <ValidationMessage msg={this.state.msgErr.replacement_cost} />
                 </div>

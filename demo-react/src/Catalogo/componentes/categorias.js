@@ -273,24 +273,12 @@ class CategoriesForm extends Component {
         });
         this.validar();
     }
-    validarCntr(cntr) {
-        if (cntr.name) {
-            // eslint-disable-next-line default-case
-            switch (cntr.name) {
-                case "apellidos":
-                    cntr.setCustomValidity(cntr.value !== cntr.value.toUpperCase()
-                        ? "Debe estar en mayúsculas" : '');
-                    break;
-            }
-        }
-    }
     validar() {
         if (this.form) {
             const errors = {};
             let invalid = false;
             for (var cntr of this.form.elements) {
                 if (cntr.name) {
-                    this.validarCntr(cntr);
                     errors[cntr.name] = cntr.validationMessage;
                     invalid = invalid || !cntr.validity.valid;
                 }
@@ -325,7 +313,7 @@ class CategoriesForm extends Component {
                         id="categoria" name="categoria"
                         value={this.state.elemento.Category}
                         onChange={this.handleChange}
-                        required minLength="2" maxLength="45"
+                        required minLength="2" maxLength="25"
                     />
                     <ValidationMessage msg={this.state.msgErr.Category} />
                 </div>
