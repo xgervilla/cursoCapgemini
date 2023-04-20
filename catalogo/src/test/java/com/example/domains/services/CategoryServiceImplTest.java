@@ -91,7 +91,7 @@ class CategoryServiceImplTest {
 	
 	@Test
 	@DisplayName("Modify category")
-	void testModify() throws NotFoundException, InvalidDataException {
+	void testModify() throws NotFoundException, InvalidDataException, DuplicateKeyException {
 		
 		var category = new Category(0, "New category: original");
 		var addedCategory = srv.add(category);
@@ -131,7 +131,7 @@ class CategoryServiceImplTest {
 
 	@Test
 	@DisplayName("Delete by id")
-	void testDeleteById() throws InvalidDataException, NotFoundException{
+	void testDeleteById() throws InvalidDataException, NotFoundException, DuplicateKeyException{
 		
 		var category = new Category(0,"Category to delete");
 		
@@ -146,7 +146,7 @@ class CategoryServiceImplTest {
 	
 	@Test
 	@DisplayName("Delete by id not exists")
-	void testDeleteByIdNotExists() throws InvalidDataException, NotFoundException{
+	void testDeleteByIdNotExists() throws InvalidDataException, NotFoundException, DuplicateKeyException{
 		
 		var category = new Category(0,"Category to delete");
 		

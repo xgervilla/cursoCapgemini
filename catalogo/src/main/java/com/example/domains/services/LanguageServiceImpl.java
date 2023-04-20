@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +16,7 @@ import com.example.domains.entities.Actor;
 import com.example.domains.entities.Language;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+import com.example.exceptions.DuplicateKeyException;
 
 @Service
 public class LanguageServiceImpl implements LanguageService{

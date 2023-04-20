@@ -57,9 +57,9 @@ class LanguageServiceImplTest {
 		
 		var originalSize = srv.getAll().size();
 		
-		var category = new Language(0, "New language");
+		var language = new Language(0, "New language");
 		
-		var result = srv.add(category);
+		var result = srv.add(language);
 		assertEquals(originalSize+1, srv.getAll().size());
 		
 		srv.deleteById(result.getLanguageId());
@@ -80,15 +80,15 @@ class LanguageServiceImplTest {
 	
 	@Test
 	@DisplayName("Modify language")
-	void testModify() throws NotFoundException, InvalidDataException {
+	void testModify() throws NotFoundException, InvalidDataException, DuplicateKeyException {
 		
-		var category = new Language(0, "Portuguese");
-		var addedLanguage = srv.add(category);
+		var language = new Language(0, "Portuguese");
+		var addedLanguage = srv.add(language);
 		addedLanguage.setName("Portuguese modified");
 		
-		var result = srv.modify(category);
+		var result = srv.modify(language);
 		assertEquals("Portuguese modified", result.getName());
-		assertEquals(category.getLanguageId(), result.getLanguageId());
+		assertEquals(language.getLanguageId(), result.getLanguageId());
 		
 		srv.deleteById(result.getLanguageId());
 	}
@@ -120,7 +120,7 @@ class LanguageServiceImplTest {
 
 	@Test
 	@DisplayName("Delete by id")
-	void testDeleteById() throws InvalidDataException, NotFoundException{
+	void testDeleteById() throws InvalidDataException, NotFoundException, DuplicateKeyException{
 		
 		var language = new Language(0,"Language to delete");
 		
@@ -135,7 +135,7 @@ class LanguageServiceImplTest {
 	
 	@Test
 	@DisplayName("Delete by id not exists")
-	void testDeleteByIdNotExists() throws InvalidDataException, NotFoundException{
+	void testDeleteByIdNotExists() throws InvalidDataException, NotFoundException, DuplicateKeyException{
 		
 		var language = new Language(0,"Language to delete");
 		
