@@ -197,7 +197,7 @@ function FilmsList(props) {
                         <th className="text-end">
                             <input
                                 type="button" className="btn btn-primary"
-                                value="Añadir" onClick={e => props.onAdd()}
+                                value="Añadir" onClick={e => alert('Esta funcionalidad no está disponible')} //props.onAdd()}
                             />
                         </th>
                     </tr>
@@ -215,7 +215,7 @@ function FilmsList(props) {
                                     />
                                     <input type="button" className="btn btn-primary"
                                         value="Editar"
-                                        onClick={e => props.onEdit(item.filmId)}
+                                        onClick={e => alert('Esta funcionalidad no está disponible')} //props.onEdit(item.filmId)}
                                     />
                                     <input type="button" className="btn btn-danger"
                                         value="Borrar"

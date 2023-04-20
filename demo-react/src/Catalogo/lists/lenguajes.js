@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Loading, ErrorMessage } from '../Componentes/componentes'
+import { Loading, ErrorMessage } from '../../Componentes/componentes'
 
 export default class LenguajesView extends Component {
   constructor(props) {

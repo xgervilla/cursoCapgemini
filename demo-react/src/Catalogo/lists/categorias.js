@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Loading, ErrorMessage } from '../Componentes/componentes'
-import { PaginationButtons } from '../Componentes/basicos'
+import { Loading, ErrorMessage } from '../../Componentes/componentes'
+import { PaginationButtons } from '../../Componentes/basicos'
 
 export default class CategoriasView extends Component {
   constructor(props) {
