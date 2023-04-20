@@ -2,18 +2,19 @@ import React, { Component } from 'react'
 import { Loading, ErrorMessage } from '../Componentes/componentes'
 import { PaginationButtons } from '../Componentes/basicos'
 
-export default class Categorias extends Component {
+
+export default class Actores extends Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: true,
       error: null,
       pageNumber: 0,
-      pageSize: 10,
-      categoriesList: null
+      pageSize: 13,
+      actorList: null
     }
-    this.previousPage = this.previousPage.bind(this)
-    this.nextPage = this.nextPage.bind(this)
+      this.previousPage = this.previousPage.bind(this)
+      this.nextPage = this.nextPage.bind(this)
   }
 
   previousPage(){
@@ -47,15 +48,15 @@ export default class Categorias extends Component {
           <div className='row'>
             <div className='col'>
               <div className='row'>
-                {this.state.categoriesList && this.state.categoriesList.content.map((cat, index) =>
+                {this.state.actorsList && this.state.actorsList.content.map((actor, index) =>
                   <div className='row rowTable'>
                     <div className='col'>
-                          <p>{cat.ID}: {cat.Category}</p>
+                          <p>{actor.actorId}: {actor.nombre}</p>
                     </div>
                     <div className='col'>
-                      <button type='button' className='btn btn-primary btnTable' onClick={() => window.confirm(`${cat.ID}, ${cat.Category}`)}>See</button>
-                      <button type='button' className='btn btn-secondary btnTable' onClick={() => window.confirm('Modify the object')}>Modify</button>
-                      <button type='button' className='btn btn-danger btnTable' onClick={() => window.confirm('Are you sure you want to delete?')}>Delete</button>
+                      <button type='button' className='btn btn-primary btnTable'>See</button>
+                      <button type='button' className='btn btn-secondary btnTable'>Modify</button>
+                      <button type='button' className='btn btn-danger btnTable'>Delete</button>
                     </div>
                   </div>
                 )}
@@ -74,10 +75,10 @@ export default class Categorias extends Component {
 
   load(pageNumber, pageSize) {
     this.setState({loading: true})
-    fetch(`http://localhost:8080/catalogo/api/categorias?page=${pageNumber}&size=${pageSize}`)
+    fetch(`http://localhost:8080/catalogo/api/actores?page=${pageNumber}&size=${pageSize}`)
       .then(resp => {
         if (resp.ok) {
-          resp.json().then(data => this.setState({ categoriesList: data }))
+          resp.json().then(data => this.setState({ actorsList: data }))
         }
         else {
           this.setError(resp.status)

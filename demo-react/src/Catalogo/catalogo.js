@@ -6,6 +6,7 @@ import Categorias from './categorias'
 import Novedades from './novedades'
 import Lenguajes from './lenguajes'
 import Muro from '../Modulos/muro'
+import {PadreFormulario } from '../Modulos/formulario'
 
 /*
   ** 4 tipo de operaciones:
@@ -57,7 +58,8 @@ export class Catalogo extends Component {
       {texto: 'Lenguajes', url:'/lenguajes', componente: <Lenguajes/>},
       {texto: 'Categorias', url:'/categorias', componente: <Categorias/>},
       {texto: 'Novedades', url:'/novedades', componente: <Novedades/>},
-      {texto: 'Muro', url: '/muro', componente: <Muro/>}
+      {texto: 'Muro', url: '/muro', componente: <Muro/>},
+      {texto: 'Formulario', url:'/formulario', componente: <PadreFormulario/>}
     ]
   }
 
