@@ -3,7 +3,7 @@ import { Header } from '../Componentes/basicos'
 import { Actores } from './componentes/actores'
 //import { Peliculas }from './componentes/peliculas'
 import {Categorias} from './componentes/categorias'
-//import { Lenguajes } from './componentes/lenguajes'
+import { Lenguajes } from './componentes/lenguajes'
 import Muro from '../Modulos/muro'
 import {PadreFormulario } from '../Modulos/formulario'
 
@@ -54,7 +54,7 @@ export class Catalogo extends Component {
     this.menu = [
       {texto: 'Actores', url:'/actor', componente: <Actores/>},
       //{texto: 'Peliculas', url:'/peliculas', componente: <Peliculas/>},
-      //{texto: 'Lenguajes', url:'/lenguajes', componente: <Lenguajes/>},
+      {texto: 'Lenguajes', url:'/lenguajes', componente: <Lenguajes/>},
       {texto: 'Categorias', url:'/categorias', componente: <Categorias/>},
       //{texto: 'Novedades', url:'/novedades', componente: <Novedades/>},
       {texto: 'Muro', url: '/muro', componente: <Muro/>},
