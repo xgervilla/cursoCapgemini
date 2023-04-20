@@ -300,17 +300,17 @@ class LanguagesForm extends Component {
                     <label htmlFor="id">Código</label>
                     <input type="number"
                         className={'form-control' + (this.props.isAdd ? '' : '-plaintext')}
-                        id="id" name="id"
-                        value={this.state.elemento.idOriginal}
+                        id="ID" name="ID"
+                        value={this.state.elemento.ID}
                         onChange={this.handleChange}
                         required readOnly={!this.props.isAdd}
                     />
-                    <ValidationMessage msg={this.state.msgErr.id} />
+                    <ValidationMessage msg={this.state.msgErr.ID} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="lenguaje">Lenguaje</label>
+                    <label htmlFor="Name">Lenguaje</label>
                     <input type="text" className="form-control"
-                        id="lenguaje" name="lenguaje"
+                        id="Name" name="Name"
                         value={this.state.elemento.Name}
                         onChange={this.handleChange}
                         required minLength="2" maxLength="20"

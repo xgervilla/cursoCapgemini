@@ -265,6 +265,7 @@ class CategoriesForm extends Component {
         };
     }
     handleChange(event) {
+        console.log(event.target.value)
         const cmp = event.target.name;
         const valor = event.target.value;
         this.setState(prev => {
@@ -300,17 +301,17 @@ class CategoriesForm extends Component {
                     <label htmlFor="id">Código</label>
                     <input type="number"
                         className={'form-control' + (this.props.isAdd ? '' : '-plaintext')}
-                        id="id" name="id"
-                        value={this.state.elemento.idOriginal}
+                        id="ID" name="ID"
+                        value={this.state.elemento.ID}
                         onChange={this.handleChange}
                         required readOnly={!this.props.isAdd}
                     />
-                    <ValidationMessage msg={this.state.msgErr.id} />
+                    <ValidationMessage msg={this.state.msgErr.ID} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="categoria">Categoria</label>
+                    <label htmlFor="Category">Categoria</label>
                     <input type="text" className="form-control"
-                        id="categoria" name="categoria"
+                        id="Category" name="Category"
                         value={this.state.elemento.Category}
                         onChange={this.handleChange}
                         required minLength="2" maxLength="25"
