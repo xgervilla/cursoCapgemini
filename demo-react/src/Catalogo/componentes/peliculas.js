@@ -62,6 +62,7 @@ export class Peliculas extends Component {
                         elemento: data,
                         loading: false
                     });
+                    console.log(this.state.elemento)
                     this.idOriginal = key;
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
@@ -126,12 +127,6 @@ export class Peliculas extends Component {
                     .catch(error => this.setError(error))
                 break;
             case "edit":
-                this.setState(prev => {
-                    console.log(prev.elemento.lenguaje)
-                    prev.elemento.lenguaje = JSON.stringify(prev.elemento.lenguaje)
-                    prev.elemento.vo = JSON.stringify(prev.elemento.vo)
-                    return {elemento: prev.elemento}
-                })
                 fetch(`${this.url}/${this.idOriginal}`, {
                     method: 'PUT',
                     body: JSON.stringify(elemento),
@@ -244,7 +239,7 @@ function FilmsList(props) {
 function FilmsView({ elemento, onCancel }) {
     return (
         <div className="listFilms">
-            <p>
+            <div>
                 <b>Código:</b> {elemento.id}
                 <br />
                 <b>Titulo:</b> {elemento.titulo}
@@ -265,7 +260,7 @@ function FilmsView({ elemento, onCancel }) {
                 <br/>
                 <b>Lenguaje:</b> {elemento.lenguaje.Name}
                 <br/>
-                <b>Lenguaje original:</b>{elemento.vo?.Name ? 'Tiene doblaje': ' La pelicula no está doblada'}
+                <b>Lenguaje original:</b>{elemento.vo?.Name ? elemento.vo.Name : 'La pelicula no está doblada'}
                 <br/>
                 <b>Actores:</b>
                     {<ul>
@@ -279,7 +274,7 @@ function FilmsView({ elemento, onCancel }) {
                             <li>{category}
                             </li>))}
                     </ul>}
-            </p>
+            </div>
             <p>
                 <button
                     className="btn btnView"
@@ -344,30 +339,14 @@ class FilmsForm extends Component {
             if(cmp ==="categories" || cmp ==="actors"){
                 prev.elemento[cmp] = Array.from(event.target.selectedOptions, option => option.value)
             }
-            else if(cmp === "lenguaje"){
+            else if(cmp === "lenguaje" || cmp === "vo"){
+                prev.elemento[cmp] = JSON.parse(valor)
                 console.log(prev.elemento[cmp])
-                console.log(JSON.stringify(prev.elemento[cmp]))
-                prev.elemento[cmp].ID = valor.ID
-                prev.elemento[cmp].Name = valor.Name
-
-            }
-            else if(cmp ==="vo"){
-                console.log(JSON.stringify(prev.elemento[cmp]))
-                if(prev.elemento[cmp] !== null && prev.elemento[cmp] !== undefined){
-                    console.log('Entra en el if')
-                    prev.elemento[cmp].ID = valor.ID
-                    prev.elemento[cmp].Name = valor.Name
-                }
-                else {
-                    prev.elemento[cmp] = valor
-                    console.log(prev.elemento[cmp])
-                    console.log(JSON.stringify(prev.elemento[cmp]))
-                }
-
             }
             else{
                 prev.elemento[cmp] = valor;
             }
+            console.log(prev.elemento)
             return { elemento: prev.elemento };
         });
         this.validar();
@@ -547,9 +526,10 @@ class FilmsForm extends Component {
                 <br/>
                 <div className="form-group">
                     <label htmlFor="lenguaje">Language</label>
-                    <select onChange={this.handleChange} className="form-control" id="lenguaje" name="lenguaje" value={this.state.elemento.lenguaje.Name}>
+                    {console.log(this.state.elemento.lenguaje.Name)}
+                    <select onChange={this.handleChange} className="form-control" id="lenguaje" name="lenguaje" value={JSON.stringify(this.state.elemento.lenguaje)}>
                         {this.state.languages.map((lang) => (
-                            <option value={lang} key={lang.ID}>{lang.Name}</option>
+                            <option value={JSON.stringify(lang)} key={lang.ID}>{lang.Name}</option>
                         ))}
                     </select>
                     <ValidationMessage msg={this.state.msgErr.lenguaje} />
@@ -557,9 +537,9 @@ class FilmsForm extends Component {
                 <br/>
                 <div className="form-group">
                     <label htmlFor="vo">Language in VO</label>
-                    <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={this.state.elemento.vo?.Name}>
+                    <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={JSON.stringify(this.state.elemento.vo)}>
                         {this.state.languages.map((lang) => (
-                            <option value={lang} key={lang.ID}>{lang.Name}</option>
+                            <option value={JSON.stringify(lang)} key={lang.ID}>{lang.Name}</option>
                         ))}
                     </select>
                     <ValidationMessage msg={this.state.msgErr.vo} />
