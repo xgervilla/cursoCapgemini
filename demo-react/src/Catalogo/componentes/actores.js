@@ -194,7 +194,7 @@ function ActoresList(props) {
                         <th>Lista de Actores y Actrices</th>
                         <th className="text-end">
                             <input
-                                type="button" className="btn btn-primary"
+                                type="button" className="btn btnEdit"
                                 value="Añadir" onClick={e => props.onAdd()}
                             />
                         </th>
@@ -208,14 +208,14 @@ function ActoresList(props) {
                             </td>
                             <td className="text-end">
                                 <div className="btn-group text-end" role="group">
-                                    <input type="button" className="btn btn-primary"
+                                    <input type="button" className="btn btnView"
                                         value="Ver" onClick={e => props.onView(item.actorId)}
                                     />
-                                    <input type="button" className="btn btn-primary"
+                                    <input type="button" className="btn btnEdit"
                                         value="Editar"
                                         onClick={e => props.onEdit(item.actorId)}
                                     />
-                                    <input type="button" className="btn btn-danger"
+                                    <input type="button" className="btn btnDelete"
                                         value="Borrar"
                                         onClick={e => props.onDelete(item.actorId)}
                                     />

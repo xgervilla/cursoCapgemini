@@ -1,11 +1,28 @@
-.rowTable {
-    margin: 10px;
+.btnEdit, .btnView, .btnDelete {
+    color: white;
+    border: 1px solid black;
+    margin: 0px 10px 0px 10px;
 }
 
-.btnTable {
-    padding: 10px;
+.btnEdit, .btnView {
+    background-color: lightslategrey;
+    color: white;
+    border: 1px solid black;
+    
 }
 
-table {
-    margin-left: 5vw;
+.btnEdit:hover, .btnView:hover {
+    background-color: lightseagreen;
+    color:black;
+    border: 1px solid black;
+}
+
+.btnDelete {
+    background-color: red;
+    
+}
+
+.btnDelete:hover {
+    background-color: lightcoral;
+    border: 1px solid black;
 }

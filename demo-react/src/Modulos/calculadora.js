@@ -117,38 +117,38 @@ export class Calculadora extends Component {
                   <div className="row justify-content-center calculadora">
                       
                       <div className="row">
-                        <input type="button" className="col" id="inversa" defaultValue="1/x" onClick={() => this.applyOperation('inversa')}/>
-                        <input type="button" className="col" id="modulo" defaultValue="%" onClick={() => this.applyOperation('modulo')}/>
-                        <input type="button" className="col" id="exponencial" defaultValue="exp" onClick={() => this.applyOperation('exponenciacion')}/>
-                        <input type="button" className="col" id="multiplica" defaultValue="*" onClick={() => this.applyOperation('multiplicacion')}/>
+                        <input type="button" className="col btnCalc" id="inversa" defaultValue="1/x" onClick={() => this.applyOperation('inversa')}/>
+                        <input type="button" className="col btnCalc" id="modulo" defaultValue="%" onClick={() => this.applyOperation('modulo')}/>
+                        <input type="button" className="col btnCalc" id="exponencial" defaultValue="exp" onClick={() => this.applyOperation('exponenciacion')}/>
+                        <input type="button" className="col btnCalc" id="multiplica" defaultValue="*" onClick={() => this.applyOperation('multiplicacion')}/>
                       </div>
                       
                       <div className="row">
-                        <input type="button" className="col" id="number7" defaultValue={7} onClick={() => this.accumulateValues(7)}/>
-                        <input type="button" className="col" id="number8" defaultValue={8} onClick={() => this.accumulateValues(8)}/>
-                        <input type="button" className="col" id="number9" defaultValue={9} onClick={() => this.accumulateValues(9)}/>
-                        <input type="button" className="col" id="divide" defaultValue="/" onClick={() => this.applyOperation('division')}/>
+                        <input type="button" className="col btnCalc" id="number7" defaultValue={7} onClick={() => this.accumulateValues(7)}/>
+                        <input type="button" className="col btnCalc" id="number8" defaultValue={8} onClick={() => this.accumulateValues(8)}/>
+                        <input type="button" className="col btnCalc" id="number9" defaultValue={9} onClick={() => this.accumulateValues(9)}/>
+                        <input type="button" className="col btnCalc" id="divide" defaultValue="/" onClick={() => this.applyOperation('division')}/>
                       </div>
                       
                       <div className="row">
-                        <input type="button" className="col" id="number4" defaultValue={4} onClick={() => this.accumulateValues(4)}/>
-                        <input type="button" className="col" id="number5" defaultValue={5} onClick={() => this.accumulateValues(5)}/>
-                        <input type="button" className="col" id="number6" defaultValue={6} onClick={() => this.accumulateValues(6)}/>
-                        <input type="button" className="col" id="suma" defaultValue="+" onClick={() => this.applyOperation('suma')}/>
+                        <input type="button" className="col btnCalc" id="number4" defaultValue={4} onClick={() => this.accumulateValues(4)}/>
+                        <input type="button" className="col btnCalc" id="number5" defaultValue={5} onClick={() => this.accumulateValues(5)}/>
+                        <input type="button" className="col btnCalc" id="number6" defaultValue={6} onClick={() => this.accumulateValues(6)}/>
+                        <input type="button" className="col btnCalc" id="suma" defaultValue="+" onClick={() => this.applyOperation('suma')}/>
                       </div>
                       
                       <div className="row">
-                        <input type="button" className="col" id="number1" defaultValue={1} onClick={() => this.accumulateValues(1)}/>
-                        <input type="button" className="col" id="number2" defaultValue={2} onClick={() => this.accumulateValues(2)}/>
-                        <input type="button" className="col" id="number3" defaultValue={3} onClick={() => this.accumulateValues(3)}/>
-                        <input type="button" className="col" id="resta" defaultValue="-" onClick={() => this.applyOperation('resta')}/>
+                        <input type="button" className="col btnCalc" id="number1" defaultValue={1} onClick={() => this.accumulateValues(1)}/>
+                        <input type="button" className="col btnCalc" id="number2" defaultValue={2} onClick={() => this.accumulateValues(2)}/>
+                        <input type="button" className="col btnCalc" id="number3" defaultValue={3} onClick={() => this.accumulateValues(3)}/>
+                        <input type="button" className="col btnCalc" id="resta" defaultValue="-" onClick={() => this.applyOperation('resta')}/>
                       </div>
                       
                       <div className="row">
-                        <input type="button" className="col" id="number0" defaultValue={0} onClick={() => this.accumulateValues(0)}/>
-                        <input type="button" className="col" id="clear" defaultValue="C" onClick={() => this.applyOperation('clear')}/>
-                        <input type="button" className="col" id="decimal" defaultValue="." onClick={() => this.startDecimals()}/>
-                        <input type="button" className="col" id="calcula" defaultValue="=" onClick={() => this.applyOperation('calculate')}/>
+                        <input type="button" className="col btnCalc" id="number0" defaultValue={0} onClick={() => this.accumulateValues(0)}/>
+                        <input type="button" className="col btnCalc" id="clear" defaultValue="C" onClick={() => this.applyOperation('clear')}/>
+                        <input type="button" className="col btnCalc" id="decimal" defaultValue="." onClick={() => this.startDecimals()}/>
+                        <input type="button" className="col btnCalc" id="calcula" defaultValue="=" onClick={() => this.applyOperation('calculate')}/>
                       </div>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
+import '../catalogo.css'
 
 export class Peliculas extends Component {
     constructor(props) {
@@ -196,7 +197,7 @@ function FilmsList(props) {
                         <th>Lista de películas disponibles para alquilar</th>
                         <th className="text-end">
                             <input
-                                type="button" className="btn btn-primary"
+                                type="button" className="btn btnEdit"
                                 value="Añadir" onClick={e => alert('Esta funcionalidad no está disponible')} //props.onAdd()}
                             />
                         </th>
@@ -210,14 +211,14 @@ function FilmsList(props) {
                             </td>
                             <td className="text-end">
                                 <div className="btn-group text-end" role="group">
-                                    <input type="button" className="btn btn-primary"
+                                    <input type="button" className="btn btnView"
                                         value="Ver" onClick={e => props.onView(item.filmId)}
                                     />
-                                    <input type="button" className="btn btn-primary"
+                                    <input type="button" className="btn btnEdit"
                                         value="Editar"
                                         onClick={e => alert('Esta funcionalidad no está disponible')} //props.onEdit(item.filmId)}
                                     />
-                                    <input type="button" className="btn btn-danger"
+                                    <input type="button" className="btn btnDelete"
                                         value="Borrar"
                                         onClick={e => props.onDelete(item.filmId)}
                                     />

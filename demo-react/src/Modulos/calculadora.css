@@ -1,4 +1,4 @@
-input[type=button] {
+.btnCalc {
 	margin: 10px;
 	color: black;
 	background-color: lightgrey;
@@ -8,7 +8,7 @@ input[type=button] {
 	min-height: 40px;
 }
 
-input[type=button]:hover {
+.btnCalc:hover {
 	color: white;
 	background-color: grey;
 }
