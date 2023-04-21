@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
+import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion, SelectDropdown } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
 import '../catalogo.css'
+import Dropdown from '../biblioteca/dropdown'
 
 export class Peliculas extends Component {
     constructor(props) {
@@ -198,7 +199,7 @@ function FilmsList(props) {
                         <th className="text-end">
                             <input
                                 type="button" className="btn btnEdit"
-                                value="Añadir" onClick={e => alert('Esta funcionalidad no está disponible')} //props.onAdd()}
+                                value="Añadir" onClick={e => props.onAdd()}
                             />
                         </th>
                     </tr>
@@ -274,9 +275,37 @@ function FilmsView({ elemento, onCancel }) {
 }
 
 class FilmsForm extends Component {
+
     constructor(props) {
         super(props);
-        this.state = { elemento: props.elemento, msgErr: [], invalid: false };
+        this.state = {
+            elemento: props.elemento,
+            msgErr: [],
+            invalid: false,
+            ratings: [
+                {
+                    label: "General audiences",
+                    value: "GENERAL_AUDIENCES"
+                },
+                {
+                    label: "Parental guidance suggested",
+                    value: "PARENTAL_GUIDANCE_SUGGESTED"
+                },
+                {
+                    label: "Parents strongly cautioned",
+                    value: "PARENTS_STRONGLY_CAUTIONED"
+                },
+                {
+                    label: "Restricted",
+                    value: "RESTRICTED"
+                },
+                {
+                    label: "Adults only",
+                    value: "ADULTS_ONLY"
+                }
+            ],
+            languages: []
+        };
         this.handleChange = this.handleChange.bind(this);
         this.onSend = () => {
             if (this.props.onSend) this.props.onSend(this.state.elemento);
@@ -284,16 +313,19 @@ class FilmsForm extends Component {
         this.onCancel = () => {
             if (this.props.onCancel) this.props.onCancel();
         };
+        this.loadLanguages = this.loadLanguages.bind(this)
     }
+
     handleChange(event) {
         const cmp = event.target.name;
-        const valor = event.target.value;
+        let valor = event.target.value;
         this.setState(prev => {
             prev.elemento[cmp] = valor;
             return { elemento: prev.elemento };
         });
         this.validar();
     }
+
     validar() {
         if (this.form) {
             const errors = {};
@@ -307,9 +339,25 @@ class FilmsForm extends Component {
             this.setState({ msgErr: errors, invalid: invalid });
         }
     }
+
     componentDidMount() {
         this.validar();
+        this.loadLanguages()
     }
+
+    loadLanguages() {
+        let languageURL = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'lenguajes/v1'
+        fetch(languageURL)
+            .then(response => {
+                response.json().then(response.ok ? data => {
+                    this.setState({
+                        languages: data
+                    })
+                } : error => this.setError(`${error.status}: ${error.error}`))
+            })
+            .catch(error => this.setError(error))
+    }
+
     render() {
         return (
             <form
@@ -356,11 +404,13 @@ class FilmsForm extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="valoracion">Rating</label>
-                    <input type="text" className="form-control"
-                        id="valoracion" name="valoracion"
-                        value={this.state.elemento.valoracion}
-                        onChange={this.handleChange}
-                    />
+
+                    <select onChange={this.handleChange} className="form-control" id="valoracion" name="valoracion" value={this.state.elemento.valoracion}>
+                        {this.state.ratings.map((option) => (
+                            <option value={option.value} key={option.label}>{option.label}</option>
+                        ))}
+                    </select>
+
                     <ValidationMessage msg={this.state.msgErr.valoracion} />
                 </div>
                 <div className="form-group">
@@ -400,21 +450,22 @@ class FilmsForm extends Component {
                     <ValidationMessage msg={this.state.msgErr.replacement_cost} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="language">Language</label>
-                    <input type="text" className="form-control"
-                        id="language" name="language"
-                        value={this.state.elemento.language}
-                        onChange={this.handleChange}
-                    />
-                    <ValidationMessage msg={this.state.msgErr.language} />
+                    <label htmlFor="lenguaje">Language</label>
+                    <select onChange={this.handleChange} className="form-control" id="lenguaje" name="lenguaje" value={this.state.elemento.lenguaje.Name}>
+                        {this.state.languages.map((lang) => (
+                            <option value={lang} key={lang.ID}>{lang.Name}</option>
+                        ))}
+                    </select>
+                    <ValidationMessage msg={this.state.msgErr.lenguaje} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="vo">Language in VO</label>
-                    <input type="text" className="form-control"
-                        id="vo" name="vo"
-                        value={this.state.elemento.vo}
-                        onChange={this.handleChange}
-                    />
+                    <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={this.state.elemento.vo.Name}>
+                        <option value={null} key={'none'}>Select...</option>
+                        {this.state.languages.map((lang) => (
+                            <option value={lang} key={lang.ID}>{lang.Name}</option>
+                        ))}
+                    </select>
                     <ValidationMessage msg={this.state.msgErr.vo} />
                 </div>
                 <div className="form-group">
@@ -429,6 +480,17 @@ class FilmsForm extends Component {
                     >
                         Volver
                     </button>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="categories">Categorias</label>
+                    <Dropdown
+                        isSearchable
+                        isMulti
+                        placeHolder="Select..."
+                        options={this.state.ratings}
+                        onChange={(value) => console.log(value)}
+                    />
+                    <ValidationMessage msg={this.state.msgErr.lenguaje} />
                 </div>
             </form>
         );
