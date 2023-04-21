@@ -26,3 +26,16 @@
     background-color: lightcoral;
     border: 1px solid black;
 }
+
+.listFilms {
+    margin-left: 2vw
+}
+
+form{
+    margin-bottom: 10vw;
+    padding-left: 2vw;
+}
+
+select[multiple=true] {
+    margin: 10vw;
+}

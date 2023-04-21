@@ -22,6 +22,7 @@ import com.example.domains.contracts.services.FilmService;
 import com.example.domains.entities.dtos.ElementoDTO;
 import com.example.domains.entities.dtos.FilmFullDTO;
 import com.example.domains.entities.dtos.FilmShortDTO;
+import com.example.domains.entities.dtos.FilmViewDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -73,13 +74,13 @@ public class FilmResource {
 
 	@Operation(summary = "Get one film", description = "Get all attributes of a film")
 	@GetMapping(path = "/{id:\\d+}")
-	public FilmFullDTO getOne(@PathVariable int id) throws NotFoundException {
+	public FilmViewDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		
 		if(item.isEmpty())
 			throw new NotFoundException();
 		
-		return FilmFullDTO.from(item.get());
+		return FilmViewDTO.from(item.get());
 	}
 	
 	@Hidden

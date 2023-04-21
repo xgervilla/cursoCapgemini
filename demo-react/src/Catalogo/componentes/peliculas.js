@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion, SelectDropdown } from "../biblioteca/comunes";
+import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
 import '../catalogo.css'
-import Dropdown from '../biblioteca/dropdown'
 
 export class Peliculas extends Component {
     constructor(props) {
@@ -52,6 +51,7 @@ export class Peliculas extends Component {
                 rental_rate: 0, replacement_cost: 0, lenguaje: "", vo: ""}
         });
     }
+
     edit(key) {
         this.setState({ loading: true });
         fetch(`${this.url}/${key}`)
@@ -126,6 +126,12 @@ export class Peliculas extends Component {
                     .catch(error => this.setError(error))
                 break;
             case "edit":
+                this.setState(prev => {
+                    console.log(prev.elemento.lenguaje)
+                    prev.elemento.lenguaje = JSON.stringify(prev.elemento.lenguaje)
+                    prev.elemento.vo = JSON.stringify(prev.elemento.vo)
+                    return {elemento: prev.elemento}
+                })
                 fetch(`${this.url}/${this.idOriginal}`, {
                     method: 'PUT',
                     body: JSON.stringify(elemento),
@@ -217,7 +223,7 @@ function FilmsList(props) {
                                     />
                                     <input type="button" className="btn btnEdit"
                                         value="Editar"
-                                        onClick={e => alert('Esta funcionalidad no está disponible')} //props.onEdit(item.filmId)}
+                                        onClick={e => props.onEdit(item.filmId)}
                                     />
                                     <input type="button" className="btn btnDelete"
                                         value="Borrar"
@@ -237,7 +243,7 @@ function FilmsList(props) {
 
 function FilmsView({ elemento, onCancel }) {
     return (
-        <div>
+        <div className="listFilms">
             <p>
                 <b>Código:</b> {elemento.id}
                 <br />
@@ -245,25 +251,38 @@ function FilmsView({ elemento, onCancel }) {
                 <br />
                 <b>Descripción:</b> {elemento.descripcion}
                 <br/>
-                <b>Duración:</b> {elemento.duracion}
+                <b>Duración:</b> {elemento.duracion} minutos
                 <br/>
                 <b>Valoración:</b> {elemento.valoracion}
                 <br/>
                 <b>Año de estreno:</b> {elemento.release_year}
                 <br/>
-                <b>Duración del alquiler:</b> {elemento.rental_duration}
+                <b>Duración del alquiler:</b> {elemento.rental_duration} días
                 <br/>
-                <b>Coste del alquiler por día:</b> {elemento.rental_rate}
+                <b>Coste del alquiler:</b> {elemento.rental_rate}$/día
                 <br/>
-                <b>Coste del reemplazo:</b> {elemento.replacement_cost}
+                <b>Coste del reemplazo:</b> {elemento.replacement_cost}$
                 <br/>
                 <b>Lenguaje:</b> {elemento.lenguaje.Name}
                 <br/>
-                {/* elemento.vo?.Name && <b>Lenguaje original:</b> elemento.vo.Name */}
+                <b>Lenguaje original:</b>{elemento.vo?.Name ? 'Tiene doblaje': ' La pelicula no está doblada'}
+                <br/>
+                <b>Actores:</b>
+                    {<ul>
+                        {elemento.actors.map(actor => (
+                            <li>{titleCase(actor)}
+                            </li>))}
+                    </ul>}
+                <b>Categories:</b>
+                    {<ul>
+                        {elemento.categories.map(category => (
+                            <li>{category}
+                            </li>))}
+                    </ul>}
             </p>
             <p>
                 <button
-                    className="btn btn-primary"
+                    className="btn btnView"
                     type="button"
                     onClick={e => onCancel()}
                 >
@@ -304,7 +323,9 @@ class FilmsForm extends Component {
                     value: "ADULTS_ONLY"
                 }
             ],
-            languages: []
+            languages: [],
+            categories: [],
+            actors: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.onSend = () => {
@@ -320,7 +341,33 @@ class FilmsForm extends Component {
         const cmp = event.target.name;
         let valor = event.target.value;
         this.setState(prev => {
-            prev.elemento[cmp] = valor;
+            if(cmp ==="categories" || cmp ==="actors"){
+                prev.elemento[cmp] = Array.from(event.target.selectedOptions, option => option.value)
+            }
+            else if(cmp === "lenguaje"){
+                console.log(prev.elemento[cmp])
+                console.log(JSON.stringify(prev.elemento[cmp]))
+                prev.elemento[cmp].ID = valor.ID
+                prev.elemento[cmp].Name = valor.Name
+
+            }
+            else if(cmp ==="vo"){
+                console.log(JSON.stringify(prev.elemento[cmp]))
+                if(prev.elemento[cmp] !== null && prev.elemento[cmp] !== undefined){
+                    console.log('Entra en el if')
+                    prev.elemento[cmp].ID = valor.ID
+                    prev.elemento[cmp].Name = valor.Name
+                }
+                else {
+                    prev.elemento[cmp] = valor
+                    console.log(prev.elemento[cmp])
+                    console.log(JSON.stringify(prev.elemento[cmp]))
+                }
+
+            }
+            else{
+                prev.elemento[cmp] = valor;
+            }
             return { elemento: prev.elemento };
         });
         this.validar();
@@ -343,6 +390,8 @@ class FilmsForm extends Component {
     componentDidMount() {
         this.validar();
         this.loadLanguages()
+        this.loadCategories()
+        this.loadActors()
     }
 
     loadLanguages() {
@@ -352,6 +401,44 @@ class FilmsForm extends Component {
                 response.json().then(response.ok ? data => {
                     this.setState({
                         languages: data
+                    })
+                } : error => this.setError(`${error.status}: ${error.error}`))
+            })
+            .catch(error => this.setError(error))
+    }
+
+    loadActors(){
+        let actorsURL = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'actores/v1'
+        fetch(actorsURL)
+            .then(response => {
+                response.json().then(response.ok ? data => {
+                    let actorsAssigned = []
+                    for(let actor of data){
+                        if(this.state.elemento.actors.includes(actor.nombre) || this.state.elemento.actors.includes(actor.actorId))
+                            actorsAssigned.push(actor.actorId)
+                    }
+                    this.setState(prev => {
+                        prev.elemento.actors = actorsAssigned;
+                        return {actors: data, elemento: prev.elemento};
+                    })
+                } : error => this.setError(`${error.status}: ${error.error}`))
+            })
+            .catch(error => this.setError(error))
+    }
+
+    loadCategories(){
+        let categoriasURL = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'categorias/v1'
+        fetch(categoriasURL)
+            .then(response => {
+                response.json().then(response.ok ? data => {
+                    let categoriesAssigned = []
+                    for(let cat of data){
+                        if(this.state.elemento.categories.includes(cat.Category) || this.state.elemento.categories.includes(cat.ID))
+                            categoriesAssigned.push(cat.ID)
+                    }
+                    this.setState(prev => {
+                        prev.elemento.categories = categoriesAssigned;
+                        return {categories: data, elemento: prev.elemento};
                     })
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
@@ -375,6 +462,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.id} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="titulo">Title</label>
                     <input type="text" className="form-control"
@@ -384,6 +472,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.title} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="descripcion">Description</label>
                     <input type="text" className="form-control"
@@ -393,6 +482,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.descripcion} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="duracion">Length</label>
                     <input type="number" className="form-control"
@@ -402,6 +492,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.duracion} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="valoracion">Rating</label>
 
@@ -413,6 +504,7 @@ class FilmsForm extends Component {
 
                     <ValidationMessage msg={this.state.msgErr.valoracion} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="release_year">Release year</label>
                     <input type="number" className="form-control"
@@ -422,6 +514,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.release_year} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="rental_duration">Rental duration</label>
                     <input type="number" className="form-control"
@@ -431,6 +524,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.rental_duration} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="rental_rate">Rental rate</label>
                     <input type="number" className="form-control"
@@ -440,6 +534,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.rental_rate} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="replacement_cost">Replacement cost</label>
                     <input type="number" className="form-control"
@@ -449,6 +544,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.replacement_cost} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="lenguaje">Language</label>
                     <select onChange={this.handleChange} className="form-control" id="lenguaje" name="lenguaje" value={this.state.elemento.lenguaje.Name}>
@@ -458,16 +554,37 @@ class FilmsForm extends Component {
                     </select>
                     <ValidationMessage msg={this.state.msgErr.lenguaje} />
                 </div>
+                <br/>
                 <div className="form-group">
                     <label htmlFor="vo">Language in VO</label>
-                    <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={this.state.elemento.vo.Name}>
-                        <option value={null} key={'none'}>Select...</option>
+                    <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={this.state.elemento.vo?.Name}>
                         {this.state.languages.map((lang) => (
                             <option value={lang} key={lang.ID}>{lang.Name}</option>
                         ))}
                     </select>
                     <ValidationMessage msg={this.state.msgErr.vo} />
                 </div>
+                <br/>
+                <div className="form-group">
+                    <label htmlFor="categories">Categorias<br/><p>Press Ctrl while clicking on each item to add more than one</p></label>
+                    <select multiple={true} onChange={this.handleChange} className="form-control" id="categories" name="categories" value={this.state.elemento.categories}>
+                        {this.state.categories.map((cat) => (
+                            <option value={cat.ID} key={cat.ID}>{cat.Category}</option>
+                        ))}
+                    </select>
+                    <ValidationMessage msg={this.state.msgErr.categories} />
+                </div>
+                <br/>
+                <div className="form-group">
+                    <label htmlFor="actors">Actores<br/><p>Press Ctrl while clicking on each item to add more than one</p></label>
+                    <select multiple={true} onChange={this.handleChange} className="form-control" id="actors" name="actors" value={this.state.elemento.actors}>
+                        {this.state.actors.map((actor) => (
+                            <option value={actor.actorId} key={actor.actorId}>{titleCase(actor.nombre)}</option>
+                        ))}
+                    </select>
+                    <ValidationMessage msg={this.state.msgErr.actors} />
+                </div>
+                <br/>
                 <div className="form-group">
                     <button className="btn btn-primary" type="button"
                         disabled={this.state.invalid}
@@ -480,17 +597,6 @@ class FilmsForm extends Component {
                     >
                         Volver
                     </button>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="categories">Categorias</label>
-                    <Dropdown
-                        isSearchable
-                        isMulti
-                        placeHolder="Select..."
-                        options={this.state.ratings}
-                        onChange={(value) => console.log(value)}
-                    />
-                    <ValidationMessage msg={this.state.msgErr.lenguaje} />
                 </div>
             </form>
         );
