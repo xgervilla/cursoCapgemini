@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
-import '../catalogo.css'
 
 export class Peliculas extends Component {
     constructor(props) {
@@ -260,7 +259,7 @@ function FilmsView({ elemento, onCancel }) {
                 <br/>
                 <b>Lenguaje:</b> {elemento.lenguaje.Name}
                 <br/>
-                <b>Lenguaje original:</b>{elemento.vo?.Name ? elemento.vo.Name : 'La pelicula no está doblada'}
+                <b>Lenguaje original:</b> {elemento.vo?.Name ? elemento.vo.Name : 'La pelicula no está doblada'}
                 <br/>
                 <b>Actores:</b>
                     {<ul>
