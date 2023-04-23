@@ -12,7 +12,7 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      main: 1
+      main: 0
     }
 
     this.menu = [

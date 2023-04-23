@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
 
@@ -12,7 +12,8 @@ export class Actores extends Component {
             error: null,
             loading: true,
             pagina: 0,
-            paginas: 0
+            paginas: 0,
+            films: null
         };
         this.idOriginal = null;
         this.url = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'actores/v1';
@@ -71,15 +72,21 @@ export class Actores extends Component {
                 response.json().then(response.ok ? data => {
                     this.setState({
                         modo: "view",
-                        elemento: data,
-                        loading: false
+                        elemento: data
                     });
+                fetch(`${this.url}/${key}/pelis`).then(response => {
+                    response.json().then(response.ok ? data => this.setState({
+                        loading: false,
+                        films: data
+                    }) : error => this.setError(`${error.status}: ${error.error}`))
+                })
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
             .catch(error => this.setError(error))
     }
+
     delete(key) {
-        if (!window.confirm("¿Seguro?")) return;
+        if (!window.confirm(`¿Seguro que quieres eliminar al actor con ID ${key}?`)) return;
         this.setState({ loading: true });
         fetch(`${this.url}/${key}`, { method: 'DELETE' })
             .then(response => {
@@ -162,6 +169,7 @@ export class Actores extends Component {
                 result.push(
                     <ActoresView key="main"
                         elemento={this.state.elemento}
+                        listFilms={this.state.films}
                         onCancel={e => this.cancel()}
                     />
                 )
@@ -231,7 +239,8 @@ function ActoresList(props) {
     )
 }
 
-function ActoresView({ elemento, onCancel }) {
+function ActoresView({ elemento, onCancel, listFilms }) {
+    const [hideFilms, setHideFilms] = useState(true)
     return (
         <div>
             <p>
@@ -241,9 +250,14 @@ function ActoresView({ elemento, onCancel }) {
                 <br />
                 <b>Apellidos:</b> {elemento.apellidos}
             </p>
+            <button type="button" className="btn btnEdit" onClick={() => setHideFilms(!hideFilms)}>{hideFilms ?  "Muestra las películas con este actor" : "Oculta las películas"}</button>
+            <div hidden={hideFilms}>
+                {listFilms.map((film) => <p>Id: {film.key}; título: {titleCase(film.value)}</p>)}
+            </div>
             <p>
+                <br/>
                 <button
-                    className="btn btn-primary"
+                    className="btn btnEdit"
                     type="button"
                     onClick={e => onCancel()}
                 >

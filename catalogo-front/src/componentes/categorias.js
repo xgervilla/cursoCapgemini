@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
 
@@ -12,7 +12,8 @@ export class Categorias extends Component {
             error: null,
             loading: true,
             pagina: 0,
-            paginas: 0
+            paginas: 0,
+            films: null
         };
         this.idOriginal = null;
         this.url = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'categorias/v1';
@@ -71,15 +72,21 @@ export class Categorias extends Component {
                 response.json().then(response.ok ? data => {
                     this.setState({
                         modo: "view",
-                        elemento: data,
-                        loading: false
+                        elemento: data
                     });
+                fetch(`${this.url}/${key}/pelis`).then(response => {
+                    response.json().then(response.ok ? data => this.setState({
+                        loading: false,
+                        films: data
+                    }) : error => this.setError(`${error.status}: ${error.error}`))
+                })
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
             .catch(error => this.setError(error))
     }
+    
     delete(key) {
-        if (!window.confirm("¿Seguro?")) return;
+        if (!window.confirm(`¿Seguro que quieres eliminar la categoría con ID ${key}?`)) return;
         this.setState({ loading: true });
         fetch(`${this.url}/${key}`, { method: 'DELETE' })
             .then(response => {
@@ -162,6 +169,7 @@ export class Categorias extends Component {
                 result.push(
                     <CategoryView key="main"
                         elemento={this.state.elemento}
+                        listFilms={this.state.films}
                         onCancel={e => this.cancel()}
                     />
                 )
@@ -231,7 +239,8 @@ function CategoryList(props) {
     )
 }
 
-function CategoryView({ elemento, onCancel }) {
+function CategoryView({ elemento, onCancel, listFilms}) {
+    const [hideFilms, setHideFilms] = useState(true)
     return (
         <div>
             <p>
@@ -239,9 +248,14 @@ function CategoryView({ elemento, onCancel }) {
                 <br />
                 <b>Categoria:</b> {elemento.Category}
             </p>
+            <button type="button" className="btn btnEdit" onClick={() => setHideFilms(!hideFilms)}>{hideFilms ?  "Muestra las películas con esta categoría" : "Oculta las películas"}</button>
+            <div hidden={hideFilms}>
+                {listFilms.map((film) => <p>Id: {film.filmId}; título: {titleCase(film.title)}</p>)}
+            </div>
             <p>
+                <br/>
                 <button
-                    className="btn btn-primary"
+                    className="btn btnEdit"
                     type="button"
                     onClick={e => onCancel()}
                 >

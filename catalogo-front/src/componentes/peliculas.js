@@ -83,7 +83,7 @@ export class Peliculas extends Component {
             .catch(error => this.setError(error))
     }
     delete(key) {
-        if (!window.confirm("¿Seguro?")) return;
+        if (!window.confirm(`¿Seguro que quieres eliminar la película con ID ${key}?`)) return;
         this.setState({ loading: true });
         fetch(`${this.url}/${key}`, { method: 'DELETE' })
             .then(response => {
