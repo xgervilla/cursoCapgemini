@@ -194,10 +194,14 @@ export class Peliculas extends Component {
 function FilmsList(props) {
     return (
         <>
-            <table className="table table-hover table-striped">
-                <thead className="table-info">
+            <table className="table table-hover table-sm">
+                <thead className="table-active">
                     <tr>
-                        <th>Lista de películas disponibles para alquilar</th>
+                        <th colSpan={12}>Listado de películas</th>
+                    </tr>
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Título</th>
                         <th className="text-end">
                             <input
                                 type="button" className="btn btnEdit"
@@ -209,6 +213,9 @@ function FilmsList(props) {
                 <tbody className="table-group-divider">
                     {props.listado.map(item => (
                         <tr key={item.filmId}>
+                            <td>
+                                {item.filmId}
+                            </td>
                             <td>
                                 {titleCase(item.title)}
                             </td>
@@ -430,7 +437,7 @@ class FilmsForm extends Component {
                     this.form = tag;
                 }}>
                 <div className="form-group">
-                    <label htmlFor="id">Código</label>
+                    <label htmlFor="id"><b>Código identificador</b> (dejar a 0 para la asignación automática)</label>
                     <input type="number"
                         className={'form-control' + (this.props.isAdd ? '' : '-plaintext')}
                         id="id" name="id"
@@ -442,7 +449,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="titulo">Title</label>
+                    <label htmlFor="titulo"><b>Título</b></label>
                     <input type="text" className="form-control"
                         id="titulo" name="titulo"
                         value={this.state.elemento.titulo}
@@ -452,7 +459,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="descripcion">Description</label>
+                    <label htmlFor="descripcion"><b>Descripción</b></label>
                     <input type="text" className="form-control"
                         id="descripcion" name="descripcion"
                         value={this.state.elemento.descripcion}
@@ -462,7 +469,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="duracion">Length</label>
+                    <label htmlFor="duracion"><b>Duración de la película</b> (minutos)</label>
                     <input type="number" className="form-control"
                         id="duracion" name="duracion"
                         value={this.state.elemento.duracion}
@@ -472,7 +479,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="valoracion">Rating</label>
+                    <label htmlFor="valoracion"><b>Clasificación MPAA</b></label>
 
                     <select onChange={this.handleChange} className="form-control" id="valoracion" name="valoracion" value={this.state.elemento.valoracion}>
                         {this.state.ratings.map((option) => (
@@ -484,17 +491,17 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="release_year">Release year</label>
+                    <label htmlFor="release_year"><b>Año de estreno</b></label>
                     <input type="number" className="form-control"
                         id="release_year" name="release_year"
                         value={this.state.elemento.release_year}
-                        onChange={this.handleChange} min={1895}
+                        onChange={this.handleChange} min={1895} max={new Date().getFullYear()}
                     />
                     <ValidationMessage msg={this.state.msgErr.release_year} />
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="rental_duration">Rental duration</label>
+                    <label htmlFor="rental_duration"><b>Duración del alquiler</b> (días)</label>
                     <input type="number" className="form-control"
                         id="rental_duration" name="rental_duration"
                         value={this.state.elemento.rental_duration}
@@ -504,7 +511,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="rental_rate">Rental rate</label>
+                    <label htmlFor="rental_rate"><b>Coste del alquiler</b> ($/día)</label>
                     <input type="number" className="form-control"
                         id="rental_rate" name="rental_rate"
                         value={this.state.elemento.rental_rate}
@@ -514,7 +521,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="replacement_cost">Replacement cost</label>
+                    <label htmlFor="replacement_cost"><b>Coste del reemplazo</b> ($)</label>
                     <input type="number" className="form-control"
                         id="replacement_cost" name="replacement_cost"
                         value={this.state.elemento.replacement_cost}
@@ -524,7 +531,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="lenguaje">Language</label>
+                    <label htmlFor="lenguaje"><b>Lenguaje de la película</b></label>
                     {console.log(this.state.elemento.lenguaje.Name)}
                     <select onChange={this.handleChange} className="form-control" id="lenguaje" name="lenguaje" value={JSON.stringify(this.state.elemento.lenguaje)}>
                         {this.state.languages.map((lang) => (
@@ -535,7 +542,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="vo">Language in VO</label>
+                    <label htmlFor="vo"><b>Lenguaje de la película en su versión original</b></label>
                     <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={JSON.stringify(this.state.elemento.vo)}>
                         {this.state.languages.map((lang) => (
                             <option value={JSON.stringify(lang)} key={lang.ID}>{lang.Name}</option>
@@ -545,7 +552,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="categories">Categorias<br /><p>Press Ctrl while clicking on each item to add more than one</p></label>
+                    <label htmlFor="categories"><b>Categorías</b><br /><p>Mantén pulsada la tecla Ctrl para seleccionar varias categorías</p></label>
                     <select multiple={true} onChange={this.handleChange} className="form-control" id="categories" name="categories" value={this.state.elemento.categories}>
                         {this.state.categories.map((cat) => (
                             <option value={cat.ID} key={cat.ID}>{cat.Category}</option>
@@ -555,7 +562,7 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <label htmlFor="actors">Actores<br /><p>Press Ctrl while clicking on each item to add more than one</p></label>
+                    <label htmlFor="actors"><b>Reparto de actores</b><br /><p>Mantén pulsada la tecla Ctrl para seleccionar varios actores</p></label>
                     <select multiple={true} onChange={this.handleChange} className="form-control" id="actors" name="actors" value={this.state.elemento.actors}>
                         {this.state.actors.map((actor) => (
                             <option value={actor.actorId} key={actor.actorId}>{titleCase(actor.nombre)}</option>
@@ -565,13 +572,13 @@ class FilmsForm extends Component {
                 </div>
                 <br />
                 <div className="form-group">
-                    <button className="btn btn-primary" type="button"
+                    <button className="btn btnEdit" type="button"
                         disabled={this.state.invalid}
                         onClick={this.onSend}
                     >
                         Enviar
                     </button>
-                    <button className="btn btn-primary" type="button"
+                    <button className="btn btnEdit" type="button"
                         onClick={this.onCancel}
                     >
                         Volver

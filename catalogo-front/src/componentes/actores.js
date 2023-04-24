@@ -196,10 +196,14 @@ export class Actores extends Component {
 function ActoresList(props) {
     return (
         <>
-            <table className="table table-hover table-striped">
-                <thead className="table-info">
+            <table className="table table-hover table-sm">
+                <thead className="table-active">
                     <tr>
-                        <th>Lista de Actores y Actrices</th>
+                        <th colSpan={12}>Listado de actores</th>
+                    </tr>
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Actor/actriz</th>
                         <th className="text-end">
                             <input
                                 type="button" className="btn btnEdit"
@@ -211,9 +215,8 @@ function ActoresList(props) {
                 <tbody className="table-group-divider">
                     {props.listado.map(item => (
                         <tr key={item.actorId}>
-                            <td>
-                                {titleCase(item.nombre)}
-                            </td>
+                            <td>{item.actorId}</td>
+                            <td>{titleCase(item.nombre)}</td>
                             <td className="text-end">
                                 <div className="btn-group text-end" role="group">
                                     <input type="button" className="btn btnView"
@@ -252,15 +255,28 @@ function ActoresView({ elemento, onCancel, listFilms }) {
             </p>
             <button type="button" className="btn btnEdit" onClick={() => setHideFilms(!hideFilms)}>{hideFilms ?  "Muestra las películas con este actor" : "Oculta las películas"}</button>
             <div hidden={hideFilms}>
-                {listFilms.map((film) => <p>Id: {film.key}; título: {titleCase(film.value)}</p>)}
+                <br/>
+                <table className="table table-hover table-sm">
+                    <thead className="table-active">
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Título</th>
+                    </tr>
+                    </thead>
+                    <tbody className="table-group-divider">
+                        {listFilms.map((film) => (<tr key={film.key}>
+                            <td>{film.key}</td>
+                            <td>{titleCase(film.value)}</td>
+                        </tr>))}
+                    </tbody>
+                </table>
             </div>
             <p>
                 <br/>
                 <button
                     className="btn btnEdit"
                     type="button"
-                    onClick={e => onCancel()}
-                >
+                    onClick={e => onCancel()}>
                     Volver
                 </button>
             </p>
@@ -325,7 +341,7 @@ class ActoresForm extends Component {
                 }}
             >
                 <div className="form-group">
-                    <label htmlFor="id">Código</label>
+                    <label htmlFor="id"><b>Código identificador</b> (dejar a 0 para la asignación automática)</label>
                     <input type="number"
                         className={'form-control' + (this.props.isAdd ? '' : '-plaintext')}
                         id="id" name="id"
@@ -336,7 +352,7 @@ class ActoresForm extends Component {
                     <ValidationMessage msg={this.state.msgErr.id} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="nombre">Nombre</label>
+                    <label htmlFor="nombre"><b>Nombre</b></label>
                     <input type="text" className="form-control"
                         id="nombre" name="nombre"
                         value={this.state.elemento.nombre}
@@ -346,7 +362,7 @@ class ActoresForm extends Component {
                     <ValidationMessage msg={this.state.msgErr.nombre} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="apellidos">Apellidos</label>
+                    <label htmlFor="apellidos"><b>Apellidos</b></label>
                     <input type="text" className="form-control"
                         id="apellidos" name="apellidos"
                         value={this.state.elemento.apellidos}
@@ -355,16 +371,15 @@ class ActoresForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.apellidos} />
                 </div>
+                <br/>
                 <div className="form-group">
-                    <button className="btn btn-primary" type="button"
+                    <button className="btn btnEdit" type="button"
                         disabled={this.state.invalid}
-                        onClick={this.onSend}
-                    >
+                        onClick={this.onSend}>
                         Enviar
                     </button>
-                    <button className="btn btn-primary" type="button"
-                        onClick={this.onCancel}
-                    >
+                    <button className="btn btnEdit" type="button"
+                        onClick={this.onCancel}>
                         Volver
                     </button>
                 </div>

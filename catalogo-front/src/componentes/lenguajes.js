@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
+import { ValidationMessage, ErrorMessage, Esperando} from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
 
 export class Lenguajes extends Component {
@@ -12,7 +12,6 @@ export class Lenguajes extends Component {
             error: null,
             loading: true,
             pagina: 0,
-            paginas: 0,
             films: null
         };
         this.idOriginal = null;
@@ -28,15 +27,13 @@ export class Lenguajes extends Component {
         let pagina = this.state.pagina
         if (num || num === 0) pagina = num
         this.setState({ loading: true });
-        fetch(`${this.url}?sort=name&page=${pagina}&size=10`)
+        fetch(`${this.url}?sort=name&page=${pagina}&size=100`)
             .then(response => {
                 response.json().then(response.ok ? data => {
                     this.setState({
                         modo: "list",
                         listado: data.content,
-                        loading: false,
-                        pagina: data.number,
-                        paginas: data.totalPages
+                        loading: false
                     })
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
@@ -179,12 +176,10 @@ export class Lenguajes extends Component {
                     <LanguagesList key="main"
                         listado={this.state.listado}
                         pagina={this.state.pagina}
-                        paginas={this.state.paginas}
                         onAdd={e => this.add()}
                         onView={key => this.view(key)}
                         onEdit={key => this.edit(key)}
                         onDelete={key => this.delete(key)}
-                        onChangePage={num => this.list(num)}
                     />
                 );
                 break;
@@ -196,10 +191,14 @@ export class Lenguajes extends Component {
 function LanguagesList(props) {
     return (
         <>
-            <table className="table table-hover table-striped">
-                <thead className="table-info">
+            <table className="table table-hover table-sm">
+                <thead className="table-active">
                     <tr>
-                        <th>Lista de lenguajes</th>
+                        <th colSpan={12}>Listado de lenguajes</th>
+                    </tr>
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Lenguaje</th>
                         <th className="text-end">
                             <input
                                 type="button" className="btn btnEdit"
@@ -211,9 +210,8 @@ function LanguagesList(props) {
                 <tbody className="table-group-divider">
                     {props.listado.map(item => (
                         <tr key={item.ID}>
-                            <td>
-                                {titleCase(item.Name)}
-                            </td>
+                            <td>{item.ID}</td>
+                            <td>{titleCase(item.Name)}</td>
                             <td className="text-end">
                                 <div className="btn-group text-end" role="group">
                                     <input type="button" className="btn btnView"
@@ -233,8 +231,6 @@ function LanguagesList(props) {
                     ))}
                 </tbody>
             </table>
-            <Paginacion actual={props.pagina} total={props.paginas} onChange={num =>
-                props.onChangePage(num)} />
         </>
     )
 }
@@ -244,21 +240,34 @@ function LanguagesView({ elemento, onCancel, listFilms }) {
     return (
         <div>
             <p>
-                <b>Identificador:</b> {elemento.ID}
-                <br />
+                <b>Identificador de lenguaje:</b> {elemento.ID}
+                <br/>
                 <b>Lenguaje:</b> {elemento.Name}
             </p>
             <button type="button" className="btn btnEdit" onClick={() => setHideFilms(!hideFilms)}>{hideFilms ?  "Muestra las películas con este lenguaje" : "Oculta las películas"}</button>
             <div hidden={hideFilms}>
-                {listFilms.map((film) => <p>Id: {film.filmId}; título: {titleCase(film.title)}</p>)}
+                <br/>
+                <table className="table table-hover table-sm">
+                    <thead className="table-active">
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Título</th>
+                    </tr>
+                    </thead>
+                    <tbody className="table-group-divider">
+                        {listFilms.map((film) => (<tr key={film.filmId}>
+                            <td>{film.filmId}</td>
+                            <td>{titleCase(film.title)}</td>
+                        </tr>))}
+                    </tbody>
+                </table>
             </div>
             <p>
                 <br/>
                 <button
                     className="btn btnEdit"
                     type="button"
-                    onClick={e => onCancel()}
-                >
+                    onClick={e => onCancel()}>
                     Volver
                 </button>
             </p>
@@ -311,7 +320,7 @@ class LanguagesForm extends Component {
                 }}
             >
                 <div className="form-group">
-                    <label htmlFor="id">Código</label>
+                    <label htmlFor="id"><b>Código identificador</b> (dejar a 0 para la asignación automática)</label>
                     <input type="number"
                         className={'form-control' + (this.props.isAdd ? '' : '-plaintext')}
                         id="ID" name="ID"
@@ -322,7 +331,7 @@ class LanguagesForm extends Component {
                     <ValidationMessage msg={this.state.msgErr.ID} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="Name">Lenguaje</label>
+                    <label htmlFor="Name"><b>Nombre del lenguaje</b></label>
                     <input type="text" className="form-control"
                         id="Name" name="Name"
                         value={this.state.elemento.Name}
@@ -331,16 +340,15 @@ class LanguagesForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.Name} />
                 </div>
+                <br/>
                 <div className="form-group">
-                    <button className="btn btn-primary" type="button"
+                    <button className="btn btnEdit" type="button"
                         disabled={this.state.invalid}
-                        onClick={this.onSend}
-                    >
+                        onClick={this.onSend}>
                         Enviar
                     </button>
-                    <button className="btn btn-primary" type="button"
-                        onClick={this.onCancel}
-                    >
+                    <button className="btn btnEdit" type="button"
+                        onClick={this.onCancel}>
                         Volver
                     </button>
                 </div>

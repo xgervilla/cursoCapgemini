@@ -196,10 +196,14 @@ export class Categorias extends Component {
 function CategoryList(props) {
     return (
         <>
-            <table className="table table-hover table-striped">
-                <thead className="table-info">
+            <table className="table table-hover table-sm">
+                <thead className="table-active">
                     <tr>
-                        <th>Lista de Categorias</th>
+                        <th colSpan={12}>Listado de categorías</th>
+                    </tr>
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Categoría</th>
                         <th className="text-end">
                             <input
                                 type="button" className="btn btnEdit"
@@ -211,9 +215,8 @@ function CategoryList(props) {
                 <tbody className="table-group-divider">
                     {props.listado.map(item => (
                         <tr key={item.ID}>
-                            <td>
-                                {titleCase(item.Category)}
-                            </td>
+                            <td>{item.ID}</td>
+                            <td>{titleCase(item.Category)}</td>
                             <td className="text-end">
                                 <div className="btn-group text-end" role="group">
                                     <input type="button" className="btn btnView"
@@ -250,7 +253,21 @@ function CategoryView({ elemento, onCancel, listFilms}) {
             </p>
             <button type="button" className="btn btnEdit" onClick={() => setHideFilms(!hideFilms)}>{hideFilms ?  "Muestra las películas con esta categoría" : "Oculta las películas"}</button>
             <div hidden={hideFilms}>
-                {listFilms.map((film) => <p>Id: {film.filmId}; título: {titleCase(film.title)}</p>)}
+                <br/>
+                <table className="table table-hover table-sm">
+                    <thead className="table-active">
+                    <tr>
+                        <th scope="col-1">#</th>
+                        <th scope="col">Título</th>
+                    </tr>
+                    </thead>
+                    <tbody className="table-group-divider">
+                        {listFilms.map((film) => (<tr key={film.filmId}>
+                            <td>{film.filmId}</td>
+                            <td>{titleCase(film.title)}</td>
+                        </tr>))}
+                    </tbody>
+                </table>
             </div>
             <p>
                 <br/>
@@ -312,7 +329,7 @@ class CategoriesForm extends Component {
                 }}
             >
                 <div className="form-group">
-                    <label htmlFor="id">Código</label>
+                    <label htmlFor="id"><b>Código identificador</b> (dejar a 0 para la asignación automática)</label>
                     <input type="number"
                         className={'form-control' + (this.props.isAdd ? '' : '-plaintext')}
                         id="ID" name="ID"
@@ -323,7 +340,7 @@ class CategoriesForm extends Component {
                     <ValidationMessage msg={this.state.msgErr.ID} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="Category">Categoria</label>
+                    <label htmlFor="Category"><b>Nombre de la categoría</b></label>
                     <input type="text" className="form-control"
                         id="Category" name="Category"
                         value={this.state.elemento.Category}
@@ -332,14 +349,15 @@ class CategoriesForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.Category} />
                 </div>
+                <br/>
                 <div className="form-group">
-                    <button className="btn btn-primary" type="button"
+                    <button className="btn btnEdit" type="button"
                         disabled={this.state.invalid}
                         onClick={this.onSend}
                     >
                         Enviar
                     </button>
-                    <button className="btn btn-primary" type="button"
+                    <button className="btn btnEdit" type="button"
                         onClick={this.onCancel}
                     >
                         Volver
