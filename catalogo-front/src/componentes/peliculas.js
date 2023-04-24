@@ -45,9 +45,11 @@ export class Peliculas extends Component {
     add() {
         this.setState({
             modo: "add",
-            elemento: { id: 0, titulo: "", duracion: 0, descripcion: "",
+            elemento: {
+                id: 0, titulo: "", duracion: 0, descripcion: "",
                 valoracion: "", release_year: 0, rental_duration: 0,
-                rental_rate: 0, replacement_cost: 0, lenguaje: "", vo: ""}
+                rental_rate: 0, replacement_cost: 0, lenguaje: "", vo: ""
+            }
         });
     }
 
@@ -239,51 +241,45 @@ function FilmsView({ elemento, onCancel }) {
     return (
         <div className="listFilms">
             <div>
-                <b>Código:</b> {elemento.id}
+                <br/>
+                <h2>{elemento.titulo}</h2>
+                <b>Código identificador:</b> {elemento.id}
+                <br/>
+                <p>{elemento.descripcion}</p>
                 <br />
-                <b>Titulo:</b> {elemento.titulo}
-                <br />
-                <b>Descripción:</b> {elemento.descripcion}
+                <h3>Ficha técnica de la película:</h3>
+                <p>
+                    Película estrenada en {elemento.release_year} con una duración de {elemento.duracion} minutos y una
+                    clasificación {elemento.valoracion}.
+                </p>
+                <li>Lenguaje de visualización: {elemento.lenguaje.Name}</li>
+                <li>Lenguaje de la versión original: {elemento.vo?.Name ? elemento.vo.Name : 'La pelicula no está traducida, el lenguaje de visualización coincide con la versión original'}</li>
                 <br/>
-                <b>Duración:</b> {elemento.duracion} minutos
+                <b>Categorías:</b>
+                {<ul>
+                    {elemento.categories.map(category => (
+                        <li>{category}
+                        </li>))}
+                </ul>}
                 <br/>
-                <b>Valoración:</b> {elemento.valoracion}
-                <br/>
-                <b>Año de estreno:</b> {elemento.release_year}
-                <br/>
-                <b>Duración del alquiler:</b> {elemento.rental_duration} días
-                <br/>
-                <b>Coste del alquiler:</b> {elemento.rental_rate}$/día
-                <br/>
-                <b>Coste del reemplazo:</b> {elemento.replacement_cost}$
-                <br/>
-                <b>Lenguaje:</b> {elemento.lenguaje.Name}
-                <br/>
-                <b>Lenguaje original:</b> {elemento.vo?.Name ? elemento.vo.Name : 'La pelicula no está doblada'}
-                <br/>
-                <b>Actores:</b>
-                    {<ul>
-                        {elemento.actors.map(actor => (
-                            <li>{titleCase(actor)}
-                            </li>))}
-                    </ul>}
-                <b>Categories:</b>
-                    {<ul>
-                        {elemento.categories.map(category => (
-                            <li>{category}
-                            </li>))}
-                    </ul>}
+                <h3>Reparto:</h3>
+                {<ul>
+                    {elemento.actors.map(actor => (
+                        <li>{titleCase(actor)}
+                        </li>))}
+                </ul>}
+                <h3>Condiciones del alquiler</h3>
+                <p>Duración de {elemento.rental_duration} días con un coste de {elemento.rental_rate}$ por día y un coste de {elemento.replacement_cost}$ en caso de pérdida u otros daños.</p>
             </div>
             <p>
                 <button
                     className="btn btnView"
                     type="button"
-                    onClick={e => onCancel()}
-                >
+                    onClick={e => onCancel()}>
                     Volver
                 </button>
             </p>
-        </div>
+        </div >
     )
 }
 
@@ -339,14 +335,14 @@ class FilmsForm extends Component {
         const cmp = event.target.name;
         let valor = event.target.value;
         this.setState(prev => {
-            if(cmp ==="categories" || cmp ==="actors"){
+            if (cmp === "categories" || cmp === "actors") {
                 prev.elemento[cmp] = Array.from(event.target.selectedOptions, option => option.value)
             }
-            else if(cmp === "lenguaje" || cmp === "vo"){
+            else if (cmp === "lenguaje" || cmp === "vo") {
                 prev.elemento[cmp] = JSON.parse(valor)
                 console.log(prev.elemento[cmp])
             }
-            else{
+            else {
                 prev.elemento[cmp] = valor;
             }
             console.log(prev.elemento)
@@ -389,38 +385,38 @@ class FilmsForm extends Component {
             .catch(error => this.setError(error))
     }
 
-    loadActors(){
+    loadActors() {
         let actorsURL = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'actores/v1'
         fetch(actorsURL)
             .then(response => {
                 response.json().then(response.ok ? data => {
                     let actorsAssigned = []
-                    for(let actor of data){
-                        if(this.state.elemento.actors.includes(actor.nombre) || this.state.elemento.actors.includes(actor.actorId))
+                    for (let actor of data) {
+                        if (this.state.elemento.actors.includes(actor.nombre) || this.state.elemento.actors.includes(actor.actorId))
                             actorsAssigned.push(actor.actorId)
                     }
                     this.setState(prev => {
                         prev.elemento.actors = actorsAssigned;
-                        return {actors: data, elemento: prev.elemento};
+                        return { actors: data, elemento: prev.elemento };
                     })
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
             .catch(error => this.setError(error))
     }
 
-    loadCategories(){
+    loadCategories() {
         let categoriasURL = (process.env.REACT_APP_API_URL || 'http://localhost:8080/catalogo/api/') + 'categorias/v1'
         fetch(categoriasURL)
             .then(response => {
                 response.json().then(response.ok ? data => {
                     let categoriesAssigned = []
-                    for(let cat of data){
-                        if(this.state.elemento.categories.includes(cat.Category) || this.state.elemento.categories.includes(cat.ID))
+                    for (let cat of data) {
+                        if (this.state.elemento.categories.includes(cat.Category) || this.state.elemento.categories.includes(cat.ID))
                             categoriesAssigned.push(cat.ID)
                     }
                     this.setState(prev => {
                         prev.elemento.categories = categoriesAssigned;
-                        return {categories: data, elemento: prev.elemento};
+                        return { categories: data, elemento: prev.elemento };
                     })
                 } : error => this.setError(`${error.status}: ${error.error}`))
             })
@@ -444,7 +440,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.id} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="titulo">Title</label>
                     <input type="text" className="form-control"
@@ -454,7 +450,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.title} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="descripcion">Description</label>
                     <input type="text" className="form-control"
@@ -464,7 +460,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.descripcion} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="duracion">Length</label>
                     <input type="number" className="form-control"
@@ -474,7 +470,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.duracion} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="valoracion">Rating</label>
 
@@ -486,7 +482,7 @@ class FilmsForm extends Component {
 
                     <ValidationMessage msg={this.state.msgErr.valoracion} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="release_year">Release year</label>
                     <input type="number" className="form-control"
@@ -496,7 +492,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.release_year} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="rental_duration">Rental duration</label>
                     <input type="number" className="form-control"
@@ -506,7 +502,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.rental_duration} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="rental_rate">Rental rate</label>
                     <input type="number" className="form-control"
@@ -516,7 +512,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.rental_rate} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="replacement_cost">Replacement cost</label>
                     <input type="number" className="form-control"
@@ -526,7 +522,7 @@ class FilmsForm extends Component {
                     />
                     <ValidationMessage msg={this.state.msgErr.replacement_cost} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="lenguaje">Language</label>
                     {console.log(this.state.elemento.lenguaje.Name)}
@@ -537,7 +533,7 @@ class FilmsForm extends Component {
                     </select>
                     <ValidationMessage msg={this.state.msgErr.lenguaje} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <label htmlFor="vo">Language in VO</label>
                     <select onChange={this.handleChange} className="form-control" id="vo" name="vo" value={JSON.stringify(this.state.elemento.vo)}>
@@ -547,9 +543,9 @@ class FilmsForm extends Component {
                     </select>
                     <ValidationMessage msg={this.state.msgErr.vo} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
-                    <label htmlFor="categories">Categorias<br/><p>Press Ctrl while clicking on each item to add more than one</p></label>
+                    <label htmlFor="categories">Categorias<br /><p>Press Ctrl while clicking on each item to add more than one</p></label>
                     <select multiple={true} onChange={this.handleChange} className="form-control" id="categories" name="categories" value={this.state.elemento.categories}>
                         {this.state.categories.map((cat) => (
                             <option value={cat.ID} key={cat.ID}>{cat.Category}</option>
@@ -557,9 +553,9 @@ class FilmsForm extends Component {
                     </select>
                     <ValidationMessage msg={this.state.msgErr.categories} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
-                    <label htmlFor="actors">Actores<br/><p>Press Ctrl while clicking on each item to add more than one</p></label>
+                    <label htmlFor="actors">Actores<br /><p>Press Ctrl while clicking on each item to add more than one</p></label>
                     <select multiple={true} onChange={this.handleChange} className="form-control" id="actors" name="actors" value={this.state.elemento.actors}>
                         {this.state.actors.map((actor) => (
                             <option value={actor.actorId} key={actor.actorId}>{titleCase(actor.nombre)}</option>
@@ -567,7 +563,7 @@ class FilmsForm extends Component {
                     </select>
                     <ValidationMessage msg={this.state.msgErr.actors} />
                 </div>
-                <br/>
+                <br />
                 <div className="form-group">
                     <button className="btn btn-primary" type="button"
                         disabled={this.state.invalid}
