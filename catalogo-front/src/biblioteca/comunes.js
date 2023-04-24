@@ -131,7 +131,7 @@ export function PaginacionCmd({ actual, total, onChange }) {
         }
         items.push([
             <li key='dissabledLast' className="page-item"><a href='#' className='page-link'>...</a></li>,
-            <li key={total} className="page-item"><a href='.' className="page-link" onClick={click.bind(this, total)} >{total}</a></li>])
+            <li key={total-1} className="page-item"><a href='.' className="page-link" onClick={click.bind(this, total-1)}>{total}</a></li>])
         return (
             <nav aria-label="Page navigation">
                 <ul className="pagination justify-content-center">
