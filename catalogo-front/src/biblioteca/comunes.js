@@ -131,7 +131,7 @@ export function PaginacionCmd({ actual, total, onChange }) {
         }
         items.push([
             <li key='dissabledLast' className="page-item"><a href='#' className='page-link'>...</a></li>,
-            <li key={total} className="page-item"><a href='.' className="page-link" onClick={click.bind(this, total)} >{total+1}</a></li>])
+            <li key={total} className="page-item"><a href='.' className="page-link" onClick={click.bind(this, total)} >{total}</a></li>])
         return (
             <nav aria-label="Page navigation">
                 <ul className="pagination justify-content-center">
@@ -144,22 +144,20 @@ export function PaginacionCmd({ actual, total, onChange }) {
 
 export function Header(props){
     return(
-        <header>
-            <nav className="navbar navbar-expand-lg">
-                <div className='container-fluid'>
-                    <a class="navbar-brand" href="#">Curso de formación</a>
-                    <Menu {...props}/>
-                </div>
-            
-            </nav>
-        </header>
+        <nav className="navbar navbar-expand-lg">
+            <div className='container-fluid'>
+                <a className="navbar-brand" href="#">Curso de formación</a>
+                <Menu {...props}/>
+            </div>
+        
+        </nav>
     )
 }
   
 export function Menu({menu, active, onSelectMenu}){
     return(
         <div className="navbar-nav mr-auto">
-        {menu.map((item, index) => <a className={`nav-item nav-link ${active===index ? "activeMenu" : ""}`} href="#" onClick={() => {onSelectMenu && onSelectMenu(index)}}>{item.texto}</a>)}
+        {menu.map((item, index) => <a key={index} className={`nav-item nav-link ${active===index ? "activeMenu" : ""}`} href="#" onClick={() => {onSelectMenu && onSelectMenu(index)}}>{item.texto}</a>)}
         </div>
     )
 }
