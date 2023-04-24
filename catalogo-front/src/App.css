@@ -44,15 +44,15 @@
 }
 
 .btnEdit, .btnView {
-  background-color: lightslategrey;
-  color: white;
+  background-color: #7fa9c7;
+  color: black;
   border: 1px solid black;
   
 }
 
 .btnEdit:hover, .btnView:hover {
-  background-color: lightseagreen;
-  color:black;
+  background-color: rgb(45, 114, 154);
+  color:white;
   border: 1px solid black;
 }
 
@@ -75,6 +75,25 @@ form{
   padding-left: 2vw;
 }
 
+
+
 select[multiple=true] {
   margin: 10vw;
+}
+
+.page-link{
+  color: black;
+  border: 1px solid #7fa9c7;
+}
+
+.page-link-disabled, .page-link-disabled:hover{
+  color: black;
+  background-color: white;
+  border: 1px solid #7fa9c7;
+}
+
+.page-link:hover{
+  color: white;
+  background-color: rgb(45, 114, 154);
+  border: 1px solid #7fa9c7; 
 }

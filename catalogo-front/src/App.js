@@ -17,7 +17,7 @@ export default class App extends Component {
 
     this.menu = [
       {texto: 'Actores', url:'/actor', componente: <Actores/>},
-      {texto: 'Peliculas', url:'/peliculas', componente: <Peliculas/>},
+      {texto: 'Películas', url:'/peliculas', componente: <Peliculas/>},
       {texto: 'Lenguajes', url:'/lenguajes', componente: <Lenguajes/>},
       {texto: 'Categorias', url:'/categorias', componente: <Categorias/>}
     ]
