@@ -62,24 +62,84 @@ export function PaginacionCmd({ actual, total, onChange }) {
         ev.preventDefault()
         if (onChange) onChange(number)
     }
-    let items = [];
-    for (let number = 0; number < total; number++) {
-        items.push(
-            number === actual ?
-                <li key={number} className="page-item active" aria-current="page"><a href='.'
-                    className="page-link" onClick={click.bind(this, number)} >{number + 1}</a></li>
-                :
-                <li key={number} className="page-item"><a href='.' className="page-link"
-                    onClick={click.bind(this, number)} >{number + 1}</a></li>
-        );
+    if (total < 10){
+        let items = [];
+        for (let number = 0; number < total; number++) {
+            items.push(
+                number === actual ?
+                    <li key={number} className="page-item active" aria-current="page"><a href='.'
+                        className="page-link" onClick={click.bind(this, number)} >{number + 1}</a></li>
+                    :
+                    <li key={number} className="page-item"><a href='.' className="page-link"
+                        onClick={click.bind(this, number)} >{number + 1}</a></li>
+            );
+        }
+        return (
+            <nav aria-label="Page navigation">
+                <ul className="pagination">
+                    {items}
+                </ul>
+            </nav>
+        )
     }
-    return (
-        <nav aria-label="Page navigation">
-            <ul className="pagination">
-                {items}
-            </ul>
-        </nav>
-    )
+    else if(actual <3 || actual >= total-3){
+        let items = []
+        for (let number = 0; number < 5; number++) {
+            items.push(
+                number === actual ?
+                    <li key={number} className="page-item active" aria-current="page"><a href='.'
+                        className="page-link" onClick={click.bind(this, number)} >{number + 1}</a></li>
+                    :
+                    <li key={number} className="page-item"><a href='.' className="page-link"
+                        onClick={click.bind(this, number)} >{number + 1}</a></li>
+            );
+        }
+        items.push(<li key='dissabled' className="page-item"><a href='#' className='page-link'>...</a></li>)
+        for (let number = total-5; number < total; number++) {
+            items.push(
+                number === actual ?
+                    <li key={number} className="page-item active" aria-current="page"><a href='.'
+                        className="page-link" onClick={click.bind(this, number)} >{number + 1}</a></li>
+                    :
+                    <li key={number} className="page-item"><a href='.' className="page-link"
+                        onClick={click.bind(this, number)} >{number + 1}</a></li>
+            );
+        }
+        return (
+            <nav aria-label="Page navigation">
+                <ul className="pagination">
+                    {items}
+                </ul>
+            </nav>
+        )
+    }
+    else {
+        let items = []
+        items.push([
+            <li key={0} className="page-item"><a href='.' className="page-link" onClick={click.bind(this, 0)} >{1}</a></li>,
+            <li key='dissabledFirst' className="page-item"><a href='#' className='page-link'>...</a></li>])
+        
+        for (let number = actual-2; number <= actual+2; number++) {
+            items.push(
+                number === actual ?
+                    <li key={number} className="page-item active" aria-current="page"><a href='.'
+                        className="page-link" onClick={click.bind(this, number)} >{number + 1}</a></li>
+                    :
+                    <li key={number} className="page-item"><a href='.' className="page-link"
+                        onClick={click.bind(this, number)} >{number + 1}</a></li>
+            );
+        }
+        items.push([
+            <li key='dissabledLast' className="page-item"><a href='#' className='page-link'>...</a></li>,
+            <li key={total} className="page-item"><a href='.' className="page-link" onClick={click.bind(this, total)} >{total+1}</a></li>])
+        return (
+            <nav aria-label="Page navigation">
+                <ul className="pagination">
+                    {items}
+                </ul>
+            </nav>
+        )
+    }
 }
 
 export function Header(props){
